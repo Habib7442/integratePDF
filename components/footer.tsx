@@ -18,36 +18,22 @@ const footerLinks = {
     { name: 'Features', href: '#features' },
     { name: 'How it Works', href: '#how-it-works' },
     { name: 'Pricing', href: '#pricing' },
-    { name: 'API Documentation', href: '/docs' },
-    { name: 'Integrations', href: '/integrations' }
+    { name: 'Demo', href: '#demo' }
   ],
   company: [
-    { name: 'About Us', href: '/about' },
-    { name: 'Blog', href: '/blog' },
-    { name: 'Careers', href: '/careers' },
-    { name: 'Contact', href: '/contact' },
-    { name: 'Press Kit', href: '/press' }
+    { name: 'Contact', href: 'mailto:support@integratepdf.com' }
   ],
   support: [
-    { name: 'Help Center', href: '/help' },
-    { name: 'Community', href: '/community' },
-    { name: 'Status', href: '/status' },
-    { name: 'Security', href: '/security' },
-    { name: 'System Status', href: '/status' }
+    { name: 'Email Support', href: 'mailto:support@integratepdf.com' }
   ],
   legal: [
     { name: 'Privacy Policy', href: '/privacy' },
-    { name: 'Terms of Service', href: '/terms' },
-    { name: 'Cookie Policy', href: '/cookies' },
-    { name: 'GDPR', href: '/gdpr' },
-    { name: 'SOC 2', href: '/soc2' }
+    { name: 'Terms of Service', href: '/terms' }
   ]
 }
 
 const socialLinks = [
-  { name: 'Twitter', href: 'https://twitter.com/integratepdf', icon: Twitter },
-  { name: 'LinkedIn', href: 'https://linkedin.com/company/integratepdf', icon: Linkedin },
-  { name: 'GitHub', href: 'https://github.com/integratepdf', icon: Github }
+  { name: 'Email', href: 'mailto:support@integratepdf.com', icon: Mail }
 ]
 
 export function Footer() {
@@ -166,14 +152,14 @@ export function Footer() {
               Ready to eliminate manual data entry?
             </h3>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Join 500+ founders who have automated their PDF workflows. Start your free trial today.
+              Try our live demo now - see real AI extraction in action. Create account to export data.
             </p>
-            <SignUpButton>
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-4 h-auto">
-                Get Started Free
+            <Button size="lg" variant="secondary" className="text-lg px-8 py-4 h-auto" asChild>
+              <a href="#demo">
+                Try Live Demo
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </SignUpButton>
+              </a>
+            </Button>
           </div>
         </div>
       </div>
@@ -186,7 +172,7 @@ export function Footer() {
               <span>© 2024 IntegratePDF. All rights reserved.</span>
               <div className="flex items-center space-x-1">
                 <Shield className="w-4 h-4" />
-                <span>SOC 2 Compliant</span>
+                <span>Secure Processing</span>
               </div>
             </div>
             

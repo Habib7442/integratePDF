@@ -20,24 +20,24 @@ const steps = [
     description: "Simply drag and drop any PDF document - invoices, receipts, contracts, or reports. Our system supports all PDF formats including scanned documents.",
     details: [
       "Supports all PDF formats",
-      "Advanced OCR for scanned docs",
-      "Secure encrypted upload",
-      "Batch processing available"
+      "OCR for scanned documents",
+      "Secure processing",
+      "No signup required for demo"
     ],
     color: "from-blue-500 to-blue-600",
     bgColor: "bg-blue-50",
     iconColor: "text-blue-600"
   },
   {
-    number: "02", 
+    number: "02",
     icon: Brain,
     title: "AI Extracts Data",
-    description: "Our advanced AI analyzes your document and intelligently extracts structured data with 95% accuracy. Review and edit if needed before proceeding.",
+    description: "Our AI powered by Google Gemini analyzes your document and intelligently extracts structured data. Review the results before proceeding.",
     details: [
-      "95% extraction accuracy",
+      "Google Gemini AI",
       "Identifies key data fields",
-      "Manual review & correction",
-      "Learns from your preferences"
+      "Structured output",
+      "Real-time processing"
     ],
     color: "from-green-500 to-green-600",
     bgColor: "bg-green-50",
@@ -46,13 +46,13 @@ const steps = [
   {
     number: "03",
     icon: Send,
-    title: "Push to Your Tools",
-    description: "With one click, send the structured data directly to Notion, Airtable, QuickBooks, or any of your connected business tools. No manual entry required.",
+    title: "Export Your Data",
+    description: "Export the structured data to Notion databases or download as CSV. Sign up required for export functionality.",
     details: [
-      "One-click integration",
-      "Real-time data sync",
+      "Notion integration",
+      "CSV export",
       "Custom field mapping",
-      "Automatic error handling"
+      "Signup required for export"
     ],
     color: "from-orange-500 to-orange-600",
     bgColor: "bg-orange-50",
@@ -77,8 +77,8 @@ export function HowItWorksSection() {
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Our streamlined workflow gets you from document upload to integrated data in under 60 seconds. 
-            No technical knowledge required.
+            Our streamlined workflow gets you from document upload to extracted data in seconds.
+            Try the demo without signup, export requires account creation.
           </p>
         </div>
 
@@ -158,21 +158,21 @@ export function HowItWorksSection() {
                         {index === 1 && (
                           <div className="space-y-4">
                             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <span className="text-sm font-medium">Invoice Number</span>
-                              <span className="text-sm text-gray-600">INV-2024-001</span>
+                              <span className="text-sm font-medium">Field Name</span>
+                              <span className="text-sm text-gray-600">Extracted Value</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <span className="text-sm font-medium">Total Amount</span>
-                              <span className="text-sm text-gray-600">$1,250.00</span>
+                              <span className="text-sm font-medium">Amount</span>
+                              <span className="text-sm text-gray-600">$XXX.XX</span>
                             </div>
                             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                              <span className="text-sm font-medium">Due Date</span>
-                              <span className="text-sm text-gray-600">2024-02-15</span>
+                              <span className="text-sm font-medium">Date</span>
+                              <span className="text-sm text-gray-600">YYYY-MM-DD</span>
                             </div>
                             <div className="flex items-center justify-center pt-2">
                               <Badge variant="secondary" className="text-xs">
                                 <Brain className="w-3 h-3 mr-1" />
-                                95% Confidence
+                                AI Processed
                               </Badge>
                             </div>
                           </div>
@@ -192,7 +192,7 @@ export function HowItWorksSection() {
                             <div className="text-center pt-4">
                               <Badge variant="secondary" className="text-xs">
                                 <Clock className="w-3 h-3 mr-1" />
-                                Synced in 2.3s
+                                Ready to Export
                               </Badge>
                             </div>
                           </div>
@@ -217,14 +217,14 @@ export function HowItWorksSection() {
               Ready to automate your PDF workflow?
             </h3>
             <p className="text-gray-600 mb-6">
-              Join 500+ founders who have eliminated manual data entry from their business operations.
+              Try the live demo now - no signup required. See real AI extraction in action.
             </p>
-            <SignUpButton>
-              <Button size="lg" className="text-lg px-8 py-4 h-auto">
-                Start Your Free Trial
+            <Button size="lg" className="text-lg px-8 py-4 h-auto" asChild>
+              <a href="#demo">
+                Try Live Demo
                 <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </SignUpButton>
+              </a>
+            </Button>
           </div>
         </div>
       </div>

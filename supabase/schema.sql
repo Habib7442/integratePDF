@@ -32,9 +32,13 @@ CREATE TABLE documents (
     processing_status processing_status DEFAULT 'pending',
     confidence_score DECIMAL(3,2),
     storage_path TEXT NOT NULL,
+    processing_started_at TIMESTAMP WITH TIME ZONE,
+    processing_completed_at TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+
 
 -- Create extracted_data table
 CREATE TABLE extracted_data (

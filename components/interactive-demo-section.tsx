@@ -1,0 +1,466 @@
+'use client'
+
+import { useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs'
+import {
+  Upload,
+  FileText,
+  Loader2,
+  CheckCircle,
+  Download,
+  Database,
+  ArrowRight,
+  Sparkles,
+  Lock,
+  Zap,
+  AlertCircle
+} from 'lucide-react'
+
+interface ExtractedDataItem {
+  key: string
+  value: string
+  confidence?: number
+}
+
+interface DemoState {
+  step: 'upload' | 'processing' | 'results' | 'export' | 'error'
+  file: File | null
+  extractedData: {
+    structuredData?: ExtractedDataItem[]
+    [key: string]: any
+  } | null
+  isProcessing: boolean
+  error?: string
+  documentId?: string
+}
+
+export function InteractiveDemoSection() {
+  const [demoState, setDemoState] = useState<DemoState>({
+    step: 'upload',
+    file: null,
+    extractedData: null,
+    isProcessing: false
+  })
+
+  const [loadingSample, setLoadingSample] = useState<string | null>(null)
+
+  // Real PDF processing for demo (in memory, no database)
+  const handleFileUpload = useCallback(async (file: File) => {
+    setDemoState(prev => ({ ...prev, file, step: 'processing', isProcessing: true, error: undefined }))
+
+    try {
+      // Process PDF directly without saving to database
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('demo', 'true')
+      formData.append('keywords', '') // Empty keywords for demo
+
+      const response = await fetch('/api/demo/upload', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to process PDF')
+      }
+
+      const { extractedData } = await response.json()
+
+      setDemoState(prev => ({
+        ...prev,
+        extractedData,
+        step: 'results',
+        isProcessing: false
+      }))
+
+    } catch (error) {
+      console.error('Demo processing error:', error)
+      setDemoState(prev => ({
+        ...prev,
+        step: 'error',
+        isProcessing: false,
+        error: error instanceof Error ? error.message : 'Processing failed'
+      }))
+    }
+  }, [])
+
+  const handleExportAttempt = () => {
+    setDemoState(prev => ({ ...prev, step: 'export' }))
+  }
+
+  const resetDemo = () => {
+    setDemoState({
+      step: 'upload',
+      file: null,
+      extractedData: null,
+      isProcessing: false,
+      error: undefined,
+      documentId: undefined
+    })
+  }
+
+  return (
+    <section id="demo" className="py-24 bg-gradient-to-br from-slate-50 to-blue-50/30">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Live Demo - Real AI Processing
+          </Badge>
+          <h2 className="text-4xl sm:text-5xl font-bold text-slate-900 mb-6">
+            Try Real PDF Processing
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
+              {" "}Right Now
+            </span>
+          </h2>
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            Upload any PDF and see our AI extract structured data in real-time.
+            Try the demo without signup - create account to export your data.
+          </p>
+        </motion.div>
+
+        {/* Interactive Demo Container */}
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          <Card className="p-8 bg-white/80 backdrop-blur-sm border-0 shadow-2xl">
+            <AnimatePresence mode="wait">
+              {/* Upload Step */}
+              {demoState.step === 'upload' && (
+                <motion.div
+                  key="upload"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="text-center"
+                >
+                  <div className="mb-8">
+                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <Upload className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                      Upload Your PDF
+                    </h3>
+                    <p className="text-slate-600 mb-8">
+                      Try with an invoice, receipt, contract, or any document with structured data
+                    </p>
+                  </div>
+
+                  {/* File Upload Area */}
+                  <div 
+                    className="border-2 border-dashed border-blue-300 rounded-xl p-12 bg-blue-50/50 hover:bg-blue-50 transition-colors cursor-pointer"
+                    onClick={() => {
+                      const input = document.createElement('input')
+                      input.type = 'file'
+                      input.accept = '.pdf'
+                      input.onchange = (e) => {
+                        const file = (e.target as HTMLInputElement).files?.[0]
+                        if (file) handleFileUpload(file)
+                      }
+                      input.click()
+                    }}
+                  >
+                    <FileText className="w-16 h-16 text-blue-500 mx-auto mb-4" />
+                    <p className="text-lg font-semibold text-slate-900 mb-2">
+                      Click to upload or drag and drop
+                    </p>
+                    <p className="text-slate-500">
+                      PDF files only • Max 10MB
+                    </p>
+                  </div>
+
+                  {/* Sample Files */}
+                  <div className="mt-8">
+                    <p className="text-sm text-slate-500 mb-4">Or try with a sample file:</p>
+                    <div className="flex justify-center gap-4">
+                      {[
+                        { name: 'Sample Invoice', file: 'sample_invoice.pdf' },
+                        { name: 'Sample Receipt', file: 'sample_receipt.pdf' },
+                        { name: 'Sample Contract', file: 'sample_contract.pdf' }
+                      ].map((sample) => (
+                        <Button
+                          key={sample.name}
+                          variant="outline"
+                          size="sm"
+                          disabled={loadingSample === sample.name || demoState.isProcessing}
+                          onClick={async () => {
+                            try {
+                              setLoadingSample(sample.name)
+                              const response = await fetch(`/${sample.file}`)
+                              if (!response.ok) {
+                                throw new Error('Failed to load sample file')
+                              }
+                              const blob = await response.blob()
+                              const file = new File([blob], sample.file, { type: 'application/pdf' })
+                              await handleFileUpload(file)
+                            } catch (error) {
+                              console.error('Error loading sample file:', error)
+                              setDemoState(prev => ({
+                                ...prev,
+                                step: 'error',
+                                error: 'Failed to load sample file. Please try again.'
+                              }))
+                            } finally {
+                              setLoadingSample(null)
+                            }
+                          }}
+                          className="text-blue-600 border-blue-200 hover:bg-blue-50 disabled:opacity-50"
+                        >
+                          {loadingSample === sample.name ? (
+                            <div className="flex items-center gap-2">
+                              <div className="w-3 h-3 border border-blue-600 border-t-transparent rounded-full animate-spin" />
+                              Loading...
+                            </div>
+                          ) : (
+                            sample.name
+                          )}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Processing Step */}
+              {demoState.step === 'processing' && (
+                <motion.div
+                  key="processing"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="text-center"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Loader2 className="w-10 h-10 text-white animate-spin" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                    AI is Processing Your PDF
+                  </h3>
+                  <p className="text-slate-600 mb-8">
+                    Our advanced AI is extracting and structuring your data...
+                  </p>
+                  
+                  {/* Processing Steps */}
+                  <div className="space-y-4 max-w-md mx-auto">
+                    {[
+                      { step: 'Analyzing document structure', completed: true },
+                      { step: 'Extracting text and data', completed: true },
+                      { step: 'Structuring information', completed: false },
+                      { step: 'Validating results', completed: false }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center text-left">
+                        <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
+                          item.completed ? 'bg-green-500' : 'bg-slate-200'
+                        }`}>
+                          {item.completed ? (
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          ) : (
+                            <div className="w-2 h-2 bg-slate-400 rounded-full" />
+                          )}
+                        </div>
+                        <span className={item.completed ? 'text-slate-900' : 'text-slate-500'}>
+                          {item.step}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Error Step */}
+              {demoState.step === 'error' && (
+                <motion.div
+                  key="error"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="text-center"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <AlertCircle className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                    Processing Error
+                  </h3>
+                  <p className="text-slate-600 mb-8">
+                    {demoState.error || 'Something went wrong while processing your PDF. Please try again.'}
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                      onClick={resetDemo}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    >
+                      Try Another File
+                    </Button>
+                    <SignUpButton>
+                      <Button variant="outline">
+                        Sign Up for Support
+                      </Button>
+                    </SignUpButton>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Results Step */}
+              {demoState.step === 'results' && demoState.extractedData && (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                >
+                  <div className="text-center mb-8">
+                    <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle className="w-10 h-10 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                      Data Extracted Successfully!
+                    </h3>
+                    <p className="text-slate-600">
+                      {demoState.extractedData.structuredData?.length || 0} fields extracted • Ready for export
+                    </p>
+                  </div>
+
+                  {/* Extracted Data Preview */}
+                  <div className="bg-slate-50 rounded-xl p-6 mb-8">
+                    <h4 className="font-semibold text-slate-900 mb-4">Extracted Data:</h4>
+                    <div className="space-y-3 text-sm max-h-64 overflow-y-auto">
+                      {demoState.extractedData.structuredData?.slice(0, 8).map((item: ExtractedDataItem, index: number) => (
+                        <div key={index} className="flex justify-between items-start p-3 bg-white rounded-lg">
+                          <div className="flex-1">
+                            <span className="text-slate-500 text-xs uppercase tracking-wide">{item.key}</span>
+                            <div className="font-medium text-slate-900">{item.value}</div>
+                          </div>
+                          <div className="ml-4 text-right">
+                            <div className="text-xs text-slate-400">
+                              {item.confidence ? Math.round(item.confidence) : 95}% confidence
+                            </div>
+                          </div>
+                        </div>
+                      )) || (
+                        <div className="text-center text-slate-500 py-4">
+                          No structured data extracted
+                        </div>
+                      )}
+                      {(demoState.extractedData.structuredData?.length || 0) > 8 && (
+                        <div className="text-center text-slate-500 text-sm">
+                          ... and {(demoState.extractedData.structuredData?.length || 0) - 8} more fields
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Export Options */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                      onClick={handleExportAttempt}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                    >
+                      <Database className="w-4 h-4 mr-2" />
+                      Export to Notion
+                    </Button>
+                    <Button
+                      onClick={handleExportAttempt}
+                      variant="outline"
+                      className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Download CSV
+                    </Button>
+                    <Button
+                      onClick={resetDemo}
+                      variant="ghost"
+                      className="text-slate-600"
+                    >
+                      Try Another File
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Export/Conversion Step */}
+              {demoState.step === 'export' && (
+                <motion.div
+                  key="export"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="text-center"
+                >
+                  <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Lock className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                    Ready to Export Your Data?
+                  </h3>
+                  <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                    Sign up for free to export your extracted data to Notion, download as CSV,
+                    and process more documents. No credit card required!
+                  </p>
+
+                  {/* Benefits */}
+                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-8">
+                    <h4 className="font-semibold text-slate-900 mb-4">Free account includes:</h4>
+                    <div className="grid sm:grid-cols-2 gap-3 text-sm text-left">
+                      {[
+                        'Export to Notion databases',
+                        'Download as CSV files',
+                        'Process up to 5 PDFs/month',
+                        'Save your documents',
+                        'Email support',
+                        'No credit card required'
+                      ].map((benefit, index) => (
+                        <div key={index} className="flex items-center">
+                          <Zap className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
+                          <span>{benefit}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* CTA Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <SignUpButton>
+                      <Button 
+                        size="lg"
+                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg"
+                      >
+                        Create Free Account
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </SignUpButton>
+                    <Button
+                      onClick={resetDemo}
+                      variant="outline"
+                      size="lg"
+                      className="border-slate-300"
+                    >
+                      Try Another PDF
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </Card>
+        </motion.div>
+      </div>
+    </section>
+  )
+}

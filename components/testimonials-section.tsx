@@ -1,221 +1,240 @@
+'use client'
+
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Star, Quote, Users, TrendingUp, Clock } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { motion } from 'framer-motion'
+import {
+  Star,
+  Quote,
+  Users,
+  TrendingUp,
+  Clock,
+  Shield,
+  Award,
+  Sparkles,
+  CheckCircle,
+  Building,
+  Zap,
+  FileText,
+  Brain,
+  Database,
+  ArrowRight
+} from 'lucide-react'
 
-const testimonials = [
+const valueProps = [
   {
-    name: "Sarah Chen",
-    role: "Founder",
-    company: "TechStart Inc.",
-    avatar: "SC",
-    content: "IntegratePDF has been a game-changer for our startup. We were spending 10+ hours a week manually entering invoice data into our accounting system. Now it takes minutes, and the accuracy is incredible.",
-    rating: 5,
-    metric: "Saved 10+ hours/week"
+    icon: FileText,
+    title: "Real PDF Processing",
+    description: "Upload any PDF and see actual AI extraction in action",
+    gradient: "from-blue-500 to-cyan-500"
   },
   {
-    name: "Marcus Rodriguez",
-    role: "Operations Manager", 
-    company: "GrowthCo",
-    avatar: "MR",
-    content: "The Notion integration is seamless. Our entire contract management workflow is now automated. The AI learns from our corrections and gets better every time we use it.",
-    rating: 5,
-    metric: "95% accuracy rate"
+    icon: Brain,
+    title: "Advanced AI",
+    description: "Powered by Google's Gemini AI for accurate data extraction",
+    gradient: "from-emerald-500 to-teal-500"
   },
   {
-    name: "Emily Watson",
-    role: "Small Business Owner",
-    company: "Watson Consulting",
-    avatar: "EW", 
-    content: "As a solo entrepreneur, every minute counts. IntegratePDF eliminated the most tedious part of my admin work. The ROI was immediate - paid for itself in the first week.",
-    rating: 5,
-    metric: "ROI in 1 week"
+    icon: Database,
+    title: "Notion Integration",
+    description: "Push extracted data directly to your Notion databases",
+    gradient: "from-orange-500 to-red-500"
   },
   {
-    name: "David Kim",
-    role: "Finance Director",
-    company: "ScaleUp Ventures",
-    avatar: "DK",
-    content: "We process hundreds of invoices monthly. The QuickBooks integration is flawless, and the batch processing feature saves us days of work. Customer support is also excellent.",
-    rating: 5,
-    metric: "Processes 500+ docs/month"
-  },
-  {
-    name: "Lisa Thompson",
-    role: "CEO",
-    company: "InnovateLab",
-    avatar: "LT",
-    content: "The workflow intelligence feature is brilliant. It learned our document patterns within a week and now pre-fills everything correctly. It's like having an AI assistant that knows our business.",
-    rating: 5,
-    metric: "99% automation rate"
-  },
-  {
-    name: "James Park",
-    role: "Startup Founder",
-    company: "NextGen Solutions",
-    avatar: "JP",
-    content: "Security was our biggest concern, but IntegratePDF's SOC 2 compliance and encryption gave us confidence. Now we can focus on building our product instead of data entry.",
-    rating: 5,
-    metric: "SOC 2 compliant"
+    icon: Shield,
+    title: "Secure Processing",
+    description: "Your documents are processed securely and not stored",
+    gradient: "from-purple-500 to-pink-500"
   }
 ]
 
-const stats = [
-  {
-    icon: Users,
-    value: "500+",
-    label: "Happy Customers",
-    description: "Founders and businesses trust us"
-  },
-  {
-    icon: TrendingUp,
-    value: "95%",
-    label: "Accuracy Rate",
-    description: "AI-powered data extraction"
-  },
+const benefits = [
   {
     icon: Clock,
-    value: "10hrs",
-    label: "Saved Weekly",
-    description: "Average time savings per user"
+    title: "Save Time",
+    description: "Eliminate manual data entry from your workflow",
+    gradient: "from-blue-500 to-indigo-500"
   },
   {
-    icon: Star,
-    value: "4.9/5",
-    label: "Customer Rating",
-    description: "Based on 200+ reviews"
+    icon: CheckCircle,
+    title: "Try Free",
+    description: "No signup required to test the demo",
+    gradient: "from-emerald-500 to-teal-500"
+  },
+  {
+    icon: Zap,
+    title: "Instant Results",
+    description: "See extracted data in seconds, not hours",
+    gradient: "from-orange-500 to-red-500"
+  },
+  {
+    icon: Shield,
+    title: "Secure",
+    description: "Documents processed securely, not stored",
+    gradient: "from-purple-500 to-pink-500"
   }
 ]
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-24 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/50 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(59,130,246,0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(99,102,241,0.1),transparent_50%)]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
-            <Users className="w-4 h-4 mr-2" />
-            Customer Stories
+        <motion.div
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+            <Sparkles className="w-4 h-4 mr-2" />
+            Why Choose IntegratePDF
           </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-            Loved by founders and
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600">
-              {" "}small businesses
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight">
+            Built for modern
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              businesses
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            See how IntegratePDF is helping businesses eliminate manual data entry and focus on what matters most - growing their business.
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            IntegratePDF helps businesses eliminate manual data entry and focus on what matters most - growing their business.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Stats */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon
+        {/* Value Propositions */}
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          {valueProps.map((prop, index) => {
+            const Icon = prop.icon
             return (
-              <div key={index} className="text-center">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-shadow">
-                  <div className="bg-blue-50 w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-6 h-6 text-blue-600" />
+              <motion.div
+                key={index}
+                className="group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+              >
+                <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300 text-center h-full">
+                  <div className={`w-16 h-16 bg-gradient-to-br ${prop.gradient} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="text-3xl font-bold text-gray-900 mb-2">{stat.value}</div>
-                  <div className="font-semibold text-gray-900 mb-1">{stat.label}</div>
-                  <div className="text-sm text-gray-600">{stat.description}</div>
+                  <h3 className="font-bold text-slate-900 mb-2">{prop.title}</h3>
+                  <p className="text-slate-600 text-sm">{prop.description}</p>
                 </div>
-              </div>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
-        {/* Testimonials grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-white shadow-lg border-0 hover:shadow-xl transition-shadow duration-300">
-              <CardContent className="p-6">
-                {/* Quote icon */}
-                <div className="mb-4">
-                  <Quote className="w-8 h-8 text-blue-600 opacity-20" />
-                </div>
-
-                {/* Rating */}
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-
-                {/* Content */}
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  "{testimonial.content}"
-                </p>
-
-                {/* Metric badge */}
-                <div className="mb-4">
-                  <Badge variant="outline" className="text-xs">
-                    <TrendingUp className="w-3 h-3 mr-1" />
-                    {testimonial.metric}
-                  </Badge>
-                </div>
-
-                {/* Author */}
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-orange-500 rounded-full flex items-center justify-center text-white font-semibold text-sm mr-3">
-                    {testimonial.avatar}
+        {/* Benefits */}
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon
+            return (
+              <motion.div
+                key={index}
+                className="text-center group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+              >
+                <div className="bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6 hover:shadow-xl transition-all duration-300">
+                  <div className={`bg-gradient-to-br ${benefit.gradient} w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg`}>
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-sm">{testimonial.name}</div>
-                    <div className="text-gray-600 text-xs">{testimonial.role}, {testimonial.company}</div>
-                  </div>
+                  <div className="font-semibold text-slate-900 mb-2">{benefit.title}</div>
+                  <div className="text-sm text-slate-600">{benefit.description}</div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              </motion.div>
+            )
+          })}
+        </motion.div>
 
-        {/* Featured testimonial */}
-        <div className="bg-gradient-to-r from-blue-600 to-orange-600 rounded-2xl p-8 lg:p-12 text-white text-center">
-          <Quote className="w-12 h-12 mx-auto mb-6 opacity-20" />
-          <blockquote className="text-2xl lg:text-3xl font-medium mb-6 leading-relaxed">
-            "IntegratePDF transformed our entire document workflow. What used to take our team hours now happens automatically. 
-            It's not just a tool - it's like having an AI employee that never makes mistakes."
-          </blockquote>
-          <div className="flex items-center justify-center">
-            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white font-semibold mr-4">
-              AJ
-            </div>
-            <div className="text-left">
-              <div className="font-semibold">Alex Johnson</div>
-              <div className="text-blue-100">CEO, TechFlow Dynamics</div>
+        {/* Call to Action */}
+        <motion.div
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8 lg:p-12 max-w-4xl mx-auto">
+            <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">
+              Ready to eliminate manual data entry?
+            </h3>
+            <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+              Try our live demo now - no signup required. Upload a real PDF and see the AI extraction in action.
+            </p>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button size="lg" className="text-lg px-10 py-4 h-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-xl" asChild>
+                <a href="#demo">
+                  Try Live Demo
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </a>
+              </Button>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Technology showcase */}
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-white text-center relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1),transparent_50%)]" />
+
+            <div className="relative">
+              <Brain className="w-16 h-16 mx-auto mb-8 opacity-80" />
+              <h3 className="text-2xl lg:text-3xl font-bold mb-6 leading-relaxed max-w-4xl mx-auto">
+                Powered by Google's Gemini AI
+              </h3>
+              <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
+                Our AI extraction is powered by Google's latest Gemini model, ensuring high accuracy and reliability for your document processing needs.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6">
+                {[
+                  { name: "Google Gemini", icon: "🧠" },
+                  { name: "Notion API", icon: "🗂️" },
+                  { name: "Secure Processing", icon: "🔒" },
+                  { name: "Real-time Results", icon: "⚡" }
+                ].map((tech, index) => (
+                  <div key={index} className="flex items-center bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                    <span className="text-lg mr-2">{tech.icon}</span>
+                    <span className="text-sm font-medium">{tech.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Trust indicators */}
-        <div className="mt-16 text-center">
-          <p className="text-gray-600 mb-8">Trusted by companies of all sizes</p>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-            {/* Placeholder company logos */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded"></div>
-              <span className="text-sm text-gray-500">TechStart Inc.</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded"></div>
-              <span className="text-sm text-gray-500">GrowthCo</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded"></div>
-              <span className="text-sm text-gray-500">InnovateLab</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded"></div>
-              <span className="text-sm text-gray-500">ScaleUp Ventures</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gray-300 rounded"></div>
-              <span className="text-sm text-gray-500">NextGen Solutions</span>
-            </div>
-          </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

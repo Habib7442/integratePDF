@@ -57,8 +57,10 @@ export const useDocumentsStore = create<DocumentsState>()(
       documentStatuses: new Map(),
 
       // Actions
-      setDocuments: (documents) => 
-        set({ documents }, false, 'setDocuments'),
+      setDocuments: (documents) =>
+        set({
+          documents: documents.filter(doc => doc && doc.id) // Filter out invalid documents
+        }, false, 'setDocuments'),
       
       setCurrentDocument: (document) => 
         set({ currentDocument: document }, false, 'setCurrentDocument'),
@@ -76,10 +78,25 @@ export const useDocumentsStore = create<DocumentsState>()(
         set({ error }, false, 'setError'),
 
       // Document management
-      addDocument: (document) => 
-        set((state) => ({
-          documents: [document, ...state.documents]
-        }), false, 'addDocument'),
+      addDocument: (document) =>
+        set((state) => {
+          // Validate document has required fields
+          if (!document || !document.id) {
+            console.error('Invalid document:', document)
+            return state
+          }
+
+          // Check if document already exists to prevent duplicates
+          const existingIndex = state.documents.findIndex(doc => doc.id === document.id)
+          if (existingIndex !== -1) {
+            // Update existing document instead of adding duplicate
+            const updatedDocuments = [...state.documents]
+            updatedDocuments[existingIndex] = document
+            return { documents: updatedDocuments }
+          }
+
+          return { documents: [document, ...state.documents] }
+        }, false, 'addDocument'),
       
       updateDocument: (id, updates) => 
         set((state) => ({
@@ -187,7 +204,8 @@ export const useDocumentsStore = create<DocumentsState>()(
             throw new Error('Failed to upload document')
           }
 
-          const document = await response.json()
+          const result = await response.json()
+          const document = result.document || result
           addDocument(document)
           return document
 

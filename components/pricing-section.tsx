@@ -1,15 +1,24 @@
+'use client'
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { SignUpButton } from '@clerk/nextjs'
-import { 
-  Check, 
-  Star, 
-  Zap, 
-  Crown, 
+import { motion } from 'framer-motion'
+import {
+  Check,
+  Star,
+  Zap,
+  Crown,
   Building2,
   ArrowRight,
-  DollarSign
+  DollarSign,
+  Sparkles,
+  Shield,
+  Clock,
+  Users,
+  Rocket,
+  X
 } from 'lucide-react'
 
 const plans = [
@@ -21,66 +30,88 @@ const plans = [
     badge: null,
     features: [
       "5 PDFs per month",
-      "Basic data extraction",
+      "AI data extraction",
       "Notion integration",
-      "Email support",
-      "95% accuracy guarantee"
+      "CSV export",
+      "Email support"
     ],
     limitations: [
       "Limited to 5 documents",
-      "Basic templates only",
       "Standard processing speed"
     ],
     cta: "Get Started Free",
     popular: false,
     icon: Zap,
-    color: "border-gray-200"
+    gradient: "from-slate-500 to-slate-600",
+    bgGradient: "from-slate-50 to-slate-100",
+    savings: null
   },
   {
     name: "Pro",
-    price: "$29",
-    period: "per month",
-    description: "Ideal for founders and small businesses",
-    badge: "Most Popular",
+    price: "Coming Soon",
+    period: "",
+    description: "For regular users and small businesses",
+    badge: "Coming Soon",
     features: [
-      "500 PDFs per month",
+      "Unlimited PDFs",
       "Advanced AI extraction",
-      "All integrations (Notion, Airtable, QuickBooks)",
+      "All integrations (Notion, CSV)",
       "Priority support",
       "Custom field mapping",
-      "Workflow intelligence",
-      "Batch processing",
-      "API access",
-      "Advanced templates"
+      "Batch processing"
     ],
     limitations: [],
-    cta: "Start Pro Trial",
+    cta: "Join Waitlist",
     popular: true,
     icon: Star,
-    color: "border-blue-500 ring-2 ring-blue-200"
+    gradient: "from-blue-500 to-indigo-600",
+    bgGradient: "from-blue-50 to-indigo-50",
+    savings: null
   },
   {
     name: "Business",
-    price: "$99",
-    period: "per month",
-    description: "For growing teams and high-volume processing",
-    badge: "Best Value",
+    price: "Coming Soon",
+    period: "",
+    description: "For teams and high-volume processing",
+    badge: "Coming Soon",
     features: [
-      "2,500 PDFs per month",
       "Everything in Pro",
       "Team collaboration",
-      "Advanced security features",
-      "Custom integrations",
-      "Dedicated account manager",
-      "SLA guarantee",
-      "White-label options",
-      "Advanced analytics"
+      "Advanced security",
+      "Priority integrations",
+      "Dedicated support",
+      "Custom workflows"
     ],
     limitations: [],
     cta: "Contact Sales",
     popular: false,
     icon: Building2,
-    color: "border-purple-500"
+    gradient: "from-purple-500 to-pink-500",
+    bgGradient: "from-purple-50 to-pink-50",
+    savings: null
+  }
+]
+
+const valueProps = [
+  {
+    icon: Shield,
+    title: "Free to Start",
+    description: "No credit card required"
+  },
+  {
+    icon: Clock,
+    title: "Setup in Minutes",
+    description: "Start processing immediately"
+  },
+  {
+    icon: Users,
+    title: "Growing Community",
+    description: "Join early adopters"
+  },
+  {
+    icon: Rocket,
+    title: "No Commitments",
+    description: "Use as much or as little as you need"
   }
 ]
 
@@ -101,166 +132,298 @@ const faqs = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pricing" className="py-24 bg-gradient-to-br from-slate-50 to-blue-50/30 relative overflow-hidden">
+      {/* Background decorations */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.1),transparent_50%)]" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
-            <DollarSign className="w-4 h-4 mr-2" />
+        <motion.div
+          className="text-center mb-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+            <Sparkles className="w-4 h-4 mr-2" />
             Simple Pricing
           </Badge>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight">
             Choose the perfect plan for
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-orange-600">
-              {" "}your business
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
+              your business
             </span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Start free and scale as you grow. All plans include our core features with no hidden fees.
+          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Start free with no signup required. Paid plans coming soon with advanced features.
           </p>
-        </div>
+        </motion.div>
+
+        {/* Value propositions */}
+        <motion.div
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true }}
+        >
+          {valueProps.map((prop, index) => {
+            const Icon = prop.icon
+            return (
+              <motion.div
+                key={index}
+                className="text-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-semibold text-slate-900 mb-1">{prop.title}</h3>
+                <p className="text-sm text-slate-600">{prop.description}</p>
+              </motion.div>
+            )
+          })}
+        </motion.div>
 
         {/* Pricing cards */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-16">
+        <motion.div
+          className="grid lg:grid-cols-3 gap-8 mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          viewport={{ once: true }}
+        >
           {plans.map((plan, index) => {
             const Icon = plan.icon
             return (
-              <Card key={index} className={`relative overflow-hidden ${plan.color} ${plan.popular ? 'scale-105 shadow-2xl' : 'shadow-lg'} transition-all duration-300 hover:shadow-xl`}>
-                {plan.badge && (
-                  <div className="absolute top-0 right-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-1 text-sm font-medium rounded-bl-lg">
-                    {plan.badge}
-                  </div>
-                )}
-                
-                <CardHeader className="text-center pb-4">
-                  <div className="flex justify-center mb-4">
-                    <div className={`p-3 rounded-full ${plan.popular ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                      <Icon className={`w-8 h-8 ${plan.popular ? 'text-blue-600' : 'text-gray-600'}`} />
-                    </div>
-                  </div>
-                  
-                  <CardTitle className="text-2xl font-bold text-gray-900">
-                    {plan.name}
-                  </CardTitle>
-                  
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                    <span className="text-gray-600 ml-2">/{plan.period}</span>
-                  </div>
-                  
-                  <CardDescription className="mt-2 text-gray-600">
-                    {plan.description}
-                  </CardDescription>
-                </CardHeader>
+              <motion.div
+                key={index}
+                className="group relative"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: plan.popular ? 0 : -8 }}
+              >
+                <Card className={`relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 h-full ${
+                  plan.popular ? 'scale-105 ring-2 ring-blue-200' : ''
+                }`}>
+                  {/* Background gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-50`} />
 
-                <CardContent className="space-y-6">
-                  {/* Features */}
-                  <div className="space-y-3">
-                    {plan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-start">
-                        <Check className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700 text-sm">{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Limitations for free plan */}
-                  {plan.limitations.length > 0 && (
-                    <div className="pt-4 border-t border-gray-200">
-                      <p className="text-xs text-gray-500 mb-2">Limitations:</p>
-                      <div className="space-y-1">
-                        {plan.limitations.map((limitation, limitIndex) => (
-                          <div key={limitIndex} className="text-xs text-gray-500">
-                            • {limitation}
-                          </div>
-                        ))}
-                      </div>
+                  {/* Popular badge */}
+                  {plan.badge && (
+                    <div className={`absolute top-0 right-0 bg-gradient-to-r ${plan.gradient} text-white px-4 py-2 text-sm font-bold rounded-bl-2xl shadow-lg`}>
+                      <Sparkles className="w-4 h-4 inline mr-1" />
+                      {plan.badge}
                     </div>
                   )}
 
-                  {/* CTA Button */}
-                  <div className="pt-6">
-                    {plan.name === "Business" ? (
-                      <Button 
-                        variant="outline" 
-                        className="w-full"
-                        asChild
-                      >
-                        <a href="mailto:sales@integratepdf.com">
-                          {plan.cta}
-                          <ArrowRight className="ml-2 w-4 h-4" />
-                        </a>
-                      </Button>
-                    ) : (
-                      <SignUpButton>
-                        <Button 
-                          className={`w-full ${plan.popular ? 'bg-blue-600 hover:bg-blue-700' : ''}`}
-                          variant={plan.popular ? "default" : "outline"}
-                        >
-                          {plan.cta}
-                          <ArrowRight className="ml-2 w-4 h-4" />
-                        </Button>
-                      </SignUpButton>
+                  <CardHeader className="text-center pb-6 relative">
+                    <div className="flex justify-center mb-6">
+                      <div className={`p-4 rounded-2xl bg-gradient-to-br ${plan.gradient} shadow-lg`}>
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+
+                    <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
+                      {plan.name}
+                    </CardTitle>
+
+                    <div className="mb-4">
+                      <span className="text-5xl font-bold text-slate-900">{plan.price}</span>
+                      <span className="text-slate-600 ml-2">/{plan.period}</span>
+                    </div>
+
+                    {plan.savings && (
+                      <Badge className={`bg-gradient-to-r ${plan.gradient} text-white border-0 mb-4`}>
+                        {plan.savings}
+                      </Badge>
                     )}
-                  </div>
-                </CardContent>
-              </Card>
+
+                    <CardDescription className="text-slate-600 font-medium">
+                      {plan.description}
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent className="space-y-6 relative">
+                    {/* Features */}
+                    <div className="space-y-4">
+                      {plan.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex items-start">
+                          <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${plan.gradient} flex items-center justify-center mr-3 mt-0.5 flex-shrink-0`}>
+                            <Check className="w-3 h-3 text-white" />
+                          </div>
+                          <span className="text-slate-700 font-medium">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Limitations for free plan */}
+                    {plan.limitations.length > 0 && (
+                      <div className="pt-4 border-t border-slate-200">
+                        <p className="text-sm text-slate-500 mb-3 font-medium">Limitations:</p>
+                        <div className="space-y-2">
+                          {plan.limitations.map((limitation, limitIndex) => (
+                            <div key={limitIndex} className="flex items-start">
+                              <X className="w-4 h-4 text-slate-400 mr-2 mt-0.5 flex-shrink-0" />
+                              <span className="text-sm text-slate-500">{limitation}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* CTA Button */}
+                    <div className="pt-6">
+                      {plan.name === "Free" ? (
+                        <SignUpButton>
+                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                            <Button className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
+                              {plan.cta}
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Button>
+                          </motion.div>
+                        </SignUpButton>
+                      ) : plan.name === "Business" ? (
+                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                          <Button
+                            variant="outline"
+                            className="w-full h-12 text-lg font-semibold border-2 border-slate-300 hover:border-slate-400"
+                            asChild
+                          >
+                            <a href="mailto:sales@integratepdf.com">
+                              {plan.cta}
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </a>
+                          </Button>
+                        </motion.div>
+                      ) : (
+                        <SignUpButton>
+                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                            <Button
+                              variant="outline"
+                              className="w-full h-12 text-lg font-semibold border-2 border-slate-300 hover:border-slate-400"
+                            >
+                              {plan.cta}
+                              <ArrowRight className="ml-2 w-5 h-5" />
+                            </Button>
+                          </motion.div>
+                        </SignUpButton>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* Enterprise section */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 lg:p-12 mb-16">
-          <div className="text-center">
-            <Crown className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              Need something custom?
-            </h3>
-            <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-              For enterprises with specific requirements, we offer custom solutions including dedicated infrastructure, 
-              custom integrations, and white-label options.
-            </p>
-            <Button variant="outline" size="lg" asChild>
-              <a href="mailto:enterprise@integratepdf.com">
-                Contact Enterprise Sales
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </a>
-            </Button>
+        <motion.div
+          className="relative mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1),transparent_50%)]" />
+
+            <div className="relative text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <Crown className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-3xl font-bold mb-6">
+                Need something custom?
+              </h3>
+              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                For enterprises with specific requirements, we offer custom solutions including dedicated infrastructure,
+                custom integrations, and white-label options.
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-8" asChild>
+                  <a href="mailto:enterprise@integratepdf.com">
+                    Contact Enterprise Sales
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </a>
+                </Button>
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
-            Frequently Asked Questions
-          </h3>
-          <div className="space-y-6">
+        <motion.div
+          className="max-w-4xl mx-auto mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-slate-900 mb-4">
+              Frequently Asked Questions
+            </h3>
+            <p className="text-slate-600">Everything you need to know about our pricing and plans</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6">
-                <h4 className="font-semibold text-gray-900 mb-2">{faq.question}</h4>
-                <p className="text-gray-600">{faq.answer}</p>
-              </div>
+              <motion.div
+                key={index}
+                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -4 }}
+              >
+                <h4 className="font-bold text-slate-900 mb-3">{faq.question}</h4>
+                <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Bottom CTA */}
-        <div className="text-center mt-16">
-          <div className="bg-gradient-to-r from-blue-600 to-orange-600 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">
-              Ready to transform your PDF workflow?
-            </h3>
-            <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-              Join hundreds of founders who have eliminated manual data entry. Start your free trial today.
-            </p>
-            <SignUpButton>
-              <Button size="lg" variant="secondary" className="text-lg px-8 py-4 h-auto">
-                Start Free Trial
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </Button>
-            </SignUpButton>
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          viewport={{ once: true }}
+        >
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.1),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(255,255,255,0.1),transparent_50%)]" />
+
+            <div className="relative">
+              <h3 className="text-3xl font-bold mb-6">
+                Ready to transform your PDF workflow?
+              </h3>
+              <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
+                Join early adopters who are transforming their PDF workflows. Try the demo now, no signup required.
+              </p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button size="lg" variant="secondary" className="text-lg px-10 py-4 h-auto bg-white text-slate-900 hover:bg-slate-100 shadow-xl" asChild>
+                  <a href="#demo">
+                    Try Free Demo
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </a>
+                </Button>
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

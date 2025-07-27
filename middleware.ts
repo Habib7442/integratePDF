@@ -1,4 +1,5 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextResponse } from 'next/server';
 
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
@@ -16,15 +17,32 @@ const isPublicApiRoute = createRouteMatcher([
   '/sign-up(.*)'
 ]);
 
-export default clerkMiddleware(async (auth, req) => {
-  // Allow public API routes
-  if (isPublicApiRoute(req)) {
-    return;
-  }
+const isApiRoute = createRouteMatcher(['/api(.*)']);
 
-  // Protect authenticated routes
-  if (isProtectedRoute(req)) {
-    await auth.protect();
+
+
+export default clerkMiddleware(async (auth, req) => {
+  try {
+    // Allow public API routes
+    if (isPublicApiRoute(req)) {
+      return;
+    }
+
+    // Protect authenticated routes
+    if (isProtectedRoute(req)) {
+      await auth.protect();
+    }
+
+    // Add request tracking headers for API routes
+    if (isApiRoute(req)) {
+      const response = NextResponse.next();
+      response.headers.set('x-request-id', crypto.randomUUID());
+      response.headers.set('x-timestamp', new Date().toISOString());
+      return response;
+    }
+  } catch (error) {
+    console.error('Middleware error:', error);
+    throw error;
   }
 });
 

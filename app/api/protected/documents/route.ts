@@ -45,7 +45,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Failed to fetch documents' }, { status: 500 })
     }
 
-    return NextResponse.json({ documents })
+    return NextResponse.json(documents)
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
