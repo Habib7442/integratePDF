@@ -30,7 +30,7 @@ export function Navigation() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block">
+          {/* <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               <Link href="#features" className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium transition-colors">
                 Features
@@ -45,7 +45,7 @@ export function Navigation() {
                 About
               </Link>
             </div>
-          </div>
+          </div> */}
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center space-x-4">
@@ -86,7 +86,7 @@ export function Navigation() {
       {isMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-200 shadow-lg">
-            <Link
+            {/* <Link
               href="#features"
               className="text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-4 py-3 text-base font-medium rounded-lg transition-colors touch-manipulation min-h-[48px] flex items-center"
               onClick={() => setIsMenuOpen(false)}
@@ -113,7 +113,7 @@ export function Navigation() {
               onClick={() => setIsMenuOpen(false)}
             >
               About
-            </Link>
+            </Link> */}
             <div className="pt-4 pb-3 border-t border-gray-200 mt-2">
               <div className="flex flex-col space-y-3 px-2">
                 <SignedOut>
