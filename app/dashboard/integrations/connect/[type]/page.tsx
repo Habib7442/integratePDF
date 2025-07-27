@@ -193,13 +193,13 @@ export default function ConnectIntegrationPage() {
             {integration.type === 'notion' && (
               <div className="space-y-4">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="font-medium text-blue-900 mb-2">How to get your Notion API Key:</h4>
+                  <h4 className="font-medium text-blue-900 mb-2">How to get your Notion Internal Integration Secret:</h4>
                   <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                     <li>Go to <a href="https://www.notion.so/my-integrations" target="_blank" rel="noopener noreferrer" className="underline">notion.so/my-integrations</a></li>
                     <li>Click "Create new integration"</li>
                     <li>Give your integration a name (e.g., "IntegratePDF")</li>
                     <li>Select the workspace where your database is located</li>
-                    <li>Copy the "Internal Integration Token" (starts with secret_)</li>
+                    <li>Copy the "Internal Integration Token"</li>
                     <li>Share your database with the integration in Notion</li>
                   </ol>
                 </div>

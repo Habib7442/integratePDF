@@ -17,14 +17,34 @@ export function StoreProvider({ children }: StoreProviderProps) {
   useEffect(() => {
     if (!isLoaded) return
 
-    if (user) {
+    if (user && user.id) {
+      // Validate user ID before initialization
+      if (typeof user.id !== 'string' || !user.id.startsWith('user_')) {
+        console.error('Invalid Clerk user ID format:', user.id)
+        showErrorNotification(
+          'Authentication Error',
+          'Invalid user session. Please sign out and sign in again.'
+        )
+        return
+      }
+
       // User is authenticated, initialize store
       initializeUser(user.id).catch((error) => {
         console.error('Failed to initialize user:', error)
-        showErrorNotification(
-          'Authentication Error',
-          'Failed to load user profile. Please try refreshing the page.'
-        )
+
+        // Provide more specific error messages
+        let errorMessage = 'Failed to load user profile. Please try refreshing the page.'
+        if (error instanceof Error) {
+          if (error.message.includes('Authentication failed')) {
+            errorMessage = 'Authentication expired. Please sign in again.'
+          } else if (error.message.includes('Validation error')) {
+            errorMessage = 'User profile validation failed. Please contact support.'
+          } else if (error.message.includes('Server error')) {
+            errorMessage = 'Server temporarily unavailable. Please try again in a moment.'
+          }
+        }
+
+        showErrorNotification('Authentication Error', errorMessage)
       })
     } else {
       // User is not authenticated, clear store

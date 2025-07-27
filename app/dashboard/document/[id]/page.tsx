@@ -8,6 +8,7 @@ import { ArrowLeft, FileText, Loader2, Home, Calendar, Database, TrendingUp, Spa
 import ExtractionTrigger from '@/components/extraction-trigger'
 import ProcessingStatus from '@/components/processing-status'
 import ResultsWithIntegration from '@/components/integrations/ResultsWithIntegration'
+import { useRealtimeDocument } from '@/hooks/use-realtime-document'
 
 interface Document {
   id: string
@@ -67,6 +68,27 @@ export default function DocumentDetailPage() {
   } = useUI()
 
   const { showSuccessNotification, showErrorNotification } = useNotifications()
+
+  // Real-time document updates
+  const { refresh: refreshDocument } = useRealtimeDocument({
+    documentId,
+    onDocumentUpdate: (updatedDocument) => {
+      // Update the document in the store
+      fetchDocument(documentId)
+    },
+    onExtractionComplete: (extractedData) => {
+      // Refresh extracted data when processing completes
+      fetchExtractedData(documentId).then(() => {
+        showSuccessNotification('Success', 'Document processing completed! Data is now available.')
+      }).catch((err) => {
+        console.error('Failed to fetch extracted data after completion:', err)
+        showErrorNotification('Error', 'Processing completed but failed to load extracted data')
+      })
+    },
+    onError: (error) => {
+      showErrorNotification('Real-time Update Error', error)
+    }
+  })
 
   // Fetch document details - only run once on mount
   useEffect(() => {
@@ -130,6 +152,9 @@ export default function DocumentDetailPage() {
   const handleProcessingComplete = (data: ExtractedData) => {
     setShowProcessingStatus(false)
     setProcessingDocumentId(null)
+
+    // The real-time hook will handle data refresh automatically
+    // Just show a notification here
     showSuccessNotification('Success', 'Document processing completed!')
   }
 

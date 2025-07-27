@@ -210,11 +210,11 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor="api-key">Notion API Key</Label>
+              <Label htmlFor="api-key">Internal Integration Secret</Label>
               <Input
                 id="api-key"
                 type="password"
-                placeholder="secret_..."
+                placeholder="Enter your Notion internal integration secret"
                 value={newDatabase.api_key}
                 onChange={(e) => setNewDatabase(prev => ({ ...prev, api_key: e.target.value }))}
               />

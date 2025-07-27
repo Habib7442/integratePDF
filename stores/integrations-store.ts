@@ -176,18 +176,32 @@ export const useIntegrationsStore = create<IntegrationsState>()(
         }
       },
 
-      updateIntegrationConfig: async (integrationId: string, config: Record<string, any>) => {
+      updateIntegrationConfig: async (integrationId: string, updates: Record<string, any>) => {
         set({ isLoading: true, error: null }, false, 'updateIntegrationConfig:start')
-        
+
         try {
+          // Separate config from other fields
+          const { integration_name, is_active, ...config } = updates
+
+          const requestBody: any = {}
+          if (Object.keys(config).length > 0) {
+            requestBody.config = config
+          }
+          if (integration_name !== undefined) {
+            requestBody.name = integration_name
+          }
+          if (is_active !== undefined) {
+            requestBody.is_active = is_active
+          }
+
           const response = await fetch(`/api/integrations/${integrationId}`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ config }),
+            body: JSON.stringify(requestBody),
           })
-          
+
           if (!response.ok) {
             throw new Error('Failed to update integration config')
           }

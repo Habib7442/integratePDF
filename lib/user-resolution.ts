@@ -40,12 +40,23 @@ export async function resolveClerkUserToDbUser(clerkUserId: string, createIfNotE
   console.log(`Creating missing user for Clerk ID: ${clerkUserId}`)
 
   try {
+    // Validate Clerk user ID format
+    if (!clerkUserId || typeof clerkUserId !== 'string' || !clerkUserId.startsWith('user_')) {
+      throw new Error(`Invalid Clerk user ID format: ${clerkUserId}`)
+    }
+
     // Try to get user data from Clerk to populate fields
     let clerkUserData = null
     try {
       clerkUserData = await clerkClient.users.getUser(clerkUserId)
+
+      // Validate that we got valid user data
+      if (!clerkUserData || !clerkUserData.id) {
+        throw new Error(`Invalid user data received from Clerk for ID: ${clerkUserId}`)
+      }
     } catch (clerkError) {
       console.warn(`Could not fetch Clerk user data for ${clerkUserId}:`, clerkError)
+      // Don't throw here - we can still create a user with minimal data
     }
 
     const { data: newUser, error: createError } = await supabase
@@ -65,18 +76,33 @@ export async function resolveClerkUserToDbUser(clerkUserId: string, createIfNotE
 
     if (createError) {
       // Check if it's a unique constraint violation (user was created by webhook in the meantime)
-      if (createError.code === '23505') {
+      if (createError.code === '23505' || createError.message?.includes('duplicate key')) {
         console.log(`User was created by webhook during race condition for Clerk ID: ${clerkUserId}`)
-        // Try to fetch the user again
-        const { data: retryUserData, error: retryError } = await supabase
-          .from('users')
-          .select('id')
-          .eq('clerk_user_id', clerkUserId)
-          .single()
 
-        if (retryUserData && !retryError) {
-          return retryUserData.id
+        // Try to fetch the user again with retry logic
+        let retryAttempts = 0
+        const maxRetryAttempts = 3
+
+        while (retryAttempts < maxRetryAttempts) {
+          const { data: retryUserData, error: retryError } = await supabase
+            .from('users')
+            .select('id')
+            .eq('clerk_user_id', clerkUserId)
+            .single()
+
+          if (retryUserData && !retryError) {
+            console.log(`Successfully resolved user after race condition for Clerk ID: ${clerkUserId}`)
+            return retryUserData.id
+          }
+
+          retryAttempts++
+          if (retryAttempts < maxRetryAttempts) {
+            console.log(`Retry attempt ${retryAttempts} for user resolution after race condition`)
+            await new Promise(resolve => setTimeout(resolve, 500 * retryAttempts))
+          }
         }
+
+        console.error(`Failed to resolve user after race condition and ${maxRetryAttempts} retries`)
       }
 
       throw new Error(`Failed to create user for Clerk ID: ${clerkUserId}. Error: ${createError.message}`)

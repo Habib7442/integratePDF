@@ -44,58 +44,61 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth()
-    
+
     if (!clerkUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     const supabase = getSupabaseServiceClient()
-    
-    // Check if user already exists
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('clerk_user_id', clerkUserId)
-      .single()
 
-    if (existingUser) {
-      // User exists, return existing profile
-      return NextResponse.json(existingUser)
+    // Use the robust user resolution function that handles race conditions
+    try {
+      const dbUserId = await resolveClerkUserWithRetry(clerkUserId)
+
+      // Fetch the complete user profile
+      const { data: userProfile, error: fetchError } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', dbUserId)
+        .single()
+
+      if (fetchError) {
+        console.error('Error fetching user profile after resolution:', fetchError)
+        return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
+      }
+
+      if (!userProfile) {
+        console.error('User profile not found after successful resolution')
+        return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
+      }
+
+      return NextResponse.json(userProfile)
+
+    } catch (resolutionError) {
+      console.error('User resolution failed:', resolutionError)
+
+      // Check if it's a validation error (400) or server error (500)
+      if (resolutionError instanceof Error) {
+        if (resolutionError.message.includes('User data not available') ||
+            resolutionError.message.includes('Invalid')) {
+          return NextResponse.json({
+            error: 'User data validation failed',
+            details: resolutionError.message
+          }, { status: 400 })
+        }
+      }
+
+      return NextResponse.json({
+        error: 'Failed to create/update profile',
+        details: resolutionError instanceof Error ? resolutionError.message : 'Unknown error'
+      }, { status: 500 })
     }
-
-    // Get Clerk user data
-    const { user } = await auth()
-    if (!user) {
-      return NextResponse.json({ error: 'User data not available' }, { status: 400 })
-    }
-
-    // Create new user profile
-    const { data: newUser, error: createError } = await supabase
-      .from('users')
-      .insert({
-        clerk_user_id: clerkUserId,
-        email: user.emailAddresses[0]?.emailAddress || '',
-        first_name: user.firstName,
-        last_name: user.lastName,
-        avatar_url: user.imageUrl,
-        subscription_tier: 'free',
-        documents_processed: 0,
-        monthly_limit: 10,
-      })
-      .select()
-      .single()
-
-    if (createError) {
-      console.error('Error creating user profile:', createError)
-      return NextResponse.json({ error: 'Failed to create profile' }, { status: 500 })
-    }
-
-    return NextResponse.json(newUser)
 
   } catch (error) {
     console.error('API error:', error)
-    return NextResponse.json({ 
-      error: 'Internal server error' 
+    return NextResponse.json({
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 })
   }
 }

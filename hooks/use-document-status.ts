@@ -120,7 +120,7 @@ export function useDocumentStatus({
           onError(data.error_message || 'Processing failed')
         }
       }
-    }, 15000) // 15 second intervals
+    }, 10000) // 10 second intervals for more responsive updates
   }, [fetchStatus, isFinalStatus, onComplete, onError, clearPolling, documentId])
 
   // Manual refresh function

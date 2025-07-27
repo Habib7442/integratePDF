@@ -17,11 +17,11 @@ export const INTEGRATIONS: Integration[] = [
     configFields: [
       {
         key: 'api_key',
-        label: 'API Key',
+        label: 'Internal Integration Secret',
         type: 'token',
         required: true,
-        placeholder: 'Enter your Notion integration API key',
-        description: 'Your Notion integration API key (starts with secret_)'
+        placeholder: 'Enter your Notion internal integration secret',
+        description: 'Your Notion internal integration secret token'
       },
       {
         key: 'database_id',
