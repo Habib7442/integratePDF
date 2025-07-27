@@ -58,7 +58,7 @@ export async function resolveClerkUserToDbUser(clerkUserId: string, createIfNotE
         avatar_url: clerkUserData?.imageUrl || null,
         subscription_tier: 'free',
         documents_processed: 0,
-        monthly_limit: 5,
+        monthly_limit: 10,
       })
       .select('id')
       .single()

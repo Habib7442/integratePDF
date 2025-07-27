@@ -98,7 +98,7 @@ const integrations = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 bg-gradient-to-br from-slate-50 to-blue-50/30 relative overflow-hidden">
+    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50/30 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.1),transparent_50%)]" />
@@ -106,13 +106,13 @@ export function FeaturesSection() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Stats Section */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-16 sm:mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
             {stats.map((stat, index) => {
               const Icon = stat.icon
               return (
@@ -124,11 +124,11 @@ export function FeaturesSection() {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
                 >
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Icon className="w-8 h-8 text-white" />
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                   </div>
-                  <div className="text-3xl font-bold text-slate-900 mb-2">{stat.number}</div>
-                  <div className="text-slate-600 font-medium">{stat.label}</div>
+                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-1 sm:mb-2">{stat.number}</div>
+                  <div className="text-slate-600 font-medium text-sm sm:text-base">{stat.label}</div>
                 </motion.div>
               )
             })}
@@ -137,30 +137,31 @@ export function FeaturesSection() {
 
         {/* Section header */}
         <motion.div
-          className="text-center mb-20"
+          className="text-center mb-16 sm:mb-20 px-4 sm:px-0"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-            <Sparkles className="w-4 h-4 mr-2" />
+          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
             Core Features
           </Badge>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 sm:mb-8 leading-tight">
             Everything you need to
-            <br />
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
               automate PDF workflows
             </span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Built specifically for busy founders and small business owners who want to eliminate manual data entry and streamline their operations.
           </p>
         </motion.div>
 
         {/* Features grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20 lg:mb-24">
           {features.map((feature, index) => {
             const Icon = feature.icon
             return (
@@ -177,27 +178,27 @@ export function FeaturesSection() {
                   {/* Gradient background */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
 
-                  <CardHeader className="pb-4 relative">
-                    <div className="flex items-start justify-between mb-6">
-                      <div className={`p-4 rounded-2xl bg-gradient-to-br ${feature.gradient} shadow-lg`}>
-                        <Icon className="w-7 h-7 text-white" />
+                  <CardHeader className="pb-3 sm:pb-4 relative">
+                    <div className="flex items-start justify-between mb-4 sm:mb-6">
+                      <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.gradient} shadow-lg`}>
+                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
                       </div>
-                      <Badge className={`bg-gradient-to-r ${feature.gradient} text-white border-0`}>
+                      <Badge className={`bg-gradient-to-r ${feature.gradient} text-white border-0 text-xs sm:text-sm`}>
                         {feature.badge}
                       </Badge>
                     </div>
-                    <CardTitle className="text-xl font-bold text-slate-900 mb-2">
+                    <CardTitle className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
                       {feature.title}
                     </CardTitle>
-                    <div className="text-sm text-slate-500 font-medium mb-4">
+                    <div className="text-xs sm:text-sm text-slate-500 font-medium mb-3 sm:mb-4">
                       {feature.benefit}
                     </div>
                   </CardHeader>
                   <CardContent className="relative">
-                    <CardDescription className="text-slate-600 leading-relaxed mb-4">
+                    <CardDescription className="text-slate-600 leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
                       {feature.description}
                     </CardDescription>
-                    <div className="flex items-center text-sm">
+                    <div className="flex items-center text-xs sm:text-sm">
                       <TrendingUp className="w-4 h-4 text-green-500 mr-2" />
                       <span className="text-slate-700 font-medium">{feature.stats}</span>
                     </div>

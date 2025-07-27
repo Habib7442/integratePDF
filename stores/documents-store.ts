@@ -184,7 +184,7 @@ export const useDocumentsStore = create<DocumentsState>()(
 
       uploadDocument: async (file: File, documentType?: string) => {
         const { setUploading, setError, addDocument } = get()
-        
+
         try {
           setUploading(true)
           setError(null)
@@ -201,7 +201,25 @@ export const useDocumentsStore = create<DocumentsState>()(
           })
 
           if (!response.ok) {
-            throw new Error('Failed to upload document')
+            // Try to get the error message from the response
+            let errorMessage = 'Failed to upload document'
+            try {
+              const errorData = await response.json()
+              if (errorData.error) {
+                // Handle specific error cases
+                if (response.status === 429) {
+                  errorMessage = `Monthly limit reached (${errorData.processed}/${errorData.limit} documents used). Please upgrade your plan to upload more documents.`
+                } else {
+                  errorMessage = errorData.error
+                }
+              }
+            } catch (parseError) {
+              // If we can't parse the error response, use status-based message
+              if (response.status === 429) {
+                errorMessage = 'Monthly document limit reached. Please upgrade your plan to upload more documents.'
+              }
+            }
+            throw new Error(errorMessage)
           }
 
           const result = await response.json()

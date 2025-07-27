@@ -110,7 +110,7 @@ export function useUserProfile() {
     if (!user) return null
 
     const monthlyLimits = {
-      free: 5,
+      free: 10,
       pro: 500,
       business: 2500,
     }

@@ -36,7 +36,7 @@ export async function GET() {
         email: '', // Will be updated from client
         subscription_tier: 'free',
         documents_processed: 0,
-        monthly_limit: 5,
+        monthly_limit: 10,
       })
       .select()
       .single()

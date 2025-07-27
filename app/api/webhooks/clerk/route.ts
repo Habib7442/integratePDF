@@ -106,7 +106,7 @@ async function handleUserCreated(data: ClerkWebhookEvent['data']) {
         avatar_url: data.image_url,
         subscription_tier: 'free',
         documents_processed: 0,
-        monthly_limit: 5,
+        monthly_limit: 10,
       })
 
     if (error) {

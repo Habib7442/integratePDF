@@ -16,7 +16,7 @@ CREATE TABLE users (
     avatar_url TEXT,
     subscription_tier subscription_tier DEFAULT 'free',
     documents_processed INTEGER DEFAULT 0,
-    monthly_limit INTEGER DEFAULT 5,
+    monthly_limit INTEGER DEFAULT 10,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

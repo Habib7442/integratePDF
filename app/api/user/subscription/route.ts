@@ -29,7 +29,7 @@ export async function PUT(request: NextRequest) {
     const supabase = getSupabaseServiceClient()
     
     const monthlyLimits = {
-      free: 5,
+      free: 10,
       pro: 500,
       business: 2500,
     }

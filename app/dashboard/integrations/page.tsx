@@ -110,59 +110,61 @@ export default function IntegrationsPage() {
         }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <motion.div
-          className="mb-12"
+          className="mb-8 sm:mb-10 lg:mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
             <motion.button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <ArrowLeft className="h-4 w-4" />
-              Back to Dashboard
+              <span className="text-sm sm:text-base">Back to Dashboard</span>
             </motion.button>
 
             <motion.button
               onClick={() => router.push('/')}
-              className="flex items-center gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               <Home className="h-4 w-4" />
-              Home
+              <span className="text-sm sm:text-base">Home</span>
             </motion.button>
           </div>
 
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
                 Integrations
               </h1>
-              <p className="text-xl text-slate-600 mt-2">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-600 mt-1 sm:mt-2">
                 Connect your favorite tools to automate data workflows
               </p>
             </div>
 
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <Button
-                onClick={() => setShowConnectForm(true)}
-                className="flex items-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg px-6 py-3 text-lg"
-                size="lg"
+            <div className="w-full lg:w-auto">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Plus className="h-5 w-5" />
-                Add Integration
-              </Button>
-            </motion.div>
+                <Button
+                  onClick={() => setShowConnectForm(true)}
+                  className="w-full lg:w-auto flex items-center justify-center gap-2 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-lg px-6 py-3 text-base lg:text-lg min-h-[44px]"
+                  size="lg"
+                >
+                  <Plus className="h-5 w-5" />
+                  <span>Add Integration</span>
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </motion.div>
 
@@ -170,23 +172,23 @@ export default function IntegrationsPage() {
         <AnimatePresence>
           {error && (
             <motion.div
-              className="mb-8"
+              className="mb-6 sm:mb-8"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-2xl p-6 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center">
-                      <AlertCircle className="w-5 h-5 text-white" />
+              <div className="bg-gradient-to-r from-red-50 to-red-100 border border-red-200 rounded-2xl p-4 sm:p-6 shadow-lg">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-red-500 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <AlertCircle className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
-                    <p className="text-red-800 font-medium">{error}</p>
+                    <p className="text-red-800 font-medium text-sm sm:text-base break-words">{error}</p>
                   </div>
                   <motion.button
                     onClick={clearError}
-                    className="p-2 hover:bg-red-200 rounded-lg transition-colors"
+                    className="p-2 hover:bg-red-200 rounded-lg transition-colors self-end sm:self-auto flex-shrink-0"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
@@ -209,22 +211,22 @@ export default function IntegrationsPage() {
               transition={{ duration: 0.3 }}
             >
               <Card className="bg-gradient-to-br from-white to-violet-50/50 border-violet-200 shadow-lg">
-                <CardHeader className="pb-6">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center">
-                        <Link className="h-6 w-6 text-white" />
+                <CardHeader className="pb-4 sm:pb-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Link className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                       </div>
-                      <div>
-                        <CardTitle className="text-xl text-slate-900">Connect New Integration</CardTitle>
-                        <CardDescription className="text-slate-600 mt-1">
+                      <div className="min-w-0 flex-1">
+                        <CardTitle className="text-lg sm:text-xl text-slate-900">Connect New Integration</CardTitle>
+                        <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
                           Choose an integration to connect to your account
                         </CardDescription>
                       </div>
                     </div>
                     <motion.button
                       onClick={() => setShowConnectForm(false)}
-                      className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                      className="p-2 hover:bg-slate-100 rounded-lg transition-colors self-end sm:self-auto flex-shrink-0"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -256,14 +258,14 @@ export default function IntegrationsPage() {
           className="mb-8"
         >
           <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg">
-            <CardHeader className="pb-6">
+            <CardHeader className="pb-4 sm:pb-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center">
-                  <Activity className="h-6 w-6 text-white" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
-                <div>
-                  <CardTitle className="text-xl text-slate-900">Your Integrations</CardTitle>
-                  <CardDescription className="text-slate-600 mt-1">
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="text-lg sm:text-xl text-slate-900">Your Integrations</CardTitle>
+                  <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
                     Manage your connected integrations and their settings
                   </CardDescription>
                 </div>
@@ -287,16 +289,16 @@ export default function IntegrationsPage() {
                 </motion.div>
               ) : userIntegrations.length === 0 ? (
                 <motion.div
-                  className="text-center py-20"
+                  className="text-center py-12 sm:py-16 lg:py-20 px-4"
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="w-24 h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-8">
-                    <ExternalLink className="w-12 h-12 text-slate-400" />
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
+                    <ExternalLink className="w-10 h-10 sm:w-12 sm:h-12 text-slate-400" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-3">No integrations connected</h3>
-                  <p className="text-lg text-slate-600 mb-8 max-w-md mx-auto">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">No integrations connected</h3>
+                  <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-md mx-auto">
                     Connect your first integration to start automating your data workflows
                   </p>
                   <motion.div
@@ -305,10 +307,10 @@ export default function IntegrationsPage() {
                   >
                     <Button
                       onClick={() => setShowConnectForm(true)}
-                      className="bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 px-8 py-3 text-lg"
+                      className="w-full sm:w-auto bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 px-6 sm:px-8 py-3 text-base sm:text-lg min-h-[44px]"
                     >
                       <Plus className="h-5 w-5 mr-2" />
-                      Add Your First Integration
+                      <span>Add Your First Integration</span>
                     </Button>
                   </motion.div>
                 </motion.div>
@@ -328,22 +330,22 @@ export default function IntegrationsPage() {
                           whileHover={{ y: -2, scale: 1.01 }}
                           className="group"
                         >
-                          <div className="flex items-center justify-between p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 hover:shadow-lg transition-all duration-300">
-                            <div className="flex items-center space-x-6">
-                              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-                                {integrationDef?.icon ? integrationDef.icon() : <ExternalLink className="h-7 w-7 text-white" />}
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 hover:shadow-lg transition-all duration-300">
+                            <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
+                              <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                {integrationDef?.icon ? integrationDef.icon() : <ExternalLink className="h-6 w-6 sm:h-7 sm:w-7 text-white" />}
                               </div>
-                              <div>
-                                <h3 className="font-semibold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">
+                              <div className="min-w-0 flex-1">
+                                <h3 className="font-semibold text-slate-900 text-base sm:text-lg group-hover:text-blue-600 transition-colors truncate">
                                   {integration.integration_name}
                                 </h3>
-                                <p className="text-slate-600 mt-1">
+                                <p className="text-slate-600 mt-1 text-sm sm:text-base">
                                   {integrationDef?.description}
                                 </p>
-                                <div className="flex items-center gap-4 mt-3">
+                                <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 sm:mt-3">
                                   {getStatusBadge(integration)}
                                   {integration.last_sync && (
-                                    <span className="text-sm text-slate-500 flex items-center gap-1">
+                                    <span className="text-xs sm:text-sm text-slate-500 flex items-center gap-1 whitespace-nowrap">
                                       <Sparkles className="h-3 w-3" />
                                       Last sync: {new Date(integration.last_sync).toLocaleDateString()}
                                     </span>
@@ -352,26 +354,27 @@ export default function IntegrationsPage() {
                               </div>
                             </div>
 
-                            <div className="flex items-center space-x-3">
-                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-1 sm:flex-none">
                                 <Button
                                   variant="outline"
                                   size="sm"
                                   onClick={() => router.push(`/dashboard/integrations/${integration.id}`)}
-                                  className="bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300"
+                                  className="w-full sm:w-auto bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 min-h-[36px]"
                                 >
                                   <Settings className="h-4 w-4 mr-2" />
-                                  Settings
+                                  <span>Settings</span>
                                 </Button>
                               </motion.div>
-                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="flex-shrink-0">
                                 <Button
                                   variant="outline"
                                   size="sm"
                                   onClick={() => handleDisconnect(integration.id)}
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 min-h-[36px] px-3"
                                 >
                                   <Trash2 className="h-4 w-4" />
+                                  <span className="ml-2 sm:hidden">Delete</span>
                                 </Button>
                               </motion.div>
                             </div>
@@ -393,7 +396,7 @@ export default function IntegrationsPage() {
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <Card className="bg-gradient-to-br from-white to-blue-50/30 border-blue-200 shadow-lg">
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-6 lg:p-8">
               <NotionDatabaseManager
                 userIntegrations={userIntegrations}
                 onAddDatabase={handleAddDatabase}

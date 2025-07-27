@@ -122,39 +122,41 @@ export function FAQSection() {
   const activeCategoryData = faqCategories.find(cat => cat.id === activeCategory)
 
   return (
-    <section className="py-24 bg-gradient-to-br from-white via-slate-50 to-blue-50/30 relative overflow-hidden">
+    <section className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-white via-slate-50 to-blue-50/30 relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_50%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.1),transparent_50%)]" />
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <motion.div 
-          className="text-center mb-16"
+        <motion.div
+          className="text-center mb-12 sm:mb-16 px-4 sm:px-0"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
-            <HelpCircle className="w-4 h-4 mr-2" />
-            Frequently Asked Questions
+          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
+            <HelpCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+            <span className="hidden sm:inline">Frequently Asked Questions</span>
+            <span className="sm:hidden">FAQ</span>
           </Badge>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 mb-8 leading-tight">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 sm:mb-8 leading-tight">
             Got questions?
-            <br />
+            <br className="hidden sm:block" />
+            <span className="sm:hidden"> </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
               We have answers
             </span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
             Everything you need to know about IntegratePDF, from security and privacy to integrations and billing.
           </p>
         </motion.div>
 
         {/* Category tabs */}
-        <motion.div 
-          className="flex flex-wrap justify-center gap-4 mb-12"
+        <motion.div
+          className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12 px-4 sm:px-0"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -166,7 +168,7 @@ export function FAQSection() {
               <motion.button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
-                className={`flex items-center px-6 py-3 rounded-2xl font-semibold transition-all duration-300 ${
+                className={`flex items-center justify-center sm:justify-start px-4 sm:px-6 py-3 rounded-xl sm:rounded-2xl font-semibold transition-all duration-300 w-full sm:w-auto min-h-[48px] touch-manipulation ${
                   activeCategory === category.id
                     ? `bg-gradient-to-r ${category.color} text-white shadow-lg`
                     : 'bg-white/80 text-slate-600 hover:bg-white hover:text-slate-900 border border-slate-200'
@@ -174,16 +176,16 @@ export function FAQSection() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Icon className="w-5 h-5 mr-2" />
-                {category.name}
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                <span className="text-sm sm:text-base">{category.name}</span>
               </motion.button>
             )
           })}
         </motion.div>
 
         {/* FAQ Content */}
-        <motion.div 
-          className="max-w-4xl mx-auto"
+        <motion.div
+          className="max-w-4xl mx-auto px-4 sm:px-0"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -197,7 +199,7 @@ export function FAQSection() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
-                className="space-y-4"
+                className="space-y-3 sm:space-y-4"
               >
                 {activeCategoryData.faqs.map((faq, index) => {
                   const isOpen = openFAQ === `${activeCategory}-${index}`
