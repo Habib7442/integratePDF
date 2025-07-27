@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { StoreProvider } from '@/components/providers/store-provider'
 import { NotificationContainer } from '@/components/ui/notifications'
 import { Toaster } from 'sonner'
+import { StructuredData, APP_STRUCTURED_DATA } from '@/components/seo/structured-data'
 import './globals.css'
 
 const geistSans = Geist({
@@ -83,41 +84,7 @@ export const metadata: Metadata = {
   classification: 'Business Software',
 }
 
-// Structured Data for SEO
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "IntegratePDF",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web",
-  "description": "AI-powered PDF data extraction and integration platform that transforms PDFs into structured data and seamlessly integrates with business tools like Notion.",
-  "url": "https://integratepdf.com",
-  "author": {
-    "@type": "Organization",
-    "name": "IntegratePDF"
-  },
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "description": "Free plan with 10 PDFs per month"
-  },
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingValue": "4.9",
-    "ratingCount": "200",
-    "bestRating": "5"
-  },
-  "featureList": [
-    "AI-powered PDF data extraction",
-    "Notion database integration",
-    "CSV export functionality",
-    "95% accuracy rate",
-    "Batch processing",
-    "API access",
-    "Enterprise security"
-  ]
-}
+// Structured data is now imported from the safe component
 
 export default function RootLayout({
   children,
@@ -133,10 +100,7 @@ export default function RootLayout({
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 
           {/* Structured Data */}
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-          />
+          <StructuredData data={APP_STRUCTURED_DATA} />
 
           {/* Performance and Security Headers */}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { resolveClerkUserWithRetry } from '@/lib/user-resolution'
 import { createClient } from '@supabase/supabase-js'
+import { validateFile, sanitizeFileName } from '@/lib/file-validation'
+import { createRateLimitMiddleware, rateLimitConfigs } from '@/lib/rate-limit'
+
+// Create rate limit middleware for uploads
+const uploadRateLimitMiddleware = createRateLimitMiddleware(rateLimitConfigs.upload)
 
 // Use service role for server-side operations to bypass RLS
 const getSupabaseServiceClient = () => {
@@ -54,6 +59,12 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = uploadRateLimitMiddleware(request)
+    if (rateLimitResponse) {
+      return rateLimitResponse
+    }
+
     const { userId: clerkUserId } = await auth()
 
     if (!clerkUserId) {
@@ -65,6 +76,17 @@ export async function POST(request: NextRequest) {
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+    }
+
+    // Enhanced file validation
+    const validationResult = await validateFile(file)
+    if (!validationResult.isValid) {
+      return NextResponse.json({ error: validationResult.error }, { status: 400 })
+    }
+
+    // Log warnings if any
+    if (validationResult.warnings) {
+      console.warn('File validation warnings:', validationResult.warnings)
     }
 
     const supabase = getSupabaseServiceClient()
@@ -89,8 +111,9 @@ export async function POST(request: NextRequest) {
       }, { status: 429 })
     }
 
-    // Upload file to Supabase Storage
-    const fileExt = file.name.split('.').pop()
+    // Upload file to Supabase Storage with sanitized filename
+    const sanitizedOriginalName = sanitizeFileName(file.name)
+    const fileExt = sanitizedOriginalName.split('.').pop()
     const fileName = `${user.id}/${Date.now()}.${fileExt}`
     
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -107,7 +130,7 @@ export async function POST(request: NextRequest) {
       .from('documents')
       .insert({
         user_id: user.id,
-        filename: file.name,
+        filename: sanitizedOriginalName,
         file_size: file.size,
         file_type: file.type,
         storage_path: uploadData.path,

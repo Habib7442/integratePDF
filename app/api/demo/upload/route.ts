@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { extractDataFromPDF } from '@/lib/pdf-processing'
+import { validateFile } from '@/lib/file-validation'
+import { createRateLimitMiddleware, rateLimitConfigs } from '@/lib/rate-limit'
+
+// Create rate limit middleware for demo uploads
+const rateLimitMiddleware = createRateLimitMiddleware(rateLimitConfigs.upload)
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = rateLimitMiddleware(request)
+    if (rateLimitResponse) {
+      return rateLimitResponse
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     const isDemo = formData.get('demo') === 'true'
@@ -12,15 +23,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    // Validate file type
-    if (file.type !== 'application/pdf') {
-      return NextResponse.json({ error: 'Only PDF files are allowed' }, { status: 400 })
+    // Enhanced file validation
+    const validationResult = await validateFile(file)
+    if (!validationResult.isValid) {
+      return NextResponse.json({ error: validationResult.error }, { status: 400 })
     }
 
-    // Validate file size (10MB limit)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.size > maxSize) {
-      return NextResponse.json({ error: 'File too large. Maximum size is 10MB' }, { status: 400 })
+    // Log warnings if any
+    if (validationResult.warnings) {
+      console.warn('File validation warnings:', validationResult.warnings)
     }
 
     if (!isDemo) {

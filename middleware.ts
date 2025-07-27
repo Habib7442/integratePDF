@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { createSecurityHeaders } from '@/lib/security-headers';
 
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
@@ -33,13 +34,8 @@ export default clerkMiddleware(async (auth, req) => {
       await auth.protect();
     }
 
-    // Add request tracking headers for API routes
-    if (isApiRoute(req)) {
-      const response = NextResponse.next();
-      response.headers.set('x-request-id', crypto.randomUUID());
-      response.headers.set('x-timestamp', new Date().toISOString());
-      return response;
-    }
+    // Temporarily disable all custom headers for debugging
+    return NextResponse.next();
   } catch (error) {
     console.error('Middleware error:', error);
     throw error;

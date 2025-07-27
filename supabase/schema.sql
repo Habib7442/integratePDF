@@ -132,40 +132,40 @@ ALTER TABLE document_templates ENABLE ROW LEVEL SECURITY;
 
 -- Create RLS policies for users table
 CREATE POLICY "Users can view own profile" ON users
-    FOR SELECT USING (clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id');
+    FOR SELECT USING (clerk_user_id = auth.jwt() ->> 'sub');
 
 CREATE POLICY "Users can update own profile" ON users
-    FOR UPDATE USING (clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id');
+    FOR UPDATE USING (clerk_user_id = auth.jwt() ->> 'sub');
 
 CREATE POLICY "Users can insert own profile" ON users
-    FOR INSERT WITH CHECK (clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id');
+    FOR INSERT WITH CHECK (clerk_user_id = auth.jwt() ->> 'sub');
 
 -- Create RLS policies for documents table
 CREATE POLICY "Users can view own documents" ON documents
     FOR SELECT USING (
         user_id IN (
-            SELECT id FROM users WHERE clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id'
+            SELECT id FROM users WHERE clerk_user_id = auth.jwt() ->> 'sub'
         )
     );
 
 CREATE POLICY "Users can insert own documents" ON documents
     FOR INSERT WITH CHECK (
         user_id IN (
-            SELECT id FROM users WHERE clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id'
+            SELECT id FROM users WHERE clerk_user_id = auth.jwt() ->> 'sub'
         )
     );
 
 CREATE POLICY "Users can update own documents" ON documents
     FOR UPDATE USING (
         user_id IN (
-            SELECT id FROM users WHERE clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id'
+            SELECT id FROM users WHERE clerk_user_id = auth.jwt() ->> 'sub'
         )
     );
 
 CREATE POLICY "Users can delete own documents" ON documents
     FOR DELETE USING (
         user_id IN (
-            SELECT id FROM users WHERE clerk_user_id = auth.jwt() -> 'user_metadata' ->> 'user_id'
+            SELECT id FROM users WHERE clerk_user_id = auth.jwt() ->> 'sub'
         )
     );
 

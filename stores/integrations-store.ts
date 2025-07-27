@@ -376,7 +376,16 @@ export const useIntegrationsStore = create<IntegrationsState>()(
 
         try {
           const response = await fetch(
-            `/api/integrations/notion/database/${integration.config.database_id}?api_key=${encodeURIComponent(integration.config.api_key)}`
+            `/api/integrations/notion/database/${integration.config.database_id}`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                api_key: integration.config.api_key
+              })
+            }
           )
 
           if (!response.ok) {
