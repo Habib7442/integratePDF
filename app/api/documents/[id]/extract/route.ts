@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
-import { inngest } from '@/inngest'
+import { extractDataFromPDF, saveExtractedDataToDatabase } from '@/lib/pdf-processing'
 
 // Use service role for server-side operations to bypass RLS
 const getSupabaseServiceClient = () => {
@@ -117,41 +117,93 @@ export async function POST(
       return NextResponse.json({ error: 'Failed to update document status' }, { status: 500 })
     }
 
-    // Send event to Inngest for background processing
+    // Process document directly (no background job needed)
     try {
-      await inngest.send({
-        name: 'pdf/extract.requested',
-        data: {
-          documentId,
-          userId: clerkUserId, // Use Clerk user ID for the background job
-          fileName: document.filename,
-          filePath: document.storage_path,
-          keywords: keywords.trim()
-        }
-      })
+      console.log(`Starting direct extraction for document ${documentId}`)
 
-      return NextResponse.json({
-        success: true,
-        message: 'PDF extraction started',
-        documentId,
-        status: 'pending'
-      })
-
-    } catch (inngestError) {
-      console.error('Error sending Inngest event:', inngestError)
-      
-      // Revert document status if Inngest fails
+      // Update document status to processing
       await supabase
         .from('documents')
         .update({
-          processing_status: 'failed',
-          error_message: 'Failed to queue extraction job',
+          processing_status: 'processing',
+          processing_started_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         })
         .eq('id', documentId)
 
-      return NextResponse.json({ 
-        error: 'Failed to start extraction process' 
+      // Download file from Supabase Storage
+      console.log(`Downloading file: ${document.storage_path}`)
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from('documents')
+        .download(document.storage_path)
+
+      if (downloadError) {
+        throw new Error(`Failed to download file: ${downloadError.message}`)
+      }
+
+      // Convert blob to base64
+      const arrayBuffer = await fileData.arrayBuffer()
+      const base64Data = Buffer.from(arrayBuffer).toString('base64')
+
+      // Extract data using Gemini AI
+      console.log(`Extracting data from: ${document.filename}`)
+      const extractedData = await extractDataFromPDF(
+        document.filename,
+        'application/pdf',
+        base64Data,
+        keywords.trim() || ''
+      )
+
+      // Save extracted data to database
+      console.log(`Saving extracted data for document ${documentId}`)
+      await saveExtractedDataToDatabase(
+        documentId,
+        dbUserId,
+        extractedData
+      )
+
+      // Update document status to completed
+      await supabase
+        .from('documents')
+        .update({
+          processing_status: 'completed',
+          processing_completed_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', documentId)
+
+      console.log(`Extraction completed successfully for document ${documentId}`)
+
+      return NextResponse.json({
+        success: true,
+        message: 'PDF extraction completed successfully',
+        documentId,
+        status: 'completed',
+        extractedData: extractedData.structuredData.map(item => ({
+          field_key: item.key,
+          field_value: item.value,
+          data_type: 'string',
+          confidence: item.confidence,
+        }))
+      })
+
+    } catch (extractionError) {
+      console.error('Error during direct extraction:', extractionError)
+
+      // Update document status to failed
+      await supabase
+        .from('documents')
+        .update({
+          processing_status: 'failed',
+          processing_completed_at: new Date().toISOString(),
+          error_message: extractionError instanceof Error ? extractionError.message : 'Unknown extraction error',
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', documentId)
+
+      return NextResponse.json({
+        error: 'Document extraction failed',
+        details: extractionError instanceof Error ? extractionError.message : 'Unknown error'
       }, { status: 500 })
     }
 

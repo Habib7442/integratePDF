@@ -94,7 +94,7 @@ export default function ProcessingStatus({
     
     switch (status?.processing_status) {
       case 'pending':
-        return 'Queued for processing...'
+        return 'Starting extraction...'
       case 'processing':
         return 'Extracting data from PDF...'
       case 'completed':

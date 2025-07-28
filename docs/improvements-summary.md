@@ -126,8 +126,8 @@ const { refresh: refreshDocument } = useRealtimeDocument({
 // Before: 15 second intervals
 }, 15000)
 
-// After: 10 second intervals for more responsive updates
-}, 10000)
+// After: 5 second intervals for direct processing
+}, 5000)
 ```
 
 ### How It Works
