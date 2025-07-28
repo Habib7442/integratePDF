@@ -7,27 +7,24 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Authenticated Supabase client that uses Clerk session token
+// Server-side authenticated Supabase client that uses Clerk JWT
 export async function createClerkSupabaseClient() {
   const { getToken } = await auth()
 
   return createClient(supabaseUrl, supabaseAnonKey, {
-    // Use Clerk session token directly
-    accessToken: async () => {
-      const token = await getToken()
-      return token ?? null
+    global: {
+      headers: async () => {
+        const token = await getToken({ template: 'supabase' })
+        return token ? { Authorization: `Bearer ${token}` } : {}
+      },
     },
   })
 }
 
-// Client-side authenticated Supabase client
-export function createClerkSupabaseClientBrowser() {
-  if (typeof window === 'undefined') {
-    throw new Error('This function can only be called on the client side')
-  }
-
-  // This will be implemented after we set up the client-side hook
-  return supabase
+// Service role client for admin operations (bypasses RLS)
+export function getSupabaseServiceClient() {
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  return createClient(supabaseUrl, serviceRoleKey)
 }
 
 // Database types (will be generated from Supabase)

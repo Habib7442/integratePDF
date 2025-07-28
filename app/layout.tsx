@@ -5,6 +5,7 @@ import { StoreProvider } from '@/components/providers/store-provider'
 import { NotificationContainer } from '@/components/ui/notifications'
 import { Toaster } from 'sonner'
 import { StructuredData, APP_STRUCTURED_DATA } from '@/components/seo/structured-data'
+import { UserSync } from '@/components/auth/user-sync'
 import './globals.css'
 
 const geistSans = Geist({
@@ -114,6 +115,7 @@ export default function RootLayout({
         </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900`}>
           <StoreProvider>
+            <UserSync />
             {children}
             <NotificationContainer />
             <Toaster position="top-right" />

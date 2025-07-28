@@ -28,25 +28,12 @@ export async function GET() {
       return NextResponse.json({ user: existingUser })
     }
 
-    // User doesn't exist, create new profile
-    const { data: newUser, error: createError } = await supabase
-      .from('users')
-      .insert({
-        clerk_user_id: userId,
-        email: '', // Will be updated from client
-        subscription_tier: 'free',
-        documents_processed: 0,
-        monthly_limit: 10,
-      })
-      .select()
-      .single()
-
-    if (createError) {
-      console.error('Error creating user:', createError)
-      return NextResponse.json({ error: 'Failed to create user' }, { status: 500 })
-    }
-
-    return NextResponse.json({ user: newUser })
+    // User doesn't exist - this should be handled by Clerk webhook
+    // Return 404 to indicate user needs to be created via webhook first
+    console.log(`User not found for Clerk ID: ${userId}. User should be created via webhook.`)
+    return NextResponse.json({
+      error: 'User profile not found. Please try again in a moment.'
+    }, { status: 404 })
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

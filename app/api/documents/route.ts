@@ -1,33 +1,26 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { resolveClerkUserWithRetry } from '@/lib/user-resolution'
-import { createClient } from '@supabase/supabase-js'
-
-// Use service role for server-side operations to bypass RLS
-const getSupabaseServiceClient = () => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  return createClient(supabaseUrl, serviceRoleKey)
-}
+import { createClerkSupabaseClient } from '@/lib/supabase'
 
 export async function GET() {
   try {
     const { userId: clerkUserId } = await auth()
-    
+
     if (!clerkUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = getSupabaseServiceClient()
-    
-    // First, get the database user ID from Clerk user ID with retry logic
-    const dbUserId = await resolveClerkUserWithRetry(clerkUserId)
-    
-    // Get all documents for this user
+    const supabase = await createClerkSupabaseClient()
+
+    // Get user's documents using RLS
+    // The JWT token automatically filters to the current user's documents
     const { data: documents, error: documentsError } = await supabase
       .from('documents')
-      .select('*')
-      .eq('user_id', dbUserId)
+      .select(`
+        *,
+        users!inner(clerk_user_id)
+      `)
+      .eq('users.clerk_user_id', clerkUserId)
       .order('created_at', { ascending: false })
 
     if (documentsError) {

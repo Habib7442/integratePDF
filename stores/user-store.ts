@@ -72,16 +72,18 @@ export const useUserStore = create<UserState>()(
 
             while (retryCount < maxRetries) {
               try {
-                const createResponse = await fetch('/api/user/profile', {
+                const createResponse = await fetch('/api/user/sync', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ clerkUserId })
+                  body: JSON.stringify({}) // Empty body - API gets data from Clerk
                 })
 
                 if (createResponse.ok) {
-                  const userData = await createResponse.json()
+                  const result = await createResponse.json()
+                  const userData = result.user || result // Handle both response formats
                   setUser(userData)
                   setAuthenticated(true)
+                  console.log('User initialized successfully:', userData)
                   return // Success, exit the function
                 }
 

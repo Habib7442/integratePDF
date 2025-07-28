@@ -69,51 +69,36 @@ export default function DocumentDetailPage() {
 
   const { showSuccessNotification, showErrorNotification } = useNotifications()
 
-  // Real-time document updates
-  const { refresh: refreshDocument } = useRealtimeDocument({
-    documentId,
-    onDocumentUpdate: (updatedDocument) => {
-      // Update the document in the store
-      fetchDocument(documentId)
-    },
-    onExtractionComplete: (extractedData) => {
-      // Refresh extracted data when processing completes
-      fetchExtractedData(documentId).then(() => {
-        showSuccessNotification('Success', 'Document processing completed! Data is now available.')
-      }).catch((err) => {
-        console.error('Failed to fetch extracted data after completion:', err)
-        showErrorNotification('Error', 'Processing completed but failed to load extracted data')
-      })
-    },
-    onError: (error) => {
-      showErrorNotification('Real-time Update Error', error)
-    }
-  })
+  // Temporarily disable real-time updates to fix infinite loop
+  // const { refresh: refreshDocument } = useRealtimeDocument({
+  //   documentId,
+  //   onDocumentUpdate: (updatedDocument) => {
+  //     // The real-time hook already updates the document state
+  //     // No need to call fetchDocument again
+  //   },
+  //   onExtractionComplete: (extractedData) => {
+  //     // Refresh extracted data when processing completes
+  //     fetchExtractedData(documentId).then(() => {
+  //       showSuccessNotification('Success', 'Document processing completed! Data is now available.')
+  //     }).catch((err) => {
+  //       console.error('Failed to fetch extracted data after completion:', err)
+  //       showErrorNotification('Error', 'Processing completed but failed to load extracted data')
+  //     })
+  //   },
+  //   onError: (error) => {
+  //     showErrorNotification('Real-time Update Error', error)
+  //   }
+  // })
 
   // Fetch document details - only run once on mount
   useEffect(() => {
     if (documentId) {
-      // Fetch document
-      fetchDocument(documentId).then(() => {
-        // If document is completed, fetch extracted data
-        if (document?.processing_status === 'completed') {
-          fetchExtractedData(documentId).catch((err) => {
-            console.error('Failed to fetch extracted data:', err)
-            showErrorNotification('Error', 'Failed to load extracted data')
-          })
-        }
-
-        // Show processing status if document is being processed
-        if (document?.processing_status === 'pending' || document?.processing_status === 'processing') {
-          setShowProcessingStatus(true)
-          setProcessingDocumentId(documentId)
-        }
-      }).catch((err) => {
+      fetchDocument(documentId).catch((err) => {
         console.error('Failed to fetch document:', err)
         showErrorNotification('Error', 'Failed to load document')
       })
     }
-  }, [documentId, fetchDocument, fetchExtractedData, showErrorNotification, setShowProcessingStatus, setProcessingDocumentId])
+  }, [documentId]) // Only depend on documentId to prevent infinite loop
 
   // Update processing status when document status changes
   useEffect(() => {
@@ -135,7 +120,7 @@ export default function DocumentDetailPage() {
         })
       }
     }
-  }, [document?.processing_status, documentId, extractedData, fetchExtractedData, setShowProcessingStatus, setProcessingDocumentId, showErrorNotification])
+  }, [document?.processing_status, documentId, extractedData]) // Removed function dependencies to prevent infinite loop
 
   const handleExtractionStarted = async (keywords?: string) => {
     try {

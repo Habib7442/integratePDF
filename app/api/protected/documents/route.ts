@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { resolveClerkUserWithRetry } from '@/lib/user-resolution'
 import { createClient } from '@supabase/supabase-js'
 import { validateFile, sanitizeFileName } from '@/lib/file-validation'
 import { createRateLimitMiddleware, rateLimitConfigs } from '@/lib/rate-limit'
@@ -25,8 +24,16 @@ export async function GET() {
 
     const supabase = getSupabaseServiceClient()
 
-    // Get the database user ID from Clerk user ID with retry logic
-    const dbUserId = await resolveClerkUserWithRetry(clerkUserId)
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
 
     // Get user's documents
     const { data: documents, error } = await supabase
@@ -42,7 +49,7 @@ export async function GET() {
           is_corrected
         )
       `)
-      .eq('user_id', dbUserId)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
     if (error) {

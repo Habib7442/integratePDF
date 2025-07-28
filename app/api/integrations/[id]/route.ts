@@ -24,14 +24,14 @@ export async function GET(
     const { id: integrationId } = await params
     const supabase = getSupabaseServiceClient()
 
-    // Get user ID
-    const { data: userData, error: userError } = await supabase
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', userId)
       .single()
 
-    if (userError || !userData) {
+    if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
@@ -40,7 +40,7 @@ export async function GET(
       .from('integrations')
       .select('*')
       .eq('id', integrationId)
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .single()
 
     if (error) {
@@ -129,14 +129,14 @@ export async function DELETE(
     const { id: integrationId } = await params
     const supabase = getSupabaseServiceClient()
 
-    // Get user ID
-    const { data: userData, error: userError } = await supabase
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', userId)
       .single()
 
-    if (userError || !userData) {
+    if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
@@ -145,7 +145,7 @@ export async function DELETE(
       .from('integrations')
       .delete()
       .eq('id', integrationId)
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
 
     if (error) {
       console.error('Error deleting integration:', error)

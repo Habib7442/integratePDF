@@ -23,19 +23,16 @@ export async function GET(
     const { id: documentId } = await params
     const supabase = getSupabaseServiceClient()
 
-    // First, get the database user ID from Clerk user ID
-    const { data: userData, error: userError } = await supabase
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', clerkUserId)
       .single()
 
-    if (userError || !userData) {
-      console.error('Error finding user:', userError)
+    if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
-
-    const dbUserId = userData.id
 
     // Get document processing status with ownership verification
     const { data: document, error: docError } = await supabase
@@ -52,7 +49,7 @@ export async function GET(
         updated_at
       `)
       .eq('id', documentId)
-      .eq('user_id', dbUserId) // Verify ownership
+      .eq('user_id', user.id) // Verify ownership
       .single()
 
     if (docError) {

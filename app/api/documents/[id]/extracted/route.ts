@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import {
-  verifyDocumentOwnership,
-  getExtractedDataWithOwnership,
-  updateExtractedFieldWithOwnership
-} from '@/lib/user-resolution'
+import { createClient } from '@supabase/supabase-js'
+
+// Use service role for server-side operations to bypass RLS
+const getSupabaseServiceClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  return createClient(supabaseUrl, serviceRoleKey)
+}
 
 export async function GET(
   request: NextRequest,
@@ -18,12 +21,42 @@ export async function GET(
     }
 
     const { id: documentId } = await params
+    const supabase = getSupabaseServiceClient()
 
-    // Verify document ownership and get document data
-    const { document } = await verifyDocumentOwnership(documentId, clerkUserId)
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
 
-    // Get extracted data with ownership verification
-    const extractedData = await getExtractedDataWithOwnership(documentId, clerkUserId)
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Verify document ownership
+    const { data: document, error: docError } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('id', documentId)
+      .eq('user_id', user.id)
+      .single()
+
+    if (docError || !document) {
+      return NextResponse.json({ error: 'Document not found' }, { status: 404 })
+    }
+
+    // Get extracted data
+    const { data: extractedData, error: extractedError } = await supabase
+      .from('extracted_data')
+      .select('*')
+      .eq('document_id', documentId)
+      .order('created_at', { ascending: true })
+
+    if (extractedError) {
+      console.error('Error fetching extracted data:', extractedError)
+      return NextResponse.json({ error: 'Failed to fetch extracted data' }, { status: 500 })
+    }
 
     // Calculate processing statistics
     const totalFields = extractedData?.length || 0
@@ -97,14 +130,48 @@ export async function PUT(
       }, { status: 400 })
     }
 
-    // Update the field with ownership verification
-    const updatedField = await updateExtractedFieldWithOwnership(
-      field_id,
-      documentId,
-      clerkUserId,
-      field_value,
-      is_corrected
-    )
+    const supabase = getSupabaseServiceClient()
+
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Verify document ownership first
+    const { data: document, error: docError } = await supabase
+      .from('documents')
+      .select('id')
+      .eq('id', documentId)
+      .eq('user_id', user.id)
+      .single()
+
+    if (docError || !document) {
+      return NextResponse.json({ error: 'Document not found' }, { status: 404 })
+    }
+
+    // Update the extracted field
+    const { data: updatedField, error: updateError } = await supabase
+      .from('extracted_data')
+      .update({
+        field_value,
+        is_corrected,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', field_id)
+      .eq('document_id', documentId)
+      .select()
+      .single()
+
+    if (updateError) {
+      console.error('Error updating extracted field:', updateError)
+      return NextResponse.json({ error: 'Failed to update field' }, { status: 500 })
+    }
 
     return NextResponse.json({
       success: true,

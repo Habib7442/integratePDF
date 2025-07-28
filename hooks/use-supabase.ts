@@ -2,7 +2,7 @@
 
 import { useUser, useSession } from '@clerk/nextjs'
 import { createClient } from '@supabase/supabase-js'
-import { useMemo, useCallback } from 'react'
+import { useMemo } from 'react'
 import type { Database } from '@/lib/supabase'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -14,8 +14,19 @@ export function useSupabase() {
 
   const supabase = useMemo(() => {
     return createClient<Database>(supabaseUrl, supabaseAnonKey, {
-      // Session accessed from Clerk SDK
-      accessToken: async () => session?.getToken() ?? null,
+      global: {
+        headers: async () => {
+          if (!session) return {}
+
+          try {
+            const token = await session.getToken({ template: 'supabase' })
+            return token ? { Authorization: `Bearer ${token}` } : {}
+          } catch (error) {
+            console.error('Error getting Clerk token:', error)
+            return {}
+          }
+        },
+      },
     })
   }, [session])
 
@@ -26,71 +37,14 @@ export function useSupabase() {
   }
 }
 
-// Hook for user profile management
+// Hook for user profile management (simplified for new integration)
 export function useUserProfile() {
   const { supabase, user, isAuthenticated } = useSupabase()
 
-  const createOrUpdateProfile = async () => {
-    if (!user || !isAuthenticated) {
-      console.log('User not authenticated')
-      return null
-    }
-
-    // First, try to get existing user by clerk_user_id
-    const { data: existingUser } = await supabase
-      .from('users')
-      .select('*')
-      .eq('clerk_user_id', user.id)
-      .single()
-
-    if (existingUser) {
-      // User exists, update it
-      const { data, error } = await supabase
-        .from('users')
-        .update({
-          email: user.emailAddresses[0]?.emailAddress || '',
-          first_name: user.firstName,
-          last_name: user.lastName,
-          avatar_url: user.imageUrl,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('clerk_user_id', user.id)
-        .select()
-        .single()
-
-      if (error) {
-        console.error('Error updating user profile:', error)
-        return null
-      }
-      return data
-    }
-
-    // User doesn't exist, create new one
-    const { data, error } = await supabase
-      .from('users')
-      .insert({
-        clerk_user_id: user.id,
-        email: user.emailAddresses[0]?.emailAddress || '',
-        first_name: user.firstName,
-        last_name: user.lastName,
-        avatar_url: user.imageUrl,
-        subscription_tier: 'free',
-        documents_processed: 0,
-        monthly_limit: 5,
-      })
-      .select()
-      .single()
-
-    if (error) {
-      console.error('Error creating user profile:', error)
-      return null
-    }
-
-    return data
-  }
-
   const getProfile = async () => {
-    if (!user || !isAuthenticated) return null
+    if (!user || !isAuthenticated) {
+      return null
+    }
 
     const { data, error } = await supabase
       .from('users')
@@ -105,6 +59,46 @@ export function useUserProfile() {
 
     return data
   }
+
+  const updateProfile = async (updates: {
+    email?: string
+    first_name?: string
+    last_name?: string
+    avatar_url?: string
+  }) => {
+    if (!user || !isAuthenticated) {
+      return null
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .update({
+        ...updates,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('clerk_user_id', user.id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Error updating user profile:', error)
+      return null
+    }
+
+    return data
+  }
+
+  return {
+    getProfile,
+    updateProfile,
+    user,
+    isAuthenticated,
+  }
+}
+
+// Legacy hook for subscription management
+export function useSubscription() {
+  const { supabase, user } = useSupabase()
 
   const updateSubscription = async (tier: 'free' | 'pro' | 'business') => {
     if (!user) return null

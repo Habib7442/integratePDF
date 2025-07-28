@@ -1,26 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { resolveClerkUserWithRetry, verifyDocumentOwnership } from '@/lib/user-resolution'
-import { createClient } from '@supabase/supabase-js'
-
-// Use service role for server-side operations to bypass RLS
-const getSupabaseServiceClient = () => {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-  return createClient(supabaseUrl, serviceRoleKey)
-}
+import { createClerkSupabaseClient } from '@/lib/supabase'
 
 export async function GET() {
   try {
     const { userId: clerkUserId } = await auth()
-    
+
     if (!clerkUserId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = getSupabaseServiceClient()
-    
-    // Get user profile
+    const supabase = await createClerkSupabaseClient()
+
+    // Get user profile using RLS (Row Level Security)
+    // The JWT token automatically filters to the current user
     const { data: userData, error: userError } = await supabase
       .from('users')
       .select('*')
@@ -35,13 +28,13 @@ export async function GET() {
 
   } catch (error) {
     console.error('API error:', error)
-    return NextResponse.json({ 
-      error: 'Internal server error' 
+    return NextResponse.json({
+      error: 'Internal server error'
     }, { status: 500 })
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
   try {
     const { userId: clerkUserId } = await auth()
 
@@ -49,56 +42,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = getSupabaseServiceClient()
+    const body = await request.json()
+    const { email, first_name, last_name, avatar_url } = body
 
-    // Use the robust user resolution function that handles race conditions
-    try {
-      const dbUserId = await resolveClerkUserWithRetry(clerkUserId)
+    const supabase = await createClerkSupabaseClient()
 
-      // Fetch the complete user profile
-      const { data: userProfile, error: fetchError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', dbUserId)
-        .single()
+    // Update user profile using RLS
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('users')
+      .update({
+        email,
+        first_name,
+        last_name,
+        avatar_url,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('clerk_user_id', clerkUserId)
+      .select()
+      .single()
 
-      if (fetchError) {
-        console.error('Error fetching user profile after resolution:', fetchError)
-        return NextResponse.json({ error: 'Failed to fetch profile' }, { status: 500 })
-      }
-
-      if (!userProfile) {
-        console.error('User profile not found after successful resolution')
-        return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
-      }
-
-      return NextResponse.json(userProfile)
-
-    } catch (resolutionError) {
-      console.error('User resolution failed:', resolutionError)
-
-      // Check if it's a validation error (400) or server error (500)
-      if (resolutionError instanceof Error) {
-        if (resolutionError.message.includes('User data not available') ||
-            resolutionError.message.includes('Invalid')) {
-          return NextResponse.json({
-            error: 'User data validation failed',
-            details: resolutionError.message
-          }, { status: 400 })
-        }
-      }
-
-      return NextResponse.json({
-        error: 'Failed to create/update profile',
-        details: resolutionError instanceof Error ? resolutionError.message : 'Unknown error'
-      }, { status: 500 })
+    if (updateError) {
+      console.error('Error updating user profile:', updateError)
+      return NextResponse.json({ error: 'Failed to update profile' }, { status: 500 })
     }
+
+    return NextResponse.json(updatedUser)
 
   } catch (error) {
     console.error('API error:', error)
     return NextResponse.json({
-      error: 'Internal server error',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      error: 'Internal server error'
     }, { status: 500 })
   }
 }
+
+

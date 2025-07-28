@@ -20,15 +20,14 @@ export async function GET() {
 
     const supabase = getSupabaseServiceClient()
 
-    // First, get the database user ID from Clerk user ID
-    const { data: userData, error: userError } = await supabase
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', userId)
       .single()
 
-    if (userError || !userData) {
-      console.error('Error fetching user:', userError)
+    if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
@@ -36,7 +35,7 @@ export async function GET() {
     const { data: integrations, error } = await supabase
       .from('integrations')
       .select('*')
-      .eq('user_id', userData.id)
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
     if (error) {
@@ -67,14 +66,14 @@ export async function POST(request: NextRequest) {
 
     const supabase = getSupabaseServiceClient()
 
-    // Get user ID
-    const { data: userData, error: userError } = await supabase
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', userId)
       .single()
 
-    if (userError || !userData) {
+    if (userError || !user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
@@ -88,7 +87,7 @@ export async function POST(request: NextRequest) {
     const { data: integration, error } = await supabase
       .from('integrations')
       .insert({
-        user_id: userData.id,
+        user_id: user.id,
         integration_type: type,
         integration_name: name || type,
         config: secureConfig,
