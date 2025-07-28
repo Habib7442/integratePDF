@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { verifyDocumentOwnership } from '@/lib/user-resolution'
 import { createClient } from '@supabase/supabase-js'
 
 // Use service role for server-side operations to bypass RLS
@@ -22,9 +21,30 @@ export async function GET(
     }
 
     const { id: documentId } = await params
+    const supabase = getSupabaseServiceClient()
+
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
 
     // Verify document ownership and get document data
-    const { document } = await verifyDocumentOwnership(documentId, clerkUserId)
+    const { data: document, error: docError } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('id', documentId)
+      .eq('user_id', user.id)
+      .single()
+
+    if (docError || !document) {
+      return NextResponse.json({ error: 'Document not found' }, { status: 404 })
+    }
 
     return NextResponse.json(document)
 
@@ -62,11 +82,30 @@ export async function DELETE(
     }
 
     const { id: documentId } = await params
+    const supabase = getSupabaseServiceClient()
+
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
 
     // Verify document ownership and get document data
-    const { document } = await verifyDocumentOwnership(documentId, clerkUserId)
+    const { data: document, error: docError } = await supabase
+      .from('documents')
+      .select('id, storage_path')
+      .eq('id', documentId)
+      .eq('user_id', user.id)
+      .single()
 
-    const supabase = getSupabaseServiceClient()
+    if (docError || !document) {
+      return NextResponse.json({ error: 'Document not found' }, { status: 404 })
+    }
 
     // Delete from storage first if storage_path exists
     if (document.storage_path) {
