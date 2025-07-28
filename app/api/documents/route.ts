@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { createClerkSupabaseClient } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
+
+// Use service role for server-side operations to bypass RLS
+const getSupabaseServiceClient = () => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
+  return createClient(supabaseUrl, serviceRoleKey)
+}
 
 export async function GET() {
   try {
@@ -10,17 +17,24 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = await createClerkSupabaseClient()
+    const supabase = getSupabaseServiceClient()
 
-    // Get user's documents using RLS
-    // The JWT token automatically filters to the current user's documents
+    // Get user from database using Clerk ID
+    const { data: user, error: userError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('clerk_user_id', clerkUserId)
+      .single()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    }
+
+    // Get user's documents
     const { data: documents, error: documentsError } = await supabase
       .from('documents')
-      .select(`
-        *,
-        users!inner(clerk_user_id)
-      `)
-      .eq('users.clerk_user_id', clerkUserId)
+      .select('*')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false })
 
     if (documentsError) {

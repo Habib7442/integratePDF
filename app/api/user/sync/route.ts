@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth, clerkClient, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { getSupabaseServiceClient } from '@/lib/supabase'
 
 /**
@@ -14,43 +14,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get the actual user data from Clerk
-    let clerkUser
-    try {
-      console.log('Attempting to get user data from Clerk...')
+    // For now, we'll create a basic user record with just the Clerk ID
+    // The actual user data will be populated by the UserSync component on the client side
+    console.log('Creating/updating user record for Clerk ID:', clerkUserId)
 
-      // Try using currentUser() first (simpler approach)
-      clerkUser = await currentUser()
-
-      if (!clerkUser) {
-        console.log('currentUser() returned null, trying clerkClient approach...')
-        console.log('clerkClient type:', typeof clerkClient)
-
-        const client = await clerkClient()
-        console.log('Client obtained:', !!client)
-        console.log('Client users:', !!client?.users)
-
-        clerkUser = await client.users.getUser(clerkUserId)
-      }
-
-      console.log('User fetched successfully:', !!clerkUser)
-    } catch (error) {
-      console.error('Failed to fetch Clerk user:', error)
-      console.error('Error details:', {
-        name: error instanceof Error ? error.name : 'Unknown',
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : 'No stack'
-      })
-      return NextResponse.json({
-        error: 'Failed to fetch user data from Clerk',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      }, { status: 500 })
-    }
-
-    const email = clerkUser.emailAddresses[0]?.emailAddress || ''
-    const first_name = clerkUser.firstName || null
-    const last_name = clerkUser.lastName || null
-    const avatar_url = clerkUser.imageUrl || null
+    const email = ''
+    const first_name = null
+    const last_name = null
+    const avatar_url = null
 
     console.log('Syncing user via API:', { clerkUserId, email, first_name, last_name, avatar_url })
 
