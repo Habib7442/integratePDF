@@ -8,6 +8,7 @@ import { useAuth, useDocuments, useNotifications, useIntegrations } from '@/comp
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import DevUserCreator from '@/components/dev/dev-user-creator'
 import {
   FileText,
   Upload,
@@ -239,6 +240,22 @@ export default function Dashboard() {
             </div>
           </div>
         </motion.div>
+
+        {/* Development User Creator */}
+        {process.env.NODE_ENV === 'development' && (
+          <motion.div
+            className="mb-4 sm:mb-6"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <DevUserCreator onUserCreated={() => {
+              // Refresh user data after creation
+              fetchUserProfile()
+              fetchDocuments()
+            }} />
+          </motion.div>
+        )}
 
         {/* Error Alert */}
         {error && (

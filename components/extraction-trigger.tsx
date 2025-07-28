@@ -58,7 +58,11 @@ export default function ExtractionTrigger({
             await new Promise(resolve => setTimeout(resolve, 2000))
             return handleStartExtraction(1) // Retry once
           } else {
-            throw new Error('Account setup is taking longer than expected. Please refresh the page and try again.')
+            const isDev = process.env.NODE_ENV === 'development'
+            const devMessage = isDev
+              ? ' In development, use the "Create User" button on the dashboard or set up webhooks with ngrok.'
+              : ''
+            throw new Error(`Account setup is taking longer than expected. Please refresh the page and try again.${devMessage}`)
           }
         } else {
           throw new Error(errorData.error || 'Failed to start extraction')

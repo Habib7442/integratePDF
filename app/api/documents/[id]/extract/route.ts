@@ -158,7 +158,7 @@ export async function POST(
       console.log(`Saving extracted data for document ${documentId}`)
       await saveExtractedDataToDatabase(
         documentId,
-        dbUserId,
+        clerkUserId,
         extractedData
       )
 
