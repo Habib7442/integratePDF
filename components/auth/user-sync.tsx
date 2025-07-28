@@ -13,45 +13,11 @@ export function UserSync() {
   const [hasAttempted, setHasAttempted] = useState(false)
 
   useEffect(() => {
-    // Only sync once per session and when everything is loaded
-    if (!isLoaded || !userId || !user || hasAttempted) {
-      return
-    }
-
-    const performSync = async () => {
-      setSyncStatus('syncing')
-      setHasAttempted(true)
-
-      try {
-        console.log('Starting user sync for:', userId)
-
-        const response = await fetch('/api/user/sync', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({}), // Empty body since API gets data from Clerk
-        })
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(`API Error ${response.status}: ${errorData.error} - ${errorData.details || ''}`)
-        }
-
-        const result = await response.json()
-        setSyncStatus('success')
-        console.log('User profile synced successfully:', result)
-
-      } catch (error) {
-        setSyncStatus('error')
-        console.error('Error during user sync:', error)
-      }
-    }
-
-    // Longer delay to ensure Clerk user object is fully populated
-    const timer = setTimeout(performSync, 1000)
-
-    return () => clearTimeout(timer)
+    // DISABLED: User sync is now handled by the store initialization
+    // This prevents duplicate user creation
+    console.log('UserSync component loaded but sync is disabled to prevent duplicates')
+    setSyncStatus('success') // Mark as success to avoid UI issues
+    setHasAttempted(true)
   }, [isLoaded, userId, user, hasAttempted])
 
   // This component doesn't render anything visible

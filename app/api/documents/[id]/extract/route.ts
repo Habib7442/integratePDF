@@ -28,15 +28,72 @@ export async function POST(
     const supabase = getSupabaseServiceClient()
 
     // First, get the database user ID from Clerk user ID
-    const { data: userData, error: userError } = await supabase
+    // For new users, we may need to create the user record first
+    let userData = null
+    let userError = null
+
+    // Try to find existing user
+    const { data: existingUser, error: findError } = await supabase
       .from('users')
       .select('id')
       .eq('clerk_user_id', clerkUserId)
       .single()
 
+    if (existingUser) {
+      userData = existingUser
+    } else if (findError?.code === 'PGRST116') {
+      // User not found - this might be a new user, try to create them
+      console.log('User not found, attempting to create user record for:', clerkUserId)
+
+      try {
+        // Call the user sync API to create the user
+        const userSyncResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/user/sync`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': request.headers.get('Authorization') || '',
+            'Cookie': request.headers.get('Cookie') || ''
+          },
+          body: JSON.stringify({})
+        })
+
+        if (userSyncResponse.ok) {
+          const syncResult = await userSyncResponse.json()
+          userData = syncResult.user
+          console.log('Successfully created user record:', userData.id)
+        } else {
+          const syncError = await userSyncResponse.json()
+          console.error('Failed to create user via sync API:', syncError)
+          userError = new Error(`Failed to initialize user: ${syncError.error}`)
+        }
+      } catch (syncError) {
+        console.error('Error calling user sync API:', syncError)
+        userError = syncError
+      }
+
+      // If sync failed, try one more direct query in case user was created by another process
+      if (!userData) {
+        const { data: retryUser } = await supabase
+          .from('users')
+          .select('id')
+          .eq('clerk_user_id', clerkUserId)
+          .single()
+
+        if (retryUser) {
+          userData = retryUser
+          userError = null
+        }
+      }
+    } else {
+      userError = findError
+    }
+
     if (userError || !userData) {
-      console.error('Error finding user:', userError)
-      return NextResponse.json({ error: 'User not found' }, { status: 404 })
+      console.error('Error finding/creating user:', userError)
+      return NextResponse.json({
+        error: 'User initialization failed. Please try again in a moment.',
+        details: userError?.message || 'User not found'
+      }, { status: 404 })
     }
 
     const dbUserId = userData.id

@@ -27,7 +27,7 @@ export default function ExtractionTrigger({
                            document.processing_status === 'pending' ||
                            document.processing_status === 'failed'
 
-  const handleStartExtraction = async () => {
+  const handleStartExtraction = async (retryCount = 0) => {
     if (!canStartExtraction || loading) return
 
     setLoading(true)
@@ -39,14 +39,30 @@ export default function ExtractionTrigger({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          keywords: keywords.trim() 
+        body: JSON.stringify({
+          keywords: keywords.trim()
         }),
       })
 
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to start extraction')
+
+        // Handle specific error cases for better user experience
+        if (response.status === 404 && (
+          errorData.error?.includes('User initialization failed') ||
+          errorData.error?.includes('User not found')
+        )) {
+          // For new users, retry once after a short delay
+          if (retryCount === 0) {
+            setError('Setting up your account... Retrying in a moment.')
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            return handleStartExtraction(1) // Retry once
+          } else {
+            throw new Error('Account setup is taking longer than expected. Please refresh the page and try again.')
+          }
+        } else {
+          throw new Error(errorData.error || 'Failed to start extraction')
+        }
       }
 
       const result = await response.json()

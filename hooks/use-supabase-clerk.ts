@@ -52,47 +52,10 @@ export function useUserSync() {
   const { user } = useAuth()
 
   const syncUserProfile = async () => {
-    if (!isAuthenticated || !userId || !user) {
-      console.log('User sync skipped: not authenticated or missing data', {
-        isAuthenticated,
-        userId: !!userId,
-        user: !!user
-      })
-      return null
-    }
-
-    try {
-      console.log('Starting user sync via API for:', userId)
-
-      const userData = {
-        email: user.emailAddresses[0]?.emailAddress || '',
-        first_name: user.firstName,
-        last_name: user.lastName,
-        avatar_url: user.imageUrl,
-      }
-
-      console.log('User data to sync:', userData)
-
-      const response = await fetch('/api/user/sync', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      })
-
-      if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(`API Error ${response.status}: ${errorData.error} - ${errorData.details || ''}`)
-      }
-
-      const result = await response.json()
-      console.log('User sync successful:', result)
-
-      return result.user
-    } catch (error) {
-      console.error('Error syncing user profile:', error)
-      throw error // Re-throw to see the full error in the component
+    // DISABLED: User sync is now handled by the store initialization only
+    // This prevents duplicate user creation
+    console.log('useUserSync hook called but sync is disabled to prevent duplicates')
+    return null
     }
   }
 

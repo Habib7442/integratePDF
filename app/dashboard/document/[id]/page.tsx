@@ -8,6 +8,7 @@ import { ArrowLeft, FileText, Loader2, Home, Calendar, Database, TrendingUp, Spa
 import ExtractionTrigger from '@/components/extraction-trigger'
 import ProcessingStatus from '@/components/processing-status'
 import ResultsWithIntegration from '@/components/integrations/ResultsWithIntegration'
+import UserInitializationGuard from '@/components/user-initialization-guard'
 import { useRealtimeDocument } from '@/hooks/use-realtime-document'
 
 interface Document {
@@ -233,16 +234,25 @@ export default function DocumentDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
-          backgroundSize: '50px 50px'
-        }} />
-      </div>
+    <UserInitializationGuard
+      onInitialized={() => {
+        console.log('User initialized successfully')
+      }}
+      onError={(error) => {
+        console.error('User initialization error:', error)
+        showErrorNotification('Account Setup Error', error)
+      }}
+    >
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
         {/* Header */}
         <motion.div
           className="mb-8 sm:mb-10 lg:mb-12"
@@ -383,6 +393,6 @@ export default function DocumentDetailPage() {
           )}
         </div>
       </div>
-    </div>
+    </UserInitializationGuard>
   )
 }

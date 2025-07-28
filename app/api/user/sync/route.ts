@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
+import { clerkClient } from '@clerk/nextjs/server'
 import { getSupabaseServiceClient } from '@/lib/supabase'
 
 /**
- * Temporary API route to sync user profile using service role
- * This bypasses RLS for initial testing
+ * API route to sync user profile using service role with actual Clerk data
+ * This creates/updates user records with proper data from Clerk
  */
 export async function POST(request: NextRequest) {
   try {
@@ -14,32 +15,79 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // For now, we'll create a basic user record with just the Clerk ID
-    // The actual user data will be populated by the UserSync component on the client side
-    console.log('Creating/updating user record for Clerk ID:', clerkUserId)
+    console.log('Syncing user record for Clerk ID:', clerkUserId)
 
-    const email = ''
-    const first_name = null
-    const last_name = null
-    const avatar_url = null
+    // Get actual user data from Clerk
+    let clerkUser
+    try {
+      const client = await clerkClient()
+      clerkUser = await client.users.getUser(clerkUserId)
+    } catch (clerkError) {
+      console.error('Failed to fetch user from Clerk:', clerkError)
+      return NextResponse.json({
+        error: 'Failed to fetch user data from Clerk',
+        details: clerkError instanceof Error ? clerkError.message : 'Unknown error'
+      }, { status: 500 })
+    }
 
-    console.log('Syncing user via API:', { clerkUserId, email, first_name, last_name, avatar_url })
+    // Extract user data from Clerk
+    const email = clerkUser.emailAddresses[0]?.emailAddress || ''
+    const first_name = clerkUser.firstName || null
+    const last_name = clerkUser.lastName || null
+    const avatar_url = clerkUser.imageUrl || null
+
+    console.log('Syncing user with data:', { clerkUserId, email, first_name, last_name, avatar_url: !!avatar_url })
 
     const supabase = getSupabaseServiceClient()
 
-    // Check if user exists
-    const { data: existingUser, error: fetchError } = await supabase
+    // Check if user exists (and check for duplicates)
+    const { data: existingUsers, error: fetchError } = await supabase
       .from('users')
       .select('*')
       .eq('clerk_user_id', clerkUserId)
-      .single()
 
-    if (fetchError && fetchError.code !== 'PGRST116') {
+    if (fetchError) {
       console.error('Error fetching user:', fetchError)
-      return NextResponse.json({ 
-        error: 'Database error', 
-        details: fetchError.message 
+      return NextResponse.json({
+        error: 'Database error',
+        details: fetchError.message
       }, { status: 500 })
+    }
+
+    // Handle duplicates - if multiple users exist, keep the one with most complete data
+    let existingUser = null
+    if (existingUsers && existingUsers.length > 0) {
+      if (existingUsers.length > 1) {
+        console.warn(`Found ${existingUsers.length} duplicate users for Clerk ID ${clerkUserId}`)
+
+        // Sort by completeness (email, then created_at)
+        existingUsers.sort((a, b) => {
+          const aScore = (a.email ? 1 : 0) + (a.first_name ? 1 : 0) + (a.last_name ? 1 : 0)
+          const bScore = (b.email ? 1 : 0) + (b.first_name ? 1 : 0) + (b.last_name ? 1 : 0)
+
+          if (aScore !== bScore) return bScore - aScore // Higher score first
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime() // Older first
+        })
+
+        existingUser = existingUsers[0]
+
+        // Delete duplicates (keep the first one)
+        for (let i = 1; i < existingUsers.length; i++) {
+          const duplicate = existingUsers[i]
+          console.log(`Deleting duplicate user ${duplicate.id}`)
+
+          const { error: deleteError } = await supabase
+            .from('users')
+            .delete()
+            .eq('id', duplicate.id)
+
+          if (deleteError) {
+            console.error(`Failed to delete duplicate user ${duplicate.id}:`, deleteError)
+          }
+        }
+      } else {
+        existingUser = existingUsers[0]
+      }
     }
 
     const userData = {
