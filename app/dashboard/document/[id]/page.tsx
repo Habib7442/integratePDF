@@ -136,12 +136,21 @@ export default function DocumentDetailPage() {
   }
 
   const handleProcessingComplete = (data: ExtractedData) => {
+    console.log('Processing completed, refreshing data...', data)
     setShowProcessingStatus(false)
     setProcessingDocumentId(null)
 
-    // The real-time hook will handle data refresh automatically
-    // Just show a notification here
-    showSuccessNotification('Success', 'Document processing completed!')
+    // Refresh document and extracted data after completion
+    fetchDocument(documentId).then(() => {
+      console.log('Document refreshed, fetching extracted data...')
+      return fetchExtractedData(documentId)
+    }).then(() => {
+      console.log('Extracted data refreshed successfully')
+      showSuccessNotification('Success', 'Document processing completed!')
+    }).catch((err) => {
+      console.error('Failed to refresh data after completion:', err)
+      showErrorNotification('Error', 'Processing completed but failed to load results')
+    })
   }
 
   const handleProcessingError = (errorMessage: string) => {
@@ -373,7 +382,7 @@ export default function DocumentDetailPage() {
           )}
 
           {/* Extraction Results */}
-          {extractedData && (
+          {extractedData ? (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -390,7 +399,27 @@ export default function DocumentDetailPage() {
                 }}
               />
             </motion.div>
-          )}
+          ) : document?.processing_status === 'completed' ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="bg-blue-50 border border-blue-200 rounded-lg p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-900">Extraction Completed</h3>
+                  <p className="text-blue-700">Loading extracted data...</p>
+                </div>
+                <button
+                  onClick={() => fetchExtractedData(documentId)}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                >
+                  Refresh Results
+                </button>
+              </div>
+            </motion.div>
+          ) : null}
         </div>
       </div>
       </div>
