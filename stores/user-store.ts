@@ -65,50 +65,59 @@ export const useUserStore = create<UserState>()(
             setLoading(true)
             setError(null)
 
-            // Create or update profile with retry logic
+            console.log('Initializing user from webhook-created data:', clerkUserId)
+
+            // Fetch user data that should already exist (created by webhook)
             let retryCount = 0
-            const maxRetries = 3
+            const maxRetries = 5 // Increased retries to allow time for webhook processing
             let lastError: Error | null = null
 
             while (retryCount < maxRetries) {
               try {
-                const createResponse = await fetch('/api/user/sync', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({}) // Empty body - API gets data from Clerk
+                const response = await fetch('/api/protected/user', {
+                  method: 'GET',
+                  headers: { 'Content-Type': 'application/json' }
                 })
 
-                if (createResponse.ok) {
-                  const result = await createResponse.json()
-                  const userData = result.user || result // Handle both response formats
+                if (response.ok) {
+                  const result = await response.json()
+                  const userData = result.user || result
                   setUser(userData)
                   setAuthenticated(true)
-                  console.log('User initialized successfully:', userData)
+                  console.log('User initialized successfully from webhook data:', userData.email)
                   return // Success, exit the function
                 }
 
                 // Handle different error types
-                const errorData = await createResponse.json().catch(() => ({ error: 'Unknown error' }))
+                const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
 
-                if (createResponse.status === 400) {
-                  // Validation error - don't retry
-                  throw new Error(`Validation error: ${errorData.error || 'Invalid user data'}`)
-                } else if (createResponse.status === 401) {
+                if (response.status === 404) {
+                  // User not found - webhook might still be processing
+                  if (retryCount < maxRetries - 1) {
+                    console.log(`User not found (attempt ${retryCount + 1}), webhook may still be processing...`)
+                    lastError = new Error('User profile is being created. Please wait a moment.')
+                    retryCount++
+                    await new Promise(resolve => setTimeout(resolve, 2000 * (retryCount + 1))) // Longer wait for webhook
+                    continue
+                  } else {
+                    throw new Error('User profile not found. Please try signing out and signing in again.')
+                  }
+                } else if (response.status === 401) {
                   // Authentication error - don't retry
                   throw new Error('Authentication failed. Please sign in again.')
-                } else if (createResponse.status >= 500) {
+                } else if (response.status >= 500) {
                   // Server error - retry
                   lastError = new Error(`Server error: ${errorData.error || 'Internal server error'}`)
                   retryCount++
 
                   if (retryCount < maxRetries) {
-                    console.warn(`User initialization attempt ${retryCount} failed, retrying...`)
-                    await new Promise(resolve => setTimeout(resolve, 1000 * retryCount)) // Exponential backoff
+                    console.warn(`User fetch attempt ${retryCount} failed, retrying...`)
+                    await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
                     continue
                   }
                 } else {
                   // Other errors - don't retry
-                  throw new Error(`HTTP ${createResponse.status}: ${errorData.error || 'Unknown error'}`)
+                  throw new Error(`HTTP ${response.status}: ${errorData.error || 'Unknown error'}`)
                 }
 
               } catch (fetchError) {
@@ -120,14 +129,14 @@ export const useUserStore = create<UserState>()(
                 retryCount++
 
                 if (retryCount < maxRetries) {
-                  console.warn(`User initialization attempt ${retryCount} failed, retrying...`)
+                  console.warn(`User fetch attempt ${retryCount} failed, retrying...`)
                   await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
                 }
               }
             }
 
             // If we get here, all retries failed
-            throw lastError || new Error('Failed to initialize user after multiple attempts')
+            throw lastError || new Error('Failed to load user profile after multiple attempts. The user account may still be being created.')
 
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Failed to initialize user'

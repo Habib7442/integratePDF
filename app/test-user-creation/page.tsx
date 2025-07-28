@@ -52,20 +52,17 @@ export default function TestUserCreationPage() {
       const beforeCount = typeof beforeData.count === 'number' ? beforeData.count : 0
       updateResult('count-before', 'success', `Found ${beforeCount} users before test`, beforeData)
 
-      // Step 2: Call user sync API
-      updateResult('sync-call', 'running', 'Calling user sync API...')
-      const syncResponse = await fetch('/api/user/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      })
+      // Step 2: Check if user exists (webhook should have created it)
+      updateResult('sync-call', 'running', 'Checking if user exists in database...')
+      const userCheckResponse = await fetch('/api/protected/user')
 
-      if (syncResponse.ok) {
-        const syncData = await syncResponse.json()
-        updateResult('sync-call', 'success', `User sync ${syncData.action}: ${syncData.user.email}`, syncData)
+      if (userCheckResponse.ok) {
+        const userData = await userCheckResponse.json()
+        updateResult('sync-call', 'success', `User found in database: ${userData.user.email}`, userData)
       } else {
-        const syncError = await syncResponse.json()
-        updateResult('sync-call', 'error', `Sync failed: ${syncError.error}`, syncError)
+        const userError = await userCheckResponse.json()
+        updateResult('sync-call', 'error', `User not found: ${userError.error}`, userError)
+        return
       }
 
       // Step 3: Check user count after
@@ -82,20 +79,16 @@ export default function TestUserCreationPage() {
       const afterCount = typeof afterData.count === 'number' ? afterData.count : 0
       updateResult('count-after', 'success', `Found ${afterCount} users after test`, afterData)
 
-      // Step 4: Call sync again to test duplicate prevention
-      updateResult('sync-duplicate', 'running', 'Testing duplicate prevention...')
-      const duplicateResponse = await fetch('/api/user/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({})
-      })
+      // Step 4: Check user again to verify consistency
+      updateResult('sync-duplicate', 'running', 'Verifying user consistency...')
+      const verifyResponse = await fetch('/api/protected/user')
 
-      if (duplicateResponse.ok) {
-        const duplicateData = await duplicateResponse.json()
-        updateResult('sync-duplicate', 'success', `Second sync ${duplicateData.action}: ${duplicateData.user.email}`, duplicateData)
+      if (verifyResponse.ok) {
+        const verifyData = await verifyResponse.json()
+        updateResult('sync-duplicate', 'success', `User verified: ${verifyData.user.email}`, verifyData)
       } else {
-        const duplicateError = await duplicateResponse.json()
-        updateResult('sync-duplicate', 'error', `Second sync failed: ${duplicateError.error}`, duplicateError)
+        const verifyError = await verifyResponse.json()
+        updateResult('sync-duplicate', 'error', `Verification failed: ${verifyError.error}`, verifyError)
       }
 
       // Step 5: Final count check

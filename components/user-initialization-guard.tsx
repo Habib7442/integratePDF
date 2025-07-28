@@ -40,34 +40,30 @@ export default function UserInitializationGuard({
           onInitialized()
         }
       } else if (response.status === 404) {
-        // User not found, need to initialize
+        // User not found, webhook may still be processing
         setInitStatus('initializing')
-        
-        // Call user sync to create the user
-        const syncResponse = await fetch('/api/user/sync', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({})
-        })
 
-        if (syncResponse.ok) {
-          // Wait a moment for the user to be fully created
-          await new Promise(resolve => setTimeout(resolve, 1000))
-          
-          // Verify user was created
+        // Wait for webhook to process and create the user
+        let retryCount = 0
+        const maxRetries = 10
+
+        while (retryCount < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, 2000)) // Wait 2 seconds
+
           const verifyResponse = await fetch('/api/protected/user')
           if (verifyResponse.ok) {
             setInitStatus('ready')
             if (onInitialized) {
               onInitialized()
             }
-          } else {
-            throw new Error('User verification failed after creation')
+            return
           }
-        } else {
-          const syncError = await syncResponse.json()
-          throw new Error(syncError.error || 'Failed to initialize user account')
+
+          retryCount++
+          console.log(`Waiting for user creation (attempt ${retryCount}/${maxRetries})...`)
         }
+
+        throw new Error('User account creation is taking longer than expected. Please try refreshing the page.')
       } else {
         const errorData = await response.json()
         throw new Error(errorData.error || 'Failed to check user status')

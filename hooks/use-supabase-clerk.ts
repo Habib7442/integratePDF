@@ -42,26 +42,4 @@ export function useSupabaseClerk() {
   }
 }
 
-/**
- * Hook to automatically sync user profile with Supabase
- * This ensures user data is created/updated when they sign in
- * Temporarily uses API route to bypass RLS issues
- */
-export function useUserSync() {
-  const { isAuthenticated, userId } = useSupabaseClerk()
-  const { user } = useAuth()
 
-  const syncUserProfile = async () => {
-    // DISABLED: User sync is now handled by the store initialization only
-    // This prevents duplicate user creation
-    console.log('useUserSync hook called but sync is disabled to prevent duplicates')
-    return null
-    }
-  }
-
-  return {
-    syncUserProfile,
-    isAuthenticated,
-    userId,
-  }
-}

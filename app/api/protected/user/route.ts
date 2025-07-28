@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
-import { createClerkSupabaseClient } from '@/lib/supabase'
+import { getSupabaseServiceClient } from '@/lib/supabase'
 
 export async function GET() {
   try {
@@ -10,9 +10,11 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const supabase = await createClerkSupabaseClient()
-    
-    // Get or create user profile
+    const supabase = getSupabaseServiceClient()
+
+    console.log(`Looking up user for Clerk ID: ${userId}`)
+
+    // Get user profile using service role (bypasses RLS)
     const { data: existingUser, error: fetchError } = await supabase
       .from('users')
       .select('*')
@@ -25,14 +27,15 @@ export async function GET() {
     }
 
     if (existingUser) {
+      console.log(`User found: ${existingUser.email}`)
       return NextResponse.json({ user: existingUser })
     }
 
-    // User doesn't exist - this should be handled by Clerk webhook
-    // Return 404 to indicate user needs to be created via webhook first
-    console.log(`User not found for Clerk ID: ${userId}. User should be created via webhook.`)
+    // User doesn't exist - this should not happen if webhook is working
+    console.log(`User not found for Clerk ID: ${userId}. Webhook may not have processed yet.`)
+
     return NextResponse.json({
-      error: 'User profile not found. Please try again in a moment.'
+      error: 'User profile not found. Please wait a moment for your account to be created.'
     }, { status: 404 })
   } catch (error) {
     console.error('API error:', error)
@@ -51,7 +54,7 @@ export async function PUT(request: NextRequest) {
     const body = await request.json()
     const { email, first_name, last_name, avatar_url } = body
 
-    const supabase = await createClerkSupabaseClient()
+    const supabase = getSupabaseServiceClient()
     
     const { data, error } = await supabase
       .from('users')

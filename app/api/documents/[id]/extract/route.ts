@@ -45,44 +45,24 @@ export async function POST(
       // User not found - this might be a new user, try to create them
       console.log('User not found, attempting to create user record for:', clerkUserId)
 
-      try {
-        // Call the user sync API to create the user
-        const userSyncResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/user/sync`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': request.headers.get('Authorization') || '',
-            'Cookie': request.headers.get('Cookie') || ''
-          },
-          body: JSON.stringify({})
-        })
+      // User should be created by webhook, but may still be processing
+      console.log('User not found, webhook may still be processing. Waiting...')
 
-        if (userSyncResponse.ok) {
-          const syncResult = await userSyncResponse.json()
-          userData = syncResult.user
-          console.log('Successfully created user record:', userData.id)
-        } else {
-          const syncError = await userSyncResponse.json()
-          console.error('Failed to create user via sync API:', syncError)
-          userError = new Error(`Failed to initialize user: ${syncError.error}`)
-        }
-      } catch (syncError) {
-        console.error('Error calling user sync API:', syncError)
-        userError = syncError
-      }
+      // Wait a bit and try again
+      await new Promise(resolve => setTimeout(resolve, 3000))
 
-      // If sync failed, try one more direct query in case user was created by another process
-      if (!userData) {
-        const { data: retryUser } = await supabase
-          .from('users')
-          .select('id')
-          .eq('clerk_user_id', clerkUserId)
-          .single()
+      const retryResult = await supabase
+        .from('users')
+        .select('id, documents_processed, monthly_limit')
+        .eq('clerk_user_id', clerkUserId)
+        .single()
 
-        if (retryUser) {
-          userData = retryUser
-          userError = null
-        }
+      if (retryResult.error || !retryResult.data) {
+        console.error('User still not found after waiting:', retryResult.error)
+        userError = new Error('User account is still being created. Please try again in a moment.')
+      } else {
+        userData = retryResult.data
+        console.log('Found user after waiting:', userData.id)
       }
     } else {
       userError = findError
