@@ -393,6 +393,7 @@ export default function DocumentDetailPage() {
           )}
         </div>
       </div>
+      </div>
     </UserInitializationGuard>
   )
 }
