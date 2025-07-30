@@ -22,14 +22,14 @@ function SectionLoader() {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-slate-950">
       <SkipLink />
       <Navigation />
       <main id="main-content" role="main">
         {/* Above the fold - load immediately */}
         <HeroSection />
 
-        {/* Below the fold - lazy load for performance */}
+        {/* Essential sections only - simplified for minimal design */}
         <Suspense fallback={<SectionLoader />}>
           <LazySection>
             <InteractiveDemoSection />
@@ -42,24 +42,12 @@ export default function Home() {
           </LazySection>
         </Suspense>
 
-        
-        <Suspense fallback={<SectionLoader />}>
-          <LazySection>
-            <TestimonialsSection />
-          </LazySection>
-        </Suspense>
-
         <Suspense fallback={<SectionLoader />}>
           <LazySection>
             <PricingSection />
           </LazySection>
         </Suspense>
 
-        <Suspense fallback={<SectionLoader />}>
-          <LazySection>
-            <FAQSection />
-          </LazySection>
-        </Suspense>
       </main>
       <Footer />
     </div>

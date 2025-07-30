@@ -71,10 +71,10 @@ export default function IntegrationSettingsPage() {
 
   if (!isLoaded || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading integration settings...</p>
+          <p className="text-slate-300">Loading integration settings...</p>
         </div>
       </div>
     )
@@ -82,11 +82,11 @@ export default function IntegrationSettingsPage() {
 
   if (!currentIntegration || !integrationTemplate) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Integration Not Found</h1>
-          <p className="text-gray-600 mb-4">The requested integration could not be found.</p>
+          <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-slate-100 mb-2">Integration Not Found</h1>
+          <p className="text-slate-300 mb-4">The requested integration could not be found.</p>
           <Button onClick={() => router.push('/dashboard/integrations')}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Integrations
@@ -162,26 +162,26 @@ export default function IntegrationSettingsPage() {
 
   const getStatusBadge = () => {
     if (!isActive) {
-      return <Badge variant="secondary">Inactive</Badge>
+      return <Badge variant="secondary" className="bg-slate-700 text-slate-300 border-slate-600">Inactive</Badge>
     }
-    
+
     if (currentIntegration.last_sync) {
       const lastSync = new Date(currentIntegration.last_sync)
       const now = new Date()
       const diffHours = (now.getTime() - lastSync.getTime()) / (1000 * 60 * 60)
-      
+
       if (diffHours < 24) {
-        return <Badge variant="default" className="bg-green-100 text-green-800">Connected</Badge>
+        return <Badge variant="default" className="bg-green-900/20 text-green-400 border-green-600">Connected</Badge>
       } else {
-        return <Badge variant="destructive">Connection Issues</Badge>
+        return <Badge variant="destructive" className="bg-red-900/20 text-red-400 border-red-600">Connection Issues</Badge>
       }
     }
-    
-    return <Badge variant="outline">Not Tested</Badge>
+
+    return <Badge variant="outline" className="bg-slate-700 text-slate-300 border-slate-600">Not Tested</Badge>
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -196,12 +196,12 @@ export default function IntegrationSettingsPage() {
           
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="p-3 bg-white rounded-lg shadow-sm">
+              <div className="p-3 bg-slate-800 rounded-lg shadow-sm">
                 {integrationTemplate.icon()}
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">{integrationName || integrationTemplate.name}</h1>
-                <p className="text-gray-600">{integrationTemplate.description}</p>
+                <h1 className="text-2xl font-bold text-slate-100">{integrationName || integrationTemplate.name}</h1>
+                <p className="text-slate-300">{integrationTemplate.description}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -214,7 +214,7 @@ export default function IntegrationSettingsPage() {
           {/* Main Settings */}
           <div className="lg:col-span-2 space-y-6">
             {/* Basic Settings */}
-            <Card>
+            <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Settings className="h-5 w-5" />

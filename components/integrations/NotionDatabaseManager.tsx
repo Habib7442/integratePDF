@@ -88,8 +88,8 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Notion Databases</h3>
-          <p className="text-sm text-gray-600">
+          <h3 className="text-lg font-semibold text-slate-100">Notion Databases</h3>
+          <p className="text-sm text-slate-300">
             Manage your connected Notion databases. You can connect multiple databases and choose which one to use when pushing data.
           </p>
         </div>
@@ -106,11 +106,11 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
       {/* Existing Databases */}
       <div className="grid gap-4">
         {notionIntegrations.length === 0 ? (
-          <Card>
+          <Card className="bg-slate-700 border-slate-600">
             <CardContent className="flex flex-col items-center justify-center py-8">
-              <Database className="h-12 w-12 text-gray-400 mb-4" />
-              <h4 className="font-medium text-gray-900 mb-2">No databases connected</h4>
-              <p className="text-sm text-gray-600 text-center mb-4">
+              <Database className="h-12 w-12 text-slate-400 mb-4" />
+              <h4 className="font-medium text-slate-100 mb-2">No databases connected</h4>
+              <p className="text-sm text-slate-300 text-center mb-4">
                 Connect your first Notion database to start pushing extracted data automatically.
               </p>
               <Button onClick={() => setShowAddForm(true)} variant="outline">
@@ -125,12 +125,12 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
             const testResult = testResults[integration.id]
             
             return (
-              <Card key={integration.id}>
+              <Card key={integration.id} className="bg-slate-700 border-slate-600">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h4 className="font-medium">{integration.integration_name}</h4>
+                        <h4 className="font-medium text-slate-100">{integration.integration_name}</h4>
                         <Badge variant={integration.is_active ? "default" : "secondary"}>
                           {integration.is_active ? "Active" : "Inactive"}
                         </Badge>
@@ -150,8 +150,8 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
                           </Badge>
                         )}
                       </div>
-                      <div className="text-sm text-gray-600 space-y-1">
-                        <div>Database ID: <code className="bg-gray-100 px-1 rounded text-xs">
+                      <div className="text-sm text-slate-300 space-y-1">
+                        <div>Database ID: <code className="bg-slate-700 px-1 rounded text-xs text-slate-300">
                           {formatDatabaseId(integration.config.database_id)}
                         </code></div>
                         {integration.last_sync && (
@@ -195,13 +195,13 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
 
       {/* Add Database Form */}
       {showAddForm && (
-        <Card>
+        <Card className="bg-slate-700 border-slate-600">
           <CardHeader>
-            <CardTitle>Add New Notion Database</CardTitle>
+            <CardTitle className="text-slate-100">Add New Notion Database</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="database-name">Database Name</Label>
+              <Label htmlFor="database-name" className="text-slate-300">Database Name</Label>
               <Input
                 id="database-name"
                 placeholder="e.g., Invoice Database"
@@ -210,7 +210,7 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor="api-key">Internal Integration Secret</Label>
+              <Label htmlFor="api-key" className="text-slate-300">Internal Integration Secret</Label>
               <Input
                 id="api-key"
                 type="password"
@@ -220,7 +220,7 @@ const NotionDatabaseManager: React.FC<NotionDatabaseManagerProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor="database-id">Database ID</Label>
+              <Label htmlFor="database-id" className="text-slate-300">Database ID</Label>
               <Input
                 id="database-id"
                 placeholder="32-character database ID"

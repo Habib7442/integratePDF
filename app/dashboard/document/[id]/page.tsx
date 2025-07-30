@@ -171,9 +171,9 @@ export default function DocumentDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
         <motion.div
-          className="flex flex-col sm:flex-row items-center gap-4 bg-white/80 backdrop-blur-sm px-6 sm:px-8 py-6 rounded-2xl shadow-lg border border-slate-200 max-w-sm sm:max-w-md w-full"
+          className="flex flex-col sm:flex-row items-center gap-4 bg-slate-800/80 backdrop-blur-sm px-6 sm:px-8 py-6 rounded-2xl shadow-lg border border-slate-700 max-w-sm sm:max-w-md w-full"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.3 }}
@@ -182,7 +182,7 @@ export default function DocumentDetailPage() {
             <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
             <div className="absolute inset-0 h-8 w-8 border-2 border-blue-200 rounded-full animate-pulse" />
           </div>
-          <span className="text-base sm:text-lg font-medium text-slate-700 text-center sm:text-left">Loading document...</span>
+          <span className="text-base sm:text-lg font-medium text-slate-100 text-center sm:text-left">Loading document...</span>
         </motion.div>
       </div>
     )
@@ -190,18 +190,18 @@ export default function DocumentDetailPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
         <motion.div
-          className="text-center bg-white/80 backdrop-blur-sm p-6 sm:p-8 lg:p-12 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200 max-w-sm sm:max-w-md w-full"
+          className="text-center bg-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-12 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-700 max-w-sm sm:max-w-md w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-red-500" />
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-900/20 to-red-800/20 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-red-400" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">Error Loading Document</h2>
-          <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8">{error}</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3">Error Loading Document</h2>
+          <p className="text-sm sm:text-base text-slate-300 mb-6 sm:mb-8">{error}</p>
           <motion.button
             onClick={() => router.push('/dashboard')}
             className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all duration-200 min-h-[44px]"
@@ -217,18 +217,18 @@ export default function DocumentDetailPage() {
 
   if (!document) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
         <motion.div
-          className="text-center bg-white/80 backdrop-blur-sm p-6 sm:p-8 lg:p-12 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200 max-w-sm sm:max-w-md w-full"
+          className="text-center bg-slate-800/80 backdrop-blur-sm p-6 sm:p-8 lg:p-12 rounded-2xl sm:rounded-3xl shadow-xl border border-slate-700 max-w-sm sm:max-w-md w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
-            <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-slate-400" />
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-700 to-slate-600 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+            <FileText className="h-8 w-8 sm:h-10 sm:w-10 text-slate-300" />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">Document Not Found</h2>
-          <p className="text-sm sm:text-base text-slate-600 mb-6 sm:mb-8">The requested document could not be found or may have been deleted.</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3">Document Not Found</h2>
+          <p className="text-sm sm:text-base text-slate-300 mb-6 sm:mb-8">The requested document could not be found or may have been deleted.</p>
           <motion.button
             onClick={() => router.push('/dashboard')}
             className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-medium transition-all duration-200 min-h-[44px]"
@@ -252,11 +252,11 @@ export default function DocumentDetailPage() {
         showErrorNotification('Account Setup Error', error)
       }}
     >
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
+      <div className="min-h-screen bg-slate-950 relative">
         {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
+        <div className="absolute inset-0 opacity-[0.03]">
           <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 1px, transparent 0)`,
             backgroundSize: '50px 50px'
           }} />
         </div>
@@ -272,7 +272,7 @@ export default function DocumentDetailPage() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
             <motion.button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -282,7 +282,7 @@ export default function DocumentDetailPage() {
 
             <motion.button
               onClick={() => router.push('/')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -291,43 +291,43 @@ export default function DocumentDetailPage() {
             </motion.button>
           </div>
 
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-slate-200 shadow-lg">
+          <div className="bg-slate-800/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-slate-700 shadow-lg">
             <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
               <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0 mx-auto sm:mx-0">
                 <FileText className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-3 sm:mb-4 text-center sm:text-left break-words">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent mb-3 sm:mb-4 text-center sm:text-left break-words">
                   {document.filename}
                 </h1>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                   <div className="flex items-center gap-3 justify-center sm:justify-start">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Database className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-900/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Database className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
                     </div>
                     <div className="text-center sm:text-left">
-                      <div className="text-xs sm:text-sm text-slate-500">File Size</div>
-                      <div className="font-semibold text-slate-900 text-sm sm:text-base">
+                      <div className="text-xs sm:text-sm text-slate-400">File Size</div>
+                      <div className="font-semibold text-slate-100 text-sm sm:text-base">
                         {(document.file_size / 1024 / 1024).toFixed(2)} MB
                       </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 justify-center sm:justify-start">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-600" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-indigo-900/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-400" />
                     </div>
                     <div className="text-center sm:text-left">
-                      <div className="text-xs sm:text-sm text-slate-500">File Type</div>
-                      <div className="font-semibold text-slate-900 text-sm sm:text-base">{document.file_type}</div>
+                      <div className="text-xs sm:text-sm text-slate-400">File Type</div>
+                      <div className="font-semibold text-slate-100 text-sm sm:text-base">{document.file_type}</div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 justify-center sm:justify-start sm:col-span-2 lg:col-span-1">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-600" />
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-emerald-900/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-400" />
                     </div>
                     <div className="text-center sm:text-left">
-                      <div className="text-xs sm:text-sm text-slate-500">Uploaded</div>
-                      <div className="font-semibold text-slate-900 text-sm sm:text-base">
+                      <div className="text-xs sm:text-sm text-slate-400">Uploaded</div>
+                      <div className="font-semibold text-slate-100 text-sm sm:text-base">
                         {new Date(document.created_at).toLocaleDateString()}
                       </div>
                     </div>
@@ -404,12 +404,12 @@ export default function DocumentDetailPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
-              className="bg-blue-50 border border-blue-200 rounded-lg p-6"
+              className="bg-blue-900/20 border border-blue-600 rounded-lg p-6"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-blue-900">Extraction Completed</h3>
-                  <p className="text-blue-700">Loading extracted data...</p>
+                  <h3 className="text-lg font-semibold text-blue-400">Extraction Completed</h3>
+                  <p className="text-blue-300">Loading extracted data...</p>
                 </div>
                 <button
                   onClick={() => fetchExtractedData(documentId)}

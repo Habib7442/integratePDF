@@ -105,67 +105,46 @@ export function InteractiveDemoSection() {
   }
 
   return (
-    <section id="demo" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <motion.div
-          className="text-center mb-12 sm:mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-            <span className="hidden sm:inline">Live Demo - Real AI Processing</span>
-            <span className="sm:hidden">Live Demo</span>
-          </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 sm:mb-6 px-4 sm:px-0">
-            Try Real PDF Processing
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-              {" "}Right Now
-            </span>
-          </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto px-4 sm:px-0">
-            Upload any PDF and see our AI extract structured data in real-time.
-            Try the demo without signup - create account to export your data.
-          </p>
-        </motion.div>
+    <section id="demo" className="py-16 sm:py-20 lg:py-24 bg-slate-900 relative overflow-hidden">
+      {/* Minimal dark background with subtle grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
 
-        {/* Interactive Demo Container */}
-        <motion.div
-          className="max-w-4xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          <Card className="p-4 sm:p-6 lg:p-8 bg-white/80 backdrop-blur-sm border-0 shadow-2xl mx-4 sm:mx-0">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        {/* Section Header - Simplified */}
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-100 mb-4 sm:mb-6">
+            Try the Demo
+          </h2>
+          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto">
+            Upload a PDF and see AI extract data instantly. No signup required.
+          </p>
+        </div>
+
+        {/* Interactive Demo Container - Dark Theme */}
+        <div className="max-w-4xl mx-auto">
+          <Card className="p-4 sm:p-6 lg:p-8 bg-slate-800 border border-slate-700 shadow-2xl mx-4 sm:mx-0">
             <AnimatePresence mode="wait">
               {/* Upload Step */}
               {demoState.step === 'upload' && (
-                <motion.div
+                <div
                   key="upload"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
                   className="text-center"
                 >
                   <div className="mb-6 sm:mb-8">
-                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
                       <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                     </div>
-                    <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3 sm:mb-4">
+                    <h3 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3 sm:mb-4">
                       Upload Your PDF
                     </h3>
-                    <p className="text-slate-600 mb-6 sm:mb-8 text-sm sm:text-base px-4 sm:px-0">
+                    <p className="text-slate-300 mb-6 sm:mb-8 text-sm sm:text-base px-4 sm:px-0">
                       Try with an invoice, receipt, contract, or any document with structured data
                     </p>
                   </div>
 
                   {/* File Upload Area */}
                   <div
-                    className="border-2 border-dashed border-blue-300 rounded-xl p-6 sm:p-8 lg:p-12 bg-blue-50/50 hover:bg-blue-50 transition-colors cursor-pointer touch-manipulation"
+                    className="border-2 border-dashed border-slate-600 rounded-xl p-6 sm:p-8 lg:p-12 bg-slate-700/50 hover:bg-slate-700 transition-colors cursor-pointer touch-manipulation"
                     onClick={() => {
                       const input = document.createElement('input')
                       input.type = 'file'
@@ -177,19 +156,19 @@ export function InteractiveDemoSection() {
                       input.click()
                     }}
                   >
-                    <FileText className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-blue-500 mx-auto mb-3 sm:mb-4" />
-                    <p className="text-base sm:text-lg font-semibold text-slate-900 mb-2">
+                    <FileText className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 text-blue-400 mx-auto mb-3 sm:mb-4" />
+                    <p className="text-base sm:text-lg font-semibold text-slate-100 mb-2">
                       <span className="hidden sm:inline">Click to upload or drag and drop</span>
                       <span className="sm:hidden">Tap to upload PDF</span>
                     </p>
-                    <p className="text-slate-500 text-sm sm:text-base">
+                    <p className="text-slate-400 text-sm sm:text-base">
                       PDF files only • Max 10MB
                     </p>
                   </div>
 
                   {/* Sample Files */}
                   <div className="mt-6 sm:mt-8">
-                    <p className="text-xs sm:text-sm text-slate-500 mb-3 sm:mb-4">Or try with a sample file:</p>
+                    <p className="text-xs sm:text-sm text-slate-400 mb-3 sm:mb-4">Or try with a sample file:</p>
                     <div className="flex flex-col sm:flex-row justify-center gap-2 sm:gap-4">
                       {[
                         { name: 'Sample Invoice', file: 'sample_invoice.pdf' },
@@ -200,7 +179,7 @@ export function InteractiveDemoSection() {
                           key={sample.name}
                           variant="outline"
                           size="sm"
-                          className="w-full sm:w-auto min-h-[40px] text-xs sm:text-sm text-blue-600 border-blue-200 hover:bg-blue-50 disabled:opacity-50"
+                          className="w-full sm:w-auto min-h-[40px] text-xs sm:text-sm text-blue-400 border-slate-600 hover:bg-slate-700 disabled:opacity-50"
                           disabled={loadingSample === sample.name || demoState.isProcessing}
                           onClick={async () => {
                             try {
@@ -226,7 +205,7 @@ export function InteractiveDemoSection() {
                         >
                           {loadingSample === sample.name ? (
                             <div className="flex items-center gap-2">
-                              <div className="w-3 h-3 border border-blue-600 border-t-transparent rounded-full animate-spin" />
+                              <div className="w-3 h-3 border border-blue-400 border-t-transparent rounded-full animate-spin" />
                               Loading...
                             </div>
                           ) : (
@@ -236,28 +215,25 @@ export function InteractiveDemoSection() {
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Processing Step */}
               {demoState.step === 'processing' && (
-                <motion.div
+                <div
                   key="processing"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
                   className="text-center"
                 >
-                  <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Loader2 className="w-10 h-10 text-white animate-spin" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                  <h3 className="text-2xl font-bold text-slate-100 mb-4">
                     AI is Processing Your PDF
                   </h3>
-                  <p className="text-slate-600 mb-8">
+                  <p className="text-slate-300 mb-8">
                     Our advanced AI is extracting and structuring your data...
                   </p>
-                  
+
                   {/* Processing Steps */}
                   <div className="space-y-4 max-w-md mx-auto">
                     {[
@@ -268,7 +244,7 @@ export function InteractiveDemoSection() {
                     ].map((item, index) => (
                       <div key={index} className="flex items-center text-left">
                         <div className={`w-6 h-6 rounded-full flex items-center justify-center mr-3 ${
-                          item.completed ? 'bg-green-500' : 'bg-slate-200'
+                          item.completed ? 'bg-green-500' : 'bg-slate-600'
                         }`}>
                           {item.completed ? (
                             <CheckCircle className="w-4 h-4 text-white" />
@@ -276,93 +252,87 @@ export function InteractiveDemoSection() {
                             <div className="w-2 h-2 bg-slate-400 rounded-full" />
                           )}
                         </div>
-                        <span className={item.completed ? 'text-slate-900' : 'text-slate-500'}>
+                        <span className={item.completed ? 'text-slate-100' : 'text-slate-400'}>
                           {item.step}
                         </span>
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Error Step */}
               {demoState.step === 'error' && (
-                <motion.div
+                <div
                   key="error"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
                   className="text-center"
                 >
-                  <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <AlertCircle className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                  <h3 className="text-2xl font-bold text-slate-100 mb-4">
                     Processing Error
                   </h3>
-                  <p className="text-slate-600 mb-8">
+                  <p className="text-slate-300 mb-8">
                     {demoState.error || 'Something went wrong while processing your PDF. Please try again.'}
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
                       onClick={resetDemo}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="bg-blue-600 hover:bg-blue-700"
                     >
                       Try Another File
                     </Button>
                     <SignUpButton>
-                      <Button variant="outline">
+                      <Button variant="outline" className="border-slate-600 text-slate-300 hover:bg-slate-700">
                         Sign Up for Support
                       </Button>
                     </SignUpButton>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Results Step */}
               {demoState.step === 'results' && demoState.extractedData && (
-                <motion.div
+                <div
                   key="results"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
                 >
                   <div className="text-center mb-8">
-                    <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                       <CheckCircle className="w-10 h-10 text-white" />
                     </div>
-                    <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                    <h3 className="text-2xl font-bold text-slate-100 mb-4">
                       Data Extracted Successfully!
                     </h3>
-                    <p className="text-slate-600">
+                    <p className="text-slate-300">
                       {demoState.extractedData.structuredData?.length || 0} fields extracted • Ready for export
                     </p>
                   </div>
 
                   {/* Extracted Data Preview */}
-                  <div className="bg-slate-50 rounded-xl p-6 mb-8">
-                    <h4 className="font-semibold text-slate-900 mb-4">Extracted Data:</h4>
+                  <div className="bg-slate-700 rounded-xl p-6 mb-8">
+                    <h4 className="font-semibold text-slate-100 mb-4">Extracted Data:</h4>
                     <div className="space-y-3 text-sm max-h-64 overflow-y-auto">
                       {demoState.extractedData.structuredData?.slice(0, 8).map((item: ExtractedDataItem, index: number) => (
-                        <div key={index} className="flex justify-between items-start p-3 bg-white rounded-lg">
+                        <div key={index} className="flex justify-between items-start p-3 bg-slate-800 rounded-lg">
                           <div className="flex-1">
-                            <span className="text-slate-500 text-xs uppercase tracking-wide">{item.key}</span>
-                            <div className="font-medium text-slate-900">{item.value}</div>
+                            <span className="text-slate-400 text-xs uppercase tracking-wide">{item.key}</span>
+                            <div className="font-medium text-slate-100">{item.value}</div>
                           </div>
                           <div className="ml-4 text-right">
-                            <div className="text-xs text-slate-400">
+                            <div className="text-xs text-slate-500">
                               {item.confidence ? Math.round(item.confidence) : 95}% confidence
                             </div>
                           </div>
                         </div>
                       )) || (
-                        <div className="text-center text-slate-500 py-4">
+                        <div className="text-center text-slate-400 py-4">
                           No structured data extracted
                         </div>
                       )}
                       {(demoState.extractedData.structuredData?.length || 0) > 8 && (
-                        <div className="text-center text-slate-500 text-sm">
+                        <div className="text-center text-slate-400 text-sm">
                           ... and {(demoState.extractedData.structuredData?.length || 0) - 8} more fields
                         </div>
                       )}
@@ -373,7 +343,7 @@ export function InteractiveDemoSection() {
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button
                       onClick={handleExportAttempt}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                      className="bg-blue-600 hover:bg-blue-700"
                     >
                       <Database className="w-4 h-4 mr-2" />
                       Export to Notion
@@ -381,7 +351,7 @@ export function InteractiveDemoSection() {
                     <Button
                       onClick={handleExportAttempt}
                       variant="outline"
-                      className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
                     >
                       <Download className="w-4 h-4 mr-2" />
                       Download CSV
@@ -389,37 +359,34 @@ export function InteractiveDemoSection() {
                     <Button
                       onClick={resetDemo}
                       variant="ghost"
-                      className="text-slate-600"
+                      className="text-slate-400 hover:text-slate-300"
                     >
                       Try Another File
                     </Button>
                   </div>
-                </motion.div>
+                </div>
               )}
 
               {/* Export/Conversion Step */}
               {demoState.step === 'export' && (
-                <motion.div
+                <div
                   key="export"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
                   className="text-center"
                 >
-                  <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="w-20 h-20 bg-orange-600 rounded-full flex items-center justify-center mx-auto mb-6">
                     <Lock className="w-10 h-10 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4">
+                  <h3 className="text-2xl font-bold text-slate-100 mb-4">
                     Ready to Export Your Data?
                   </h3>
-                  <p className="text-slate-600 mb-8 max-w-md mx-auto">
+                  <p className="text-slate-300 mb-8 max-w-md mx-auto">
                     Sign up for free to export your extracted data to Notion, download as CSV,
                     and process more documents. No credit card required!
                   </p>
 
                   {/* Benefits */}
-                  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 mb-8">
-                    <h4 className="font-semibold text-slate-900 mb-4">Free account includes:</h4>
+                  <div className="bg-slate-700 rounded-xl p-6 mb-8">
+                    <h4 className="font-semibold text-slate-100 mb-4">Free account includes:</h4>
                     <div className="grid sm:grid-cols-2 gap-3 text-sm text-left">
                       {[
                         'Export to Notion databases',
@@ -429,8 +396,8 @@ export function InteractiveDemoSection() {
                         'Email support',
                         'No credit card required'
                       ].map((benefit, index) => (
-                        <div key={index} className="flex items-center">
-                          <Zap className="w-4 h-4 text-blue-600 mr-2 flex-shrink-0" />
+                        <div key={index} className="flex items-center text-slate-300">
+                          <Zap className="w-4 h-4 text-blue-400 mr-2 flex-shrink-0" />
                           <span>{benefit}</span>
                         </div>
                       ))}
@@ -440,9 +407,9 @@ export function InteractiveDemoSection() {
                   {/* CTA Buttons */}
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <SignUpButton>
-                      <Button 
+                      <Button
                         size="lg"
-                        className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg"
+                        className="bg-blue-600 hover:bg-blue-700 shadow-lg"
                       >
                         Create Free Account
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -452,16 +419,16 @@ export function InteractiveDemoSection() {
                       onClick={resetDemo}
                       variant="outline"
                       size="lg"
-                      className="border-slate-300"
+                      className="border-slate-600 text-slate-300 hover:bg-slate-700"
                     >
                       Try Another PDF
                     </Button>
                   </div>
-                </motion.div>
+                </div>
               )}
             </AnimatePresence>
           </Card>
-        </motion.div>
+        </div>
       </div>
     </section>
   )

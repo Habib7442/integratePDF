@@ -101,57 +101,57 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
   return (
     <div className="space-y-6">
       {/* Extraction Results */}
-      <Card>
+      <Card className="bg-slate-800 border-slate-700">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-slate-100">
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 Extraction Complete
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-300">
                 Data extracted from {document.filename}
               </CardDescription>
             </div>
             <div className="text-right">
-              <div className="text-2xl font-bold">{statistics.total_fields}</div>
-              <div className="text-sm text-gray-500">fields extracted</div>
+              <div className="text-2xl font-bold text-slate-100">{statistics.total_fields}</div>
+              <div className="text-sm text-slate-300">fields extracted</div>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           {/* Statistics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-lg font-semibold">{(statistics.average_confidence * 100).toFixed(0)}%</div>
-              <div className="text-sm text-gray-600">Avg. Confidence</div>
+            <div className="text-center p-3 bg-slate-700 rounded-lg">
+              <div className="text-lg font-semibold text-slate-100">{(statistics.average_confidence * 100).toFixed(0)}%</div>
+              <div className="text-sm text-slate-300">Avg. Confidence</div>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-lg font-semibold">{statistics.corrected_fields}</div>
-              <div className="text-sm text-gray-600">Corrections Made</div>
+            <div className="text-center p-3 bg-slate-700 rounded-lg">
+              <div className="text-lg font-semibold text-slate-100">{statistics.corrected_fields}</div>
+              <div className="text-sm text-slate-300">Corrections Made</div>
             </div>
-            <div className="text-center p-3 bg-gray-50 rounded-lg">
-              <div className="text-lg font-semibold">{(statistics.correction_rate * 100).toFixed(0)}%</div>
-              <div className="text-sm text-gray-600">Correction Rate</div>
+            <div className="text-center p-3 bg-slate-700 rounded-lg">
+              <div className="text-lg font-semibold text-slate-100">{(statistics.correction_rate * 100).toFixed(0)}%</div>
+              <div className="text-sm text-slate-300">Correction Rate</div>
             </div>
           </div>
 
           {/* Extracted Data Table */}
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-slate-700">
                 <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-900">Field</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-900">Value</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-900">Confidence</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-900">Type</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-900">Actions</th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-100">Field</th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-100">Value</th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-100">Confidence</th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-100">Type</th>
+                  <th className="px-4 py-3 text-left font-medium text-slate-100">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-slate-600">
                 {extractedData.map((field) => (
-                  <tr key={field.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">
+                  <tr key={field.id} className="hover:bg-slate-700">
+                    <td className="px-4 py-3 font-medium text-slate-100">
                       {field.field_key}
                     </td>
                     <td className="px-4 py-3">
@@ -174,14 +174,14 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
                           </button>
                           <button
                             onClick={handleCancel}
-                            className="p-1 text-gray-600 hover:bg-gray-50 rounded"
+                            className="p-1 text-slate-300 hover:bg-slate-600 rounded"
                             title="Cancel"
                           >
                             <X className="h-4 w-4" />
                           </button>
                         </div>
                       ) : (
-                        <div className="text-sm text-gray-900">
+                        <div className="text-sm text-slate-100">
                           {field.field_value}
                         </div>
                       )}
@@ -216,8 +216,8 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
 
           {extractedData.length === 0 && (
             <div className="text-center py-8">
-              <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No data was extracted from this document.</p>
+              <AlertCircle className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+              <p className="text-slate-300">No data was extracted from this document.</p>
               <Button 
                 onClick={onRetryExtraction}
                 variant="outline"
@@ -232,23 +232,23 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
 
       {/* Integration Push */}
       {extractedData.length > 0 && (
-        <Card>
+        <Card className="bg-slate-800 border-slate-700">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-slate-100">
               <Send className="h-5 w-5" />
               Push to Integration
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-300">
               Send this extracted data to your connected integrations
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Success Message */}
             {showPushSuccess && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="bg-green-900/20 border border-green-600 rounded-lg p-4">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-green-600" />
-                  <span className="font-medium text-green-900">
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="font-medium text-green-300">
                     Data successfully pushed to {selectedIntegrationData?.integration_name}!
                   </span>
                 </div>
@@ -257,10 +257,10 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
 
             {/* Error Message */}
             {pushError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="bg-red-900/20 border border-red-600 rounded-lg p-4">
                 <div className="flex items-center gap-2">
-                  <AlertCircle className="h-5 w-5 text-red-600" />
-                  <span className="text-red-900">{pushError}</span>
+                  <AlertCircle className="h-5 w-5 text-red-400" />
+                  <span className="text-red-300">{pushError}</span>
                 </div>
               </div>
             )}
@@ -274,11 +274,11 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
                 />
 
                 {selectedIntegration && (
-                  <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-blue-900/20 border border-blue-600 rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="text-sm">
-                        <div className="font-medium text-blue-900">Ready to push data</div>
-                        <div className="text-blue-700">
+                        <div className="font-medium text-blue-400">Ready to push data</div>
+                        <div className="text-blue-300">
                           {extractedData.length} fields will be sent to {selectedIntegrationData?.integration_name}
                         </div>
                       </div>
@@ -305,9 +305,9 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
               </div>
             ) : (
               <div className="text-center py-8">
-                <ExternalLink className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="font-medium text-gray-900 mb-2">No integrations connected</h3>
-                <p className="text-gray-600 mb-4">
+                <ExternalLink className="w-12 h-12 text-slate-400 mx-auto mb-4" />
+                <h3 className="font-medium text-slate-100 mb-2">No integrations connected</h3>
+                <p className="text-slate-300 mb-4">
                   Connect an integration to automatically push extracted data
                 </p>
                 <Button 
@@ -325,21 +325,21 @@ const ResultsWithIntegration: React.FC<ResultsWithIntegrationProps> = ({
       )}
 
       {/* Export Options */}
-      <Card>
+      <Card className="bg-slate-800 border-slate-700">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-slate-100">
             <ArrowRight className="h-5 w-5" />
             Export Data
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-slate-300">
             Download your extracted data in CSV format for use in other applications
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-medium mb-1">CSV Export</h4>
-              <p className="text-sm text-gray-600">
+              <h4 className="font-medium mb-1 text-slate-100">CSV Export</h4>
+              <p className="text-sm text-slate-300">
                 Export {extractedData.length} extracted fields to CSV format
               </p>
             </div>

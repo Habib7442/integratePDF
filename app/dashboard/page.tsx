@@ -201,11 +201,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
+    <div className="min-h-screen bg-slate-950 relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
+      <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 1px, transparent 0)`,
           backgroundSize: '50px 50px'
         }} />
       </div>
@@ -220,19 +220,19 @@ export default function Dashboard() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
                 Dashboard
               </h1>
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 mt-1 sm:mt-2">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 mt-1 sm:mt-2">
                 Welcome back, {clerkUser.firstName || 'User'}!
-                <span className="hidden sm:inline text-slate-500"> Ready to process some documents?</span>
+                <span className="hidden sm:inline text-slate-400"> Ready to process some documents?</span>
               </p>
             </div>
             <div className="flex-shrink-0">
               <Button
                 variant="outline"
                 onClick={() => router.push('/')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-800/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 transition-all duration-200 min-h-[44px]"
               >
                 <Home className="w-4 h-4" />
                 <span className="sm:inline">Home</span>
@@ -279,19 +279,19 @@ export default function Dashboard() {
             whileHover={{ y: -4, scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
-            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
-                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700">Documents Processed</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-300">Documents Processed</CardTitle>
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
                   <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
+                <div className="text-2xl sm:text-3xl font-bold text-slate-100 mb-2">
                   {profile?.documents_processed || 0}
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="flex-1 bg-slate-200 rounded-full h-2">
+                  <div className="flex-1 bg-slate-700 rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-500"
                       style={{
@@ -299,11 +299,11 @@ export default function Dashboard() {
                       }}
                     />
                   </div>
-                  <span className="text-xs text-slate-600 font-medium whitespace-nowrap">
+                  <span className="text-xs text-slate-400 font-medium whitespace-nowrap">
                     {profile?.monthly_limit || 0} limit
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+                <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
                   <TrendingUp className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">
                     {((profile?.documents_processed || 0) / (profile?.monthly_limit || 1) * 100).toFixed(0)}% used this month
@@ -318,15 +318,15 @@ export default function Dashboard() {
             whileHover={{ y: -4, scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
-            <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-100 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
-                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700">Subscription</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-300">Subscription</CardTitle>
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
                   <User className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2 capitalize">
+                <div className="text-2xl sm:text-3xl font-bold text-slate-100 mb-2 capitalize">
                   {profile?.subscription_tier || 'Free'}
                 </div>
                 <Badge
@@ -341,7 +341,7 @@ export default function Dashboard() {
                   {profile?.subscription_tier === 'free' ? 'Starter Plan' :
                    profile?.subscription_tier === 'pro' ? 'Professional' : 'Enterprise'}
                 </Badge>
-                <p className="text-xs text-slate-500 flex items-center gap-1">
+                <p className="text-xs text-slate-400 flex items-center gap-1">
                   <Sparkles className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">Active since {new Date().toLocaleDateString()}</span>
                 </p>
@@ -354,21 +354,21 @@ export default function Dashboard() {
             whileHover={{ y: -4, scale: 1.02 }}
             transition={{ duration: 0.2 }}
           >
-            <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-100 shadow-lg hover:shadow-xl transition-all duration-300">
+            <Card className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
-                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-700">Storage Used</CardTitle>
+                <CardTitle className="text-xs sm:text-sm font-semibold text-slate-300">Storage Used</CardTitle>
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Database className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">
+                <div className="text-2xl sm:text-3xl font-bold text-slate-100 mb-2">
                   {documents.length}
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 mb-2">
+                <p className="text-xs sm:text-sm text-slate-300 mb-2">
                   documents stored
                 </p>
-                <p className="text-xs text-slate-500 flex items-center gap-1">
+                <p className="text-xs text-slate-400 flex items-center gap-1">
                   <Activity className="w-3 h-3 flex-shrink-0" />
                   <span className="truncate">
                     {documents.filter(doc => doc.processing_status === 'completed').length} processed successfully
@@ -386,7 +386,7 @@ export default function Dashboard() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-8 sm:mb-10 lg:mb-12"
         >
-          <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="pb-4 sm:pb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -394,8 +394,8 @@ export default function Dashboard() {
                     <ExternalLink className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <CardTitle className="text-lg sm:text-xl text-slate-900">Integrations</CardTitle>
-                    <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                    <CardTitle className="text-lg sm:text-xl text-slate-100">Integrations</CardTitle>
+                    <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                       Connect your favorite tools to automate data workflows
                     </CardDescription>
                   </div>
@@ -424,13 +424,13 @@ export default function Dashboard() {
                   </Button>
                 </motion.div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm">
-                  <div className="flex items-center text-slate-600">
+                  <div className="flex items-center text-slate-300">
                     <CheckCircle className="h-4 w-4 mr-2 text-green-500 flex-shrink-0" />
                     <span className="truncate">
                       {userIntegrations.filter(i => i.is_active).length} active integration{userIntegrations.filter(i => i.is_active).length !== 1 ? 's' : ''}
                     </span>
                   </div>
-                  <div className="flex items-center text-slate-600">
+                  <div className="flex items-center text-slate-300">
                     <Zap className="h-4 w-4 mr-2 text-blue-500 flex-shrink-0" />
                     <span>Auto-sync enabled</span>
                   </div>
@@ -447,15 +447,15 @@ export default function Dashboard() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="mb-8 sm:mb-10 lg:mb-12"
         >
-          <Card className="bg-gradient-to-br from-white to-blue-50/30 border-blue-100 shadow-lg hover:shadow-xl transition-all duration-300">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardHeader className="pb-4 sm:pb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Upload className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <CardTitle className="text-lg sm:text-xl text-slate-900">Upload Document</CardTitle>
-                  <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                  <CardTitle className="text-lg sm:text-xl text-slate-100">Upload Document</CardTitle>
+                  <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                     Upload a PDF document to extract structured data. Supports drag & drop, up to 10MB.
                   </CardDescription>
                 </div>
@@ -465,10 +465,10 @@ export default function Dashboard() {
               <motion.div
                 className={`relative border-2 border-dashed rounded-2xl p-6 sm:p-8 lg:p-12 text-center transition-all duration-300 ${
                   isDragging
-                    ? 'border-blue-400 bg-gradient-to-br from-blue-50 to-indigo-50 scale-105'
+                    ? 'border-blue-400 bg-slate-700/50 scale-105'
                     : isUploading
-                    ? 'border-blue-300 bg-blue-50/50'
-                    : 'border-slate-300 hover:border-blue-400 hover:bg-gradient-to-br hover:from-blue-50/50 hover:to-indigo-50/50'
+                    ? 'border-blue-300 bg-slate-700/30'
+                    : 'border-slate-600 hover:border-blue-400 hover:bg-slate-700/30'
                 }`}
                 onDragEnter={handleDragEnter}
                 onDragLeave={handleDragLeave}
@@ -500,8 +500,8 @@ export default function Dashboard() {
                           <Upload className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
                         </div>
                       </div>
-                      <p className="text-lg sm:text-xl font-semibold text-slate-900">Uploading document...</p>
-                      <p className="text-sm text-slate-600">Please wait while we process your file</p>
+                      <p className="text-lg sm:text-xl font-semibold text-slate-100">Uploading document...</p>
+                      <p className="text-sm text-slate-300">Please wait while we process your file</p>
                     </motion.div>
                   ) : (
                     <>
@@ -516,18 +516,18 @@ export default function Dashboard() {
                         <div className={`w-20 h-20 rounded-2xl flex items-center justify-center ${
                           isDragging
                             ? 'bg-gradient-to-br from-blue-500 to-indigo-600'
-                            : 'bg-gradient-to-br from-slate-100 to-slate-200'
+                            : 'bg-gradient-to-br from-slate-700 to-slate-600'
                         }`}>
-                          <Upload className={`h-10 w-10 ${isDragging ? 'text-white' : 'text-slate-500'}`} />
+                          <Upload className={`h-10 w-10 ${isDragging ? 'text-white' : 'text-slate-300'}`} />
                         </div>
                       </motion.div>
                       <div>
-                        <p className="text-lg sm:text-xl font-semibold text-slate-900 mb-2">
+                        <p className="text-lg sm:text-xl font-semibold text-slate-100 mb-2">
                           {isDragging ? 'Drop your PDF here' : 'Upload your PDF document'}
                         </p>
-                        <p className="text-sm sm:text-base text-slate-600">
+                        <p className="text-sm sm:text-base text-slate-300">
                           <span className="hidden sm:inline">Drag and drop your file here, or </span>
-                          <label htmlFor="file-upload" className="text-blue-600 hover:text-blue-700 cursor-pointer font-semibold underline decoration-2 underline-offset-2">
+                          <label htmlFor="file-upload" className="text-blue-400 hover:text-blue-300 cursor-pointer font-semibold underline decoration-2 underline-offset-2">
                             <span className="sm:hidden">Tap to choose a file</span>
                             <span className="hidden sm:inline">browse to choose a file</span>
                           </label>
@@ -547,7 +547,7 @@ export default function Dashboard() {
                             transition={{ duration: 0.3, delay: index * 0.1 }}
                           >
                             <item.icon className={`h-4 w-4 ${item.color} flex-shrink-0`} />
-                            <span className="text-slate-600">{item.text}</span>
+                            <span className="text-slate-300">{item.text}</span>
                           </motion.div>
                         ))}
                       </div>
@@ -565,7 +565,7 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.8 }}
         >
-          <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg">
             <CardHeader className="pb-4 sm:pb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -573,8 +573,8 @@ export default function Dashboard() {
                     <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <CardTitle className="text-lg sm:text-xl text-slate-900">Recent Documents</CardTitle>
-                    <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                    <CardTitle className="text-lg sm:text-xl text-slate-100">Recent Documents</CardTitle>
+                    <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                       Your {Math.min(documents.length, 5)} most recently uploaded documents
                     </CardDescription>
                   </div>
@@ -588,7 +588,7 @@ export default function Dashboard() {
                       <Button
                         variant="outline"
                         onClick={() => router.push('/dashboard/documents')}
-                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 min-h-[44px]"
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-700/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 min-h-[44px]"
                       >
                         <FileText className="h-4 w-4" />
                         <span className="sm:inline">View All Documents</span>
@@ -606,11 +606,11 @@ export default function Dashboard() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                  <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-slate-400" />
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-slate-700 to-slate-600 rounded-2xl flex items-center justify-center mx-auto mb-4 sm:mb-6">
+                  <FileText className="w-8 h-8 sm:w-10 sm:h-10 text-slate-300" />
                 </div>
-                <h3 className="text-base sm:text-lg font-semibold text-slate-900 mb-2">No documents uploaded yet</h3>
-                <p className="text-sm sm:text-base text-slate-600 mb-4 sm:mb-6 max-w-md mx-auto">Upload your first PDF to get started with AI-powered data extraction</p>
+                <h3 className="text-base sm:text-lg font-semibold text-slate-100 mb-2">No documents uploaded yet</h3>
+                <p className="text-sm sm:text-base text-slate-300 mb-4 sm:mb-6 max-w-md mx-auto">Upload your first PDF to get started with AI-powered data extraction</p>
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -635,16 +635,16 @@ export default function Dashboard() {
                     whileHover={{ y: -2, scale: 1.01 }}
                     className="group"
                   >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 hover:shadow-lg transition-all duration-300">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-slate-700 border border-slate-600 rounded-2xl hover:border-slate-500 hover:shadow-lg transition-all duration-300">
                       <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
                           <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                         </div>
                         <div className="min-w-0 flex-1">
-                          <h3 className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors text-sm sm:text-base truncate">
+                          <h3 className="font-semibold text-slate-100 group-hover:text-blue-400 transition-colors text-sm sm:text-base truncate">
                             {doc.filename || 'Unknown file'}
                           </h3>
-                          <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm text-slate-500 mt-1">
+                          <div className="flex flex-wrap items-center gap-1 sm:gap-2 text-xs sm:text-sm text-slate-400 mt-1">
                             <span className="whitespace-nowrap">{doc.file_size ? (doc.file_size / 1024 / 1024).toFixed(2) : '0.00'} MB</span>
                             <span className="hidden sm:inline">•</span>
                             <span className="hidden sm:inline truncate">{doc.file_type || 'Unknown type'}</span>
@@ -658,7 +658,7 @@ export default function Dashboard() {
                         {/* Status and Confidence Badges */}
                         <div className="flex items-center gap-2 flex-wrap">
                           {doc.confidence_score !== null && doc.confidence_score !== undefined && !isNaN(doc.confidence_score) && (
-                            <Badge variant="outline" className="bg-green-50 border-green-200 text-green-700 text-xs">
+                            <Badge variant="outline" className="bg-green-900/20 border-green-600 text-green-400 text-xs">
                               {Math.round(doc.confidence_score * 100)}% confidence
                             </Badge>
                           )}
@@ -677,7 +677,7 @@ export default function Dashboard() {
                               variant="outline"
                               size="sm"
                               onClick={() => router.push(`/dashboard/document/${doc.id}`)}
-                              className="w-full sm:w-auto flex items-center justify-center gap-1 bg-white/80 backdrop-blur-sm min-h-[36px]"
+                              className="w-full sm:w-auto flex items-center justify-center gap-1 bg-slate-600/80 backdrop-blur-sm border-slate-500 text-slate-300 hover:bg-slate-600 hover:text-slate-100 min-h-[36px]"
                             >
                               <Eye className="h-3 w-3" />
                               <span>View</span>

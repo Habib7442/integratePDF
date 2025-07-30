@@ -105,15 +105,15 @@ export default function RootLayout({
 
           {/* Performance and Security Headers */}
           <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-          <meta name="theme-color" content="#0ea5e9" />
-          <meta name="color-scheme" content="light" />
+          <meta name="theme-color" content="#0f172a" />
+          <meta name="color-scheme" content="dark" />
 
           {/* Favicon and App Icons */}
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" href="/icon.svg" type="image/svg+xml" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white text-slate-900`}>
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-slate-950 text-slate-100`}>
           <StoreProvider>
             {children}
             <NotificationContainer />

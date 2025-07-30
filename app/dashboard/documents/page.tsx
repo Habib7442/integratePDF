@@ -198,14 +198,14 @@ export default function DocumentsPage() {
     switch (status) {
       case 'completed':
         return (
-          <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+          <Badge variant="default" className="bg-green-900/20 text-green-400 border-green-600">
             <CheckCircle className="w-3 h-3 mr-1" />
             Completed
           </Badge>
         )
       case 'processing':
         return (
-          <Badge variant="default" className="bg-blue-100 text-blue-800 border-blue-200">
+          <Badge variant="default" className="bg-blue-900/20 text-blue-400 border-blue-600">
             <Loader2 className="w-3 h-3 mr-1 animate-spin" />
             Processing
           </Badge>
@@ -236,21 +236,21 @@ export default function DocumentsPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading...</p>
+          <p className="mt-2 text-slate-300">Loading...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
+    <div className="min-h-screen bg-slate-950 relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
+      <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 1px, transparent 0)`,
           backgroundSize: '50px 50px'
         }} />
       </div>
@@ -266,7 +266,7 @@ export default function DocumentsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6">
             <motion.button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -276,7 +276,7 @@ export default function DocumentsPage() {
 
             <motion.button
               onClick={() => router.push('/')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -287,18 +287,18 @@ export default function DocumentsPage() {
 
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
                 Document Management
               </h1>
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 mt-1 sm:mt-2">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 mt-1 sm:mt-2">
                 Manage all your uploaded and processed documents
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
               <div className="text-center sm:text-right">
-                <div className="text-xl sm:text-2xl font-bold text-slate-900">{filteredDocuments.length}</div>
-                <div className="text-xs sm:text-sm text-slate-600">of {documents.length} documents</div>
+                <div className="text-xl sm:text-2xl font-bold text-slate-100">{filteredDocuments.length}</div>
+                <div className="text-xs sm:text-sm text-slate-300">of {documents.length} documents</div>
               </div>
               <AnimatePresence>
                 {selectedDocuments.size > 0 && (
@@ -324,16 +324,16 @@ export default function DocumentsPage() {
                           <span className="text-sm sm:text-base">Delete Selected ({selectedDocuments.size})</span>
                         </Button>
                       </AlertDialogTrigger>
-                      <AlertDialogContent className="bg-white border-slate-200">
+                      <AlertDialogContent className="bg-slate-800 border-slate-700">
                         <AlertDialogHeader>
-                          <AlertDialogTitle className="text-slate-900">Delete Documents</AlertDialogTitle>
-                          <AlertDialogDescription className="text-slate-600">
+                          <AlertDialogTitle className="text-slate-100">Delete Documents</AlertDialogTitle>
+                          <AlertDialogDescription className="text-slate-300">
                             Are you sure you want to delete {selectedDocuments.size} selected document(s)?
                             This action cannot be undone and will permanently remove the documents and all associated data.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50">
+                          <AlertDialogCancel className="bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600">
                             Cancel
                           </AlertDialogCancel>
                           <AlertDialogAction
@@ -359,7 +359,7 @@ export default function DocumentsPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-6 sm:mb-8"
         >
-          <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg">
             <CardContent className="p-4 sm:p-6 lg:p-8">
               <div className="flex flex-col gap-4 sm:gap-6">
                 <div className="w-full">
@@ -369,17 +369,17 @@ export default function DocumentsPage() {
                       placeholder="Search documents by filename or type..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 sm:pl-12 h-11 sm:h-12 text-sm sm:text-lg bg-white/80 backdrop-blur-sm border-slate-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl"
+                      className="pl-10 sm:pl-12 h-11 sm:h-12 text-sm sm:text-lg bg-slate-700/80 backdrop-blur-sm border-slate-600 focus:border-blue-500 focus:ring-blue-500 rounded-xl text-slate-100 placeholder:text-slate-400"
                     />
                   </div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-full sm:w-[200px] h-11 sm:h-12 bg-white/80 backdrop-blur-sm border-slate-200 rounded-xl">
+                    <SelectTrigger className="w-full sm:w-[200px] h-11 sm:h-12 bg-slate-700/80 backdrop-blur-sm border-slate-600 rounded-xl text-slate-100">
                       <Filter className="h-4 w-4 mr-2 text-slate-500" />
                       <SelectValue placeholder="Filter by status" />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border-slate-200 rounded-xl shadow-xl">
+                    <SelectContent className="bg-slate-800 border-slate-700 rounded-xl shadow-xl">
                       <SelectItem value="all" className="rounded-lg">All Status</SelectItem>
                       <SelectItem value="completed" className="rounded-lg">
                         <div className="flex items-center gap-2">
@@ -418,7 +418,7 @@ export default function DocumentsPage() {
                       <Button
                         variant="outline"
                         onClick={() => { setSearchQuery(''); setStatusFilter('all') }}
-                        className="w-full sm:w-auto h-11 sm:h-12 px-4 sm:px-6 bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 rounded-xl min-h-[44px]"
+                        className="w-full sm:w-auto h-11 sm:h-12 px-4 sm:px-6 bg-slate-700/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 rounded-xl min-h-[44px]"
                       >
                         <span className="text-sm sm:text-base">Clear Filters</span>
                       </Button>
@@ -436,7 +436,7 @@ export default function DocumentsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg">
             <CardHeader className="pb-4 sm:pb-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -444,8 +444,8 @@ export default function DocumentsPage() {
                     <FileText className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <CardTitle className="text-lg sm:text-xl text-slate-900">Documents</CardTitle>
-                    <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                    <CardTitle className="text-lg sm:text-xl text-slate-100">Documents</CardTitle>
+                    <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                       {filteredDocuments.length} document(s) found
                     </CardDescription>
                   </div>
@@ -453,7 +453,7 @@ export default function DocumentsPage() {
                 {paginatedDocuments.length > 0 && (
                   <div className="w-full sm:w-auto">
                     <motion.div
-                      className="flex items-center justify-center sm:justify-start gap-3 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 min-h-[44px]"
+                      className="flex items-center justify-center sm:justify-start gap-3 bg-slate-700/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 min-h-[44px]"
                       whileHover={{ scale: 1.02 }}
                     >
                       <Checkbox
@@ -471,7 +471,7 @@ export default function DocumentsPage() {
             {isLoading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                <p className="mt-2 text-gray-600">Loading documents...</p>
+                <p className="mt-2 text-slate-300">Loading documents...</p>
               </div>
             ) : error ? (
               <div className="text-center py-8">
@@ -486,16 +486,16 @@ export default function DocumentsPage() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
-                  <FileText className="h-10 w-10 sm:h-12 sm:w-12 text-slate-400" />
+                <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-700 to-slate-600 rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
+                  <FileText className="h-10 w-10 sm:h-12 sm:w-12 text-slate-300" />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3">
                   {filteredDocuments.length === 0 && documents.length > 0
                     ? 'No documents match your filters'
                     : 'No documents found'
                   }
                 </h3>
-                <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-md mx-auto">
+                <p className="text-base sm:text-lg text-slate-300 mb-6 sm:mb-8 max-w-md mx-auto">
                   {filteredDocuments.length === 0 && documents.length > 0
                     ? 'Try adjusting your search or filter criteria to find what you\'re looking for'
                     : 'Upload your first document to get started with AI-powered data extraction'
@@ -535,7 +535,7 @@ export default function DocumentsPage() {
                       whileHover={{ y: -2, scale: 1.01 }}
                       className="group"
                     >
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 hover:shadow-lg transition-all duration-300">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-slate-800 border border-slate-700 rounded-2xl hover:border-slate-600 hover:shadow-lg transition-all duration-300">
                         <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
                           <motion.div
                             whileHover={{ scale: 1.1 }}
@@ -545,7 +545,7 @@ export default function DocumentsPage() {
                             <Checkbox
                               checked={selectedDocuments.has(document.id)}
                               onCheckedChange={() => toggleDocumentSelection(document.id)}
-                              className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 w-5 h-5"
+                              className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 w-5 h-5 border-slate-600"
                             />
                           </motion.div>
                           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -553,14 +553,14 @@ export default function DocumentsPage() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                              <h3 className="font-semibold text-slate-900 truncate group-hover:text-blue-600 transition-colors text-base sm:text-lg">
+                              <h3 className="font-semibold text-slate-100 truncate group-hover:text-blue-400 transition-colors text-base sm:text-lg">
                                 {document.filename}
                               </h3>
                               <div className="flex-shrink-0">
                                 {getStatusBadge(document.processing_status)}
                               </div>
                             </div>
-                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-slate-500">
+                            <div className="flex flex-wrap items-center gap-2 sm:gap-4 lg:gap-6 text-xs sm:text-sm text-slate-400">
                               <span className="flex items-center gap-1 sm:gap-2 whitespace-nowrap">
                                 <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
                                 {new Date(document.created_at).toLocaleDateString()}
@@ -570,12 +570,12 @@ export default function DocumentsPage() {
                                 {formatFileSize(document.file_size)}
                               </span>
                               {document.document_type && (
-                                <span className="capitalize bg-slate-100 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap">
+                                <span className="capitalize bg-slate-700 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap text-slate-300">
                                   {document.document_type}
                                 </span>
                               )}
                               {document.confidence_score && (
-                                <span className="bg-green-100 text-green-700 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap">
+                                <span className="bg-green-900/20 text-green-400 px-2 py-1 rounded-lg text-xs font-medium whitespace-nowrap">
                                   {Math.round(document.confidence_score * 100)}% confidence
                                 </span>
                               )}
@@ -589,7 +589,7 @@ export default function DocumentsPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => router.push(`/dashboard/document/${document.id}`)}
-                              className="w-full sm:w-auto bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 min-h-[36px]"
+                              className="w-full sm:w-auto bg-slate-700/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 min-h-[36px]"
                             >
                               <Eye className="h-4 w-4 mr-2" />
                               <span>View</span>
@@ -602,7 +602,7 @@ export default function DocumentsPage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => router.push(`/dashboard/document/${document.id}`)}
-                                className="w-full sm:w-auto bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 min-h-[36px]"
+                                className="w-full sm:w-auto bg-blue-900/20 border-blue-600 text-blue-400 hover:bg-blue-900/30 min-h-[36px]"
                               >
                                 <Zap className="h-4 w-4 mr-2" />
                                 <span>Extract</span>
@@ -617,7 +617,7 @@ export default function DocumentsPage() {
                                   variant="outline"
                                   size="sm"
                                   disabled={deletingDocuments.has(document.id)}
-                                  className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200 min-h-[36px]"
+                                  className="w-full sm:w-auto text-red-400 hover:text-red-300 hover:bg-red-900/20 border-red-600 min-h-[36px]"
                                 >
                                   {deletingDocuments.has(document.id) ? (
                                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -630,16 +630,16 @@ export default function DocumentsPage() {
                                 </Button>
                               </motion.div>
                             </AlertDialogTrigger>
-                            <AlertDialogContent className="bg-white border-slate-200">
+                            <AlertDialogContent className="bg-slate-800 border-slate-700">
                               <AlertDialogHeader>
-                                <AlertDialogTitle className="text-slate-900">Delete Document</AlertDialogTitle>
-                                <AlertDialogDescription className="text-slate-600">
+                                <AlertDialogTitle className="text-slate-100">Delete Document</AlertDialogTitle>
+                                <AlertDialogDescription className="text-slate-300">
                                   Are you sure you want to delete "{document.filename}"?
                                   This action cannot be undone and will permanently remove the document and all associated data.
                                 </AlertDialogDescription>
                               </AlertDialogHeader>
                               <AlertDialogFooter>
-                                <AlertDialogCancel className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50">
+                                <AlertDialogCancel className="bg-slate-700 border-slate-600 text-slate-300 hover:bg-slate-600">
                                   Cancel
                                 </AlertDialogCancel>
                                 <AlertDialogAction
@@ -662,15 +662,15 @@ export default function DocumentsPage() {
             {/* Pagination */}
             {totalPages > 1 && (
               <motion.div
-                className="flex items-center justify-between mt-8 pt-8 border-t border-slate-200"
+                className="flex items-center justify-between mt-8 pt-8 border-t border-slate-700"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <div className="text-sm text-slate-600 font-medium">
-                  Showing <span className="text-slate-900 font-semibold">{((currentPage - 1) * ITEMS_PER_PAGE) + 1}</span> to{' '}
-                  <span className="text-slate-900 font-semibold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredDocuments.length)}</span> of{' '}
-                  <span className="text-slate-900 font-semibold">{filteredDocuments.length}</span> documents
+                <div className="text-sm text-slate-300 font-medium">
+                  Showing <span className="text-slate-100 font-semibold">{((currentPage - 1) * ITEMS_PER_PAGE) + 1}</span> to{' '}
+                  <span className="text-slate-100 font-semibold">{Math.min(currentPage * ITEMS_PER_PAGE, filteredDocuments.length)}</span> of{' '}
+                  <span className="text-slate-100 font-semibold">{filteredDocuments.length}</span> documents
                 </div>
                 <div className="flex items-center gap-3">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -679,17 +679,17 @@ export default function DocumentsPage() {
                       size="sm"
                       onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                       disabled={currentPage === 1}
-                      className="bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 disabled:opacity-50"
+                      className="bg-slate-800/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 disabled:opacity-50"
                     >
                       Previous
                     </Button>
                   </motion.div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-slate-600">Page</span>
-                    <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-semibold">
+                    <span className="text-sm text-slate-300">Page</span>
+                    <div className="bg-blue-900/20 text-blue-400 border border-blue-600 px-3 py-1 rounded-lg text-sm font-semibold">
                       {currentPage}
                     </div>
-                    <span className="text-sm text-slate-600">of {totalPages}</span>
+                    <span className="text-sm text-slate-300">of {totalPages}</span>
                   </div>
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button
@@ -697,7 +697,7 @@ export default function DocumentsPage() {
                       size="sm"
                       onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                       disabled={currentPage === totalPages}
-                      className="bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 disabled:opacity-50"
+                      className="bg-slate-800/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 disabled:opacity-50"
                     >
                       Next
                     </Button>

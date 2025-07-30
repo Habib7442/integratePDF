@@ -74,14 +74,14 @@ export default function IntegrationsPage() {
   const getStatusBadge = (integration: any) => {
     if (integration.is_active) {
       return (
-        <Badge variant="default" className="bg-green-100 text-green-800 border-green-200">
+        <Badge variant="default" className="bg-green-900/20 text-green-400 border-green-600">
           <CheckCircle className="w-3 h-3 mr-1" />
           Connected
         </Badge>
       )
     } else {
       return (
-        <Badge variant="destructive">
+        <Badge variant="destructive" className="bg-red-900/20 text-red-400 border-red-600">
           <XCircle className="w-3 h-3 mr-1" />
           Disconnected
         </Badge>
@@ -91,21 +91,21 @@ export default function IntegrationsPage() {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading...</p>
+          <p className="mt-2 text-slate-300">Loading...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20 relative">
+    <div className="min-h-screen bg-slate-950 relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.02]">
+      <div className="absolute inset-0 opacity-[0.03]">
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 2px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 25px 25px, rgb(59 130 246) 1px, transparent 0)`,
           backgroundSize: '50px 50px'
         }} />
       </div>
@@ -121,7 +121,7 @@ export default function IntegrationsPage() {
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
             <motion.button
               onClick={() => router.push('/dashboard')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -131,7 +131,7 @@ export default function IntegrationsPage() {
 
             <motion.button
               onClick={() => router.push('/')}
-              className="flex items-center justify-center sm:justify-start gap-2 text-slate-600 hover:text-slate-900 bg-white/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-200 hover:border-slate-300 transition-all duration-200 min-h-[44px]"
+              className="flex items-center justify-center sm:justify-start gap-2 text-slate-300 hover:text-slate-100 bg-slate-800/80 backdrop-blur-sm px-4 py-3 rounded-xl border border-slate-600 hover:border-slate-500 transition-all duration-200 min-h-[44px]"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -142,10 +142,10 @@ export default function IntegrationsPage() {
 
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 lg:gap-6">
             <div className="min-w-0 flex-1">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
                 Integrations
               </h1>
-              <p className="text-base sm:text-lg lg:text-xl text-slate-600 mt-1 sm:mt-2">
+              <p className="text-base sm:text-lg lg:text-xl text-slate-300 mt-1 sm:mt-2">
                 Connect your favorite tools to automate data workflows
               </p>
             </div>
@@ -210,7 +210,7 @@ export default function IntegrationsPage() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <Card className="bg-gradient-to-br from-white to-violet-50/50 border-violet-200 shadow-lg">
+              <Card className="bg-slate-800 border-slate-700 shadow-lg">
                 <CardHeader className="pb-4 sm:pb-6">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -218,19 +218,19 @@ export default function IntegrationsPage() {
                         <Link className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <CardTitle className="text-lg sm:text-xl text-slate-900">Connect New Integration</CardTitle>
-                        <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                        <CardTitle className="text-lg sm:text-xl text-slate-100">Connect New Integration</CardTitle>
+                        <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                           Choose an integration to connect to your account
                         </CardDescription>
                       </div>
                     </div>
                     <motion.button
                       onClick={() => setShowConnectForm(false)}
-                      className="p-2 hover:bg-slate-100 rounded-lg transition-colors self-end sm:self-auto flex-shrink-0"
+                      className="p-2 hover:bg-slate-700 rounded-lg transition-colors self-end sm:self-auto flex-shrink-0"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
-                      <XCircle className="h-5 w-5 text-slate-500" />
+                      <XCircle className="h-5 w-5 text-slate-300" />
                     </motion.button>
                   </div>
                 </CardHeader>
@@ -257,15 +257,15 @@ export default function IntegrationsPage() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="mb-8"
         >
-          <Card className="bg-gradient-to-br from-white to-slate-50/50 border-slate-200 shadow-lg">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg">
             <CardHeader className="pb-4 sm:pb-6">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Activity className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <CardTitle className="text-lg sm:text-xl text-slate-900">Your Integrations</CardTitle>
-                  <CardDescription className="text-slate-600 mt-1 text-sm sm:text-base">
+                  <CardTitle className="text-lg sm:text-xl text-slate-100">Your Integrations</CardTitle>
+                  <CardDescription className="text-slate-300 mt-1 text-sm sm:text-base">
                     Manage your connected integrations and their settings
                   </CardDescription>
                 </div>
@@ -285,7 +285,7 @@ export default function IntegrationsPage() {
                       <Zap className="h-6 w-6 text-blue-600" />
                     </div>
                   </div>
-                  <p className="text-lg font-medium text-slate-700">Loading integrations...</p>
+                  <p className="text-lg font-medium text-slate-100">Loading integrations...</p>
                 </motion.div>
               ) : userIntegrations.length === 0 ? (
                 <motion.div
@@ -294,11 +294,11 @@ export default function IntegrationsPage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-100 to-slate-200 rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
-                    <ExternalLink className="w-10 h-10 sm:w-12 sm:h-12 text-slate-400" />
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-slate-700 to-slate-600 rounded-3xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
+                    <ExternalLink className="w-10 h-10 sm:w-12 sm:h-12 text-slate-300" />
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">No integrations connected</h3>
-                  <p className="text-base sm:text-lg text-slate-600 mb-6 sm:mb-8 max-w-md mx-auto">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-100 mb-3">No integrations connected</h3>
+                  <p className="text-base sm:text-lg text-slate-300 mb-6 sm:mb-8 max-w-md mx-auto">
                     Connect your first integration to start automating your data workflows
                   </p>
                   <motion.div
@@ -330,22 +330,22 @@ export default function IntegrationsPage() {
                           whileHover={{ y: -2, scale: 1.01 }}
                           className="group"
                         >
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-white border border-slate-200 rounded-2xl hover:border-slate-300 hover:shadow-lg transition-all duration-300">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 sm:p-6 bg-slate-800 border border-slate-700 rounded-2xl hover:border-slate-600 hover:shadow-lg transition-all duration-300">
                             <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
                               <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
                                 {integrationDef?.icon ? integrationDef.icon() : <ExternalLink className="h-6 w-6 sm:h-7 sm:w-7 text-white" />}
                               </div>
                               <div className="min-w-0 flex-1">
-                                <h3 className="font-semibold text-slate-900 text-base sm:text-lg group-hover:text-blue-600 transition-colors truncate">
+                                <h3 className="font-semibold text-slate-100 text-base sm:text-lg group-hover:text-blue-400 transition-colors truncate">
                                   {integration.integration_name}
                                 </h3>
-                                <p className="text-slate-600 mt-1 text-sm sm:text-base">
+                                <p className="text-slate-300 mt-1 text-sm sm:text-base">
                                   {integrationDef?.description}
                                 </p>
                                 <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-2 sm:mt-3">
                                   {getStatusBadge(integration)}
                                   {integration.last_sync && (
-                                    <span className="text-xs sm:text-sm text-slate-500 flex items-center gap-1 whitespace-nowrap">
+                                    <span className="text-xs sm:text-sm text-slate-400 flex items-center gap-1 whitespace-nowrap">
                                       <Sparkles className="h-3 w-3" />
                                       Last sync: {new Date(integration.last_sync).toLocaleDateString()}
                                     </span>
@@ -360,7 +360,7 @@ export default function IntegrationsPage() {
                                   variant="outline"
                                   size="sm"
                                   onClick={() => router.push(`/dashboard/integrations/${integration.id}`)}
-                                  className="w-full sm:w-auto bg-white/80 backdrop-blur-sm border-slate-200 hover:bg-white hover:border-slate-300 min-h-[36px]"
+                                  className="w-full sm:w-auto bg-slate-700/80 backdrop-blur-sm border-slate-600 hover:bg-slate-700 hover:border-slate-500 text-slate-300 hover:text-slate-100 min-h-[36px]"
                                 >
                                   <Settings className="h-4 w-4 mr-2" />
                                   <span>Settings</span>
@@ -395,7 +395,7 @@ export default function IntegrationsPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <Card className="bg-gradient-to-br from-white to-blue-50/30 border-blue-200 shadow-lg">
+          <Card className="bg-slate-800 border-slate-700 shadow-lg">
             <CardContent className="p-4 sm:p-6 lg:p-8">
               <NotionDatabaseManager
                 userIntegrations={userIntegrations}

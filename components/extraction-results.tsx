@@ -82,20 +82,20 @@ export default function ExtractionResults({
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="bg-slate-800 rounded-lg shadow-sm border border-slate-700 p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <FileText className="h-8 w-8 text-blue-600" />
+            <FileText className="h-8 w-8 text-blue-400" />
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Extraction Complete</h2>
-              <p className="text-gray-600">
-                Data from <span className="font-semibold text-blue-600">{document.filename}</span>
+              <h2 className="text-2xl font-bold text-slate-100">Extraction Complete</h2>
+              <p className="text-slate-300">
+                Data from <span className="font-semibold text-blue-400">{document.filename}</span>
               </p>
             </div>
           </div>
-          
+
           {document.processing_status === 'completed' && (
-            <div className="flex items-center gap-2 text-green-600">
+            <div className="flex items-center gap-2 text-green-400">
               <CheckCircle className="h-5 w-5" />
               <span className="font-medium">Processing Complete</span>
             </div>
@@ -104,20 +104,20 @@ export default function ExtractionResults({
 
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-blue-50 rounded-lg p-4">
+          <div className="bg-blue-900/20 border border-blue-600 rounded-lg p-4">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-blue-600" />
-              <span className="text-sm font-medium text-blue-900">Total Fields</span>
+              <TrendingUp className="h-5 w-5 text-blue-400" />
+              <span className="text-sm font-medium text-blue-300">Total Fields</span>
             </div>
-            <p className="text-2xl font-bold text-blue-600">{statistics.total_fields}</p>
+            <p className="text-2xl font-bold text-blue-400">{statistics.total_fields}</p>
           </div>
-          
-          <div className="bg-green-50 rounded-lg p-4">
+
+          <div className="bg-green-900/20 border border-green-600 rounded-lg p-4">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
-              <span className="text-sm font-medium text-green-900">Avg Confidence</span>
+              <CheckCircle className="h-5 w-5 text-green-400" />
+              <span className="text-sm font-medium text-green-300">Avg Confidence</span>
             </div>
-            <p className="text-2xl font-bold text-green-600">{Math.round(statistics.average_confidence * 100)}%</p>
+            <p className="text-2xl font-bold text-green-400">{Math.round(statistics.average_confidence * 100)}%</p>
           </div>
           
           <div className="bg-orange-50 rounded-lg p-4">

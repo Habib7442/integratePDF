@@ -132,10 +132,10 @@ export default function ProcessingStatus({
 
   if (loading) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="bg-slate-800 rounded-lg shadow-sm border border-slate-700 p-6">
         <div className="flex items-center gap-3">
-          <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-          <span className="text-gray-600">Loading document status...</span>
+          <Loader2 className="h-6 w-6 animate-spin text-blue-400" />
+          <span className="text-slate-300">Loading document status...</span>
         </div>
       </div>
     )
@@ -143,23 +143,23 @@ export default function ProcessingStatus({
 
   if (error) {
     return (
-      <div className="bg-white rounded-lg shadow-sm border p-6">
+      <div className="bg-slate-800 rounded-lg shadow-sm border border-slate-700 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <AlertCircle className="h-6 w-6 text-red-600" />
+          <AlertCircle className="h-6 w-6 text-red-400" />
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Status Check Failed</h3>
-            <p className="text-sm text-gray-600">Unable to fetch document status</p>
+            <h3 className="text-lg font-semibold text-slate-100">Status Check Failed</h3>
+            <p className="text-sm text-slate-300">Unable to fetch document status</p>
           </div>
         </div>
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm text-red-700">{error}</p>
+        <div className="bg-red-900/20 border border-red-600 rounded-lg p-4">
+          <p className="text-sm text-red-300">{error}</p>
           <div className="flex items-center justify-between mt-3">
-            <p className="text-xs text-red-600">
+            <p className="text-xs text-red-400">
               Polling stopped to prevent further errors.
             </p>
             <button
               onClick={refreshStatus}
-              className="flex items-center gap-1 px-3 py-1 text-xs bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
+              className="flex items-center gap-1 px-3 py-1 text-xs bg-red-900/20 text-red-300 border border-red-600 rounded-md hover:bg-red-900/30 transition-colors"
             >
               <RefreshCw className="h-3 w-3" />
               Retry
@@ -171,7 +171,7 @@ export default function ProcessingStatus({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
+    <div className="bg-slate-800 rounded-lg shadow-sm border border-slate-700 p-6">
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -179,23 +179,23 @@ export default function ProcessingStatus({
             {getStatusIcon()}
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="text-lg font-semibold text-slate-100">
                   Processing Status
                 </h3>
                 {isPolling && (
-                  <div className="flex items-center gap-1 px-2 py-1 bg-blue-50 text-blue-700 rounded-full text-xs">
+                  <div className="flex items-center gap-1 px-2 py-1 bg-blue-900/20 text-blue-400 border border-blue-600 rounded-full text-xs">
                     <Wifi className="h-3 w-3" />
                     <span>Live updates</span>
                   </div>
                 )}
               </div>
-              <p className="text-sm text-gray-600">{status?.filename}</p>
+              <p className="text-sm text-slate-300">{status?.filename}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
             {status?.processing_status === 'processing' && (
-              <div className="flex items-center gap-2 text-blue-600">
+              <div className="flex items-center gap-2 text-blue-400">
                 <Zap className="h-4 w-4" />
                 <span className="text-sm font-medium">
                   {formatDuration(elapsedTime)} elapsed
@@ -204,7 +204,7 @@ export default function ProcessingStatus({
             )}
 
             {isPolling && (
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-slate-400">
                 Checking every 15s (#{pollAttempts})
               </div>
             )}
@@ -214,10 +214,10 @@ export default function ProcessingStatus({
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
-            <span className="text-gray-600">Progress</span>
-            <span className="text-gray-900 font-medium">{getProgressPercentage()}%</span>
+            <span className="text-slate-300">Progress</span>
+            <span className="text-slate-100 font-medium">{getProgressPercentage()}%</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-slate-700 rounded-full h-2">
             <div 
               className={`h-2 rounded-full transition-all duration-500 ${
                 status?.processing_status === 'failed' 

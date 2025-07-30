@@ -91,7 +91,7 @@ export default function ExtractionTrigger({
       case 'uploaded':
       case 'pending':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-400 bg-blue-900/20 border border-blue-600 rounded-full">
             <FileText className="h-3 w-3" />
             Ready for extraction
           </span>
@@ -99,21 +99,21 @@ export default function ExtractionTrigger({
       case 'processing':
       case 'processing':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-700 bg-blue-100 rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-400 bg-blue-900/20 border border-blue-600 rounded-full">
             <Loader2 className="h-3 w-3 animate-spin" />
             Processing
           </span>
         )
       case 'completed':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-700 bg-green-100 rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-400 bg-green-900/20 border border-green-600 rounded-full">
             <Zap className="h-3 w-3" />
             Completed
           </span>
         )
       case 'failed':
         return (
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-red-700 bg-red-100 rounded-full">
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-red-400 bg-red-900/20 border border-red-600 rounded-full">
             <AlertCircle className="h-3 w-3" />
             Failed
           </span>
@@ -131,19 +131,19 @@ export default function ExtractionTrigger({
   ]
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
+    <div className="bg-slate-800 rounded-lg shadow-sm border border-slate-700 p-6">
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <Zap className="h-5 w-5 text-blue-600" />
+            <div className="p-2 bg-blue-900/20 rounded-lg">
+              <Zap className="h-5 w-5 text-blue-400" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-slate-100">
                 Extract Data
               </h3>
-              <p className="text-sm text-gray-600">{document.filename}</p>
+              <p className="text-sm text-slate-300">{document.filename}</p>
             </div>
           </div>
           {getStatusBadge()}
@@ -161,13 +161,13 @@ export default function ExtractionTrigger({
 
             {/* Suggested Keywords */}
             <div>
-              <p className="text-xs font-medium text-gray-700 mb-2">Quick suggestions:</p>
+              <p className="text-xs font-medium text-slate-300 mb-2">Quick suggestions:</p>
               <div className="flex flex-wrap gap-2">
                 {suggestedKeywords.map((suggestion, index) => (
                   <button
                     key={index}
                     onClick={() => setKeywords(suggestion)}
-                    className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+                    className="px-2 py-1 text-xs bg-slate-700 text-slate-300 rounded-md hover:bg-slate-600 transition-colors"
                     disabled={loading}
                   >
                     {suggestion}
@@ -180,10 +180,10 @@ export default function ExtractionTrigger({
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <div className="bg-red-900/20 border border-red-600 rounded-lg p-3">
             <div className="flex items-center gap-2">
-              <AlertCircle className="h-4 w-4 text-red-600" />
-              <p className="text-sm text-red-700">{error}</p>
+              <AlertCircle className="h-4 w-4 text-red-400" />
+              <p className="text-sm text-red-300">{error}</p>
             </div>
           </div>
         )}
@@ -204,8 +204,8 @@ export default function ExtractionTrigger({
               {loading ? 'Starting Extraction...' : 'Start Extraction'}
             </button>
           ) : (
-            <div className="text-sm text-gray-500">
-              {document.processing_status === 'completed' 
+            <div className="text-sm text-slate-400">
+              {document.processing_status === 'completed'
                 ? 'Extraction already completed'
                 : document.processing_status === 'processing'
                 ? 'Extraction in progress...'
@@ -217,10 +217,10 @@ export default function ExtractionTrigger({
 
         {/* Info Box */}
         {canStartExtraction && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className="bg-blue-900/20 border border-blue-600 rounded-lg p-3">
             <div className="flex items-start gap-2">
-              <FileText className="h-4 w-4 text-blue-600 mt-0.5" />
-              <div className="text-sm text-blue-700">
+              <FileText className="h-4 w-4 text-blue-400 mt-0.5" />
+              <div className="text-sm text-blue-300">
                 <p className="font-medium">How it works:</p>
                 <ul className="mt-1 space-y-1 text-xs">
                   <li>• AI analyzes your PDF and extracts structured data</li>

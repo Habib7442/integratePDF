@@ -132,149 +132,87 @@ const faqs = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50/30 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.1),transparent_50%)]" />
+    <section id="pricing" className="py-12 sm:py-16 lg:py-20 bg-slate-950 relative overflow-hidden">
+      {/* Minimal dark background with subtle grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section header */}
-        <motion.div
-          className="text-center mb-16 sm:mb-20 px-4 sm:px-0"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header - Simplified */}
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-100 mb-4 sm:mb-6">
             Simple Pricing
-          </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 sm:mb-8 leading-tight">
-            Choose the perfect plan for
-            <br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-              your business
-            </span>
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Start free with no signup required. Paid plans coming soon with advanced features.
+          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto">
+            Start free with no signup required. Paid plans coming soon.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Value propositions */}
-        <motion.div
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-        >
-          {valueProps.map((prop, index) => {
-            const Icon = prop.icon
-            return (
-              <motion.div
-                key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-2 sm:mb-3">
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </div>
-                <h3 className="font-semibold text-slate-900 mb-1 text-sm sm:text-base">{prop.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600">{prop.description}</p>
-              </motion.div>
-            )
-          })}
-        </motion.div>
-
-        {/* Pricing cards */}
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-        >
+        {/* Pricing cards - Simplified for dark mode */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20">
           {plans.map((plan, index) => {
             const Icon = plan.icon
             return (
-              <motion.div
-                key={index}
-                className="group relative"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: plan.popular ? 0 : -8 }}
-              >
-                <Card className={`relative overflow-hidden border-0 shadow-xl hover:shadow-2xl transition-all duration-500 h-full ${
-                  plan.popular ? 'scale-105 ring-2 ring-blue-200' : ''
+              <div key={index} className="group relative">
+                <Card className={`relative overflow-hidden border border-slate-700 transition-all duration-300 h-full ${
+                  plan.popular ? 'bg-slate-800 ring-2 ring-blue-500' : 'bg-slate-800'
                 }`}>
-                  {/* Background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${plan.bgGradient} opacity-50`} />
-
                   {/* Popular badge */}
                   {plan.badge && (
-                    <div className={`absolute top-0 right-0 bg-gradient-to-r ${plan.gradient} text-white px-4 py-2 text-sm font-bold rounded-bl-2xl shadow-lg`}>
+                    <div className="absolute top-0 right-0 bg-blue-600 text-white px-4 py-2 text-sm font-bold rounded-bl-2xl">
                       <Sparkles className="w-4 h-4 inline mr-1" />
                       {plan.badge}
                     </div>
                   )}
 
-                  <CardHeader className="text-center pb-6 relative">
+                  <CardHeader className="text-center pb-6 relative p-6">
                     <div className="flex justify-center mb-6">
-                      <div className={`p-4 rounded-2xl bg-gradient-to-br ${plan.gradient} shadow-lg`}>
+                      <div className="p-4 rounded-2xl bg-blue-600">
                         <Icon className="w-8 h-8 text-white" />
                       </div>
                     </div>
 
-                    <CardTitle className="text-2xl font-bold text-slate-900 mb-2">
+                    <CardTitle className="text-2xl font-bold text-slate-100 mb-2">
                       {plan.name}
                     </CardTitle>
 
                     <div className="mb-4">
-                      <span className="text-5xl font-bold text-slate-900">{plan.price}</span>
-                      <span className="text-slate-600 ml-2">/{plan.period}</span>
+                      <span className="text-5xl font-bold text-slate-100">{plan.price}</span>
+                      <span className="text-slate-300 ml-2">/{plan.period}</span>
                     </div>
 
                     {plan.savings && (
-                      <Badge className={`bg-gradient-to-r ${plan.gradient} text-white border-0 mb-4`}>
+                      <Badge className="bg-blue-600 text-white border-0 mb-4">
                         {plan.savings}
                       </Badge>
                     )}
 
-                    <CardDescription className="text-slate-600 font-medium">
+                    <CardDescription className="text-slate-300 font-medium">
                       {plan.description}
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="space-y-6 relative">
+                  <CardContent className="space-y-6 relative p-6">
                     {/* Features */}
                     <div className="space-y-4">
                       {plan.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-start">
-                          <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${plan.gradient} flex items-center justify-center mr-3 mt-0.5 flex-shrink-0`}>
+                          <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center mr-3 mt-0.5 flex-shrink-0">
                             <Check className="w-3 h-3 text-white" />
                           </div>
-                          <span className="text-slate-700 font-medium">{feature}</span>
+                          <span className="text-slate-200 font-medium">{feature}</span>
                         </div>
                       ))}
                     </div>
 
                     {/* Limitations for free plan */}
                     {plan.limitations.length > 0 && (
-                      <div className="pt-4 border-t border-slate-200">
-                        <p className="text-sm text-slate-500 mb-3 font-medium">Limitations:</p>
+                      <div className="pt-4 border-t border-slate-600">
+                        <p className="text-sm text-slate-400 mb-3 font-medium">Limitations:</p>
                         <div className="space-y-2">
                           {plan.limitations.map((limitation, limitIndex) => (
                             <div key={limitIndex} className="flex items-start">
                               <X className="w-4 h-4 text-slate-400 mr-2 mt-0.5 flex-shrink-0" />
-                              <span className="text-sm text-slate-500">{limitation}</span>
+                              <span className="text-sm text-slate-400">{limitation}</span>
                             </div>
                           ))}
                         </div>
@@ -285,146 +223,41 @@ export function PricingSection() {
                     <div className="pt-6">
                       {plan.name === "Free" ? (
                         <SignUpButton>
-                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                            <Button className="w-full h-12 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg">
-                              {plan.cta}
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                          </motion.div>
+                          <Button className="w-full h-12 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white">
+                            {plan.cta}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Button>
                         </SignUpButton>
                       ) : plan.name === "Business" ? (
-                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                          <Button
-                            variant="outline"
-                            className="w-full h-12 text-lg font-semibold border-2 border-slate-300 hover:border-slate-400"
-                            asChild
-                          >
-                            <a href="mailto:sales@integratepdf.com">
-                              {plan.cta}
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </a>
-                          </Button>
-                        </motion.div>
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 text-lg font-semibold border-2 border-slate-600 text-slate-300 hover:border-slate-500 hover:text-slate-200"
+                          asChild
+                        >
+                          <a href="mailto:sales@integratepdf.com">
+                            {plan.cta}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </a>
+                        </Button>
                       ) : (
                         <SignUpButton>
-                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                            <Button
-                              variant="outline"
-                              className="w-full h-12 text-lg font-semibold border-2 border-slate-300 hover:border-slate-400"
-                            >
-                              {plan.cta}
-                              <ArrowRight className="ml-2 w-5 h-5" />
-                            </Button>
-                          </motion.div>
+                          <Button
+                            variant="outline"
+                            className="w-full h-12 text-lg font-semibold border-2 border-slate-600 text-slate-300 hover:border-slate-500 hover:text-slate-200"
+                          >
+                            {plan.cta}
+                            <ArrowRight className="ml-2 w-5 h-5" />
+                          </Button>
                         </SignUpButton>
                       )}
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             )
           })}
-        </motion.div>
+        </div>
 
-        {/* Enterprise section */}
-        <motion.div
-          className="relative mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.1),transparent_50%)]" />
-
-            <div className="relative text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Crown className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-3xl font-bold mb-6">
-                Need something custom?
-              </h3>
-              <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-                For enterprises with specific requirements, we offer custom solutions including dedicated infrastructure,
-                custom integrations, and white-label options.
-              </p>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button variant="outline" size="lg" className="bg-white/10 border-white/20 text-white hover:bg-white/20 h-12 px-8" asChild>
-                  <a href="mailto:enterprise@integratepdf.com">
-                    Contact Enterprise Sales
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* FAQ */}
-        <motion.div
-          className="max-w-4xl mx-auto mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-slate-900 mb-4">
-              Frequently Asked Questions
-            </h3>
-            <p className="text-slate-600">Everything you need to know about our pricing and plans</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={index}
-                className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-white/20"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-              >
-                <h4 className="font-bold text-slate-900 mb-3">{faq.question}</h4>
-                <p className="text-slate-600 leading-relaxed">{faq.answer}</p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-          viewport={{ once: true }}
-        >
-          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-8 lg:p-12 text-white relative overflow-hidden">
-            {/* Background decoration */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_25%,rgba(255,255,255,0.1),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_75%,rgba(255,255,255,0.1),transparent_50%)]" />
-
-            <div className="relative">
-              <h3 className="text-3xl font-bold mb-6">
-                Ready to transform your PDF workflow?
-              </h3>
-              <p className="text-blue-100 mb-8 max-w-2xl mx-auto text-lg leading-relaxed">
-                Join early adopters who are transforming their PDF workflows. Try the demo now, no signup required.
-              </p>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="secondary" className="text-lg px-10 py-4 h-auto bg-white text-slate-900 hover:bg-slate-100 shadow-xl" asChild>
-                  <a href="#demo">
-                    Try Free Demo
-                    <ArrowRight className="ml-2 w-5 h-5" />
-                  </a>
-                </Button>
-              </motion.div>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   )

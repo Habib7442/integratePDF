@@ -1,50 +1,65 @@
-// Design System Configuration for IntegratePDF Premium Landing Page
-// Based on analysis of Stripe, Notion, and Linear design patterns
+// Design System Configuration for IntegratePDF Minimal Dark Landing Page
+// Optimized for dark mode with high contrast and minimal design
 
 export const designSystem = {
-  // Premium Color Palette
+  // Dark Mode Color Palette
   colors: {
-    // Primary brand colors
+    // Dark theme backgrounds
+    dark: {
+      50: '#fafafa',   // Light mode fallback
+      100: '#f5f5f5',  // Light mode fallback
+      800: '#1f2937',  // Dark surface
+      850: '#1a202c',  // Darker surface
+      900: '#111827',  // Primary dark background
+      950: '#0f172a'   // Deepest dark background
+    },
+    // Primary brand colors (adjusted for dark mode)
     primary: {
-      50: '#f0f9ff',
-      100: '#e0f2fe', 
-      500: '#0ea5e9',
-      600: '#0284c7',
-      700: '#0369a1',
-      900: '#0c4a6e'
+      50: '#eff6ff',
+      100: '#dbeafe',
+      400: '#60a5fa',  // Lighter for dark backgrounds
+      500: '#3b82f6',  // Main brand blue
+      600: '#2563eb',  // Darker blue
+      700: '#1d4ed8',
+      800: '#1e40af',
+      900: '#1e3a8a'
     },
-    // Secondary accent colors
-    secondary: {
-      50: '#fef3c7',
-      100: '#fde68a',
-      500: '#f59e0b',
-      600: '#d97706',
-      700: '#b45309'
+    // Accent colors for highlights
+    accent: {
+      400: '#a78bfa',  // Purple accent
+      500: '#8b5cf6',
+      600: '#7c3aed'
     },
-    // Neutral grays
+    // Neutral grays for dark mode
     neutral: {
-      50: '#fafafa',
-      100: '#f5f5f5',
-      200: '#e5e5e5',
-      300: '#d4d4d4',
-      400: '#a3a3a3',
-      500: '#737373',
-      600: '#525252',
-      700: '#404040',
-      800: '#262626',
-      900: '#171717'
+      50: '#f9fafb',   // Light text on dark
+      100: '#f3f4f6',  // Secondary light text
+      200: '#e5e7eb',  // Borders on dark
+      300: '#d1d5db',  // Muted text
+      400: '#9ca3af',  // Placeholder text
+      500: '#6b7280',  // Secondary text
+      600: '#4b5563',  // Primary text on light surfaces
+      700: '#374151',  // Dark surface text
+      800: '#1f2937',  // Dark surface
+      900: '#111827'   // Darkest surface
     },
-    // Success/positive
+    // Success/positive (adjusted for dark mode)
     success: {
-      50: '#f0fdf4',
-      500: '#22c55e',
-      600: '#16a34a'
+      400: '#34d399',  // Lighter green for dark backgrounds
+      500: '#10b981',
+      600: '#059669'
     },
-    // Warning/attention
+    // Warning/attention (adjusted for dark mode)
     warning: {
-      50: '#fffbeb',
+      400: '#fbbf24',  // Lighter yellow for dark backgrounds
       500: '#f59e0b',
       600: '#d97706'
+    },
+    // Error/destructive (adjusted for dark mode)
+    error: {
+      400: '#f87171',  // Lighter red for dark backgrounds
+      500: '#ef4444',
+      600: '#dc2626'
     }
   },
 

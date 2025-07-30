@@ -98,196 +98,44 @@ const integrations = [
 
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-gradient-to-br from-slate-50 to-blue-50/30 relative overflow-hidden">
-      {/* Background decorations */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(59,130,246,0.1),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(99,102,241,0.1),transparent_50%)]" />
+    <section id="features" className="py-12 sm:py-16 lg:py-20 bg-slate-950 relative overflow-hidden">
+      {/* Minimal dark background with subtle grid */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#1e293b_1px,transparent_1px),linear-gradient(to_bottom,#1e293b_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-10" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Stats Section */}
-        <motion.div
-          className="text-center mb-16 sm:mb-20"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto">
-            {stats.map((stat, index) => {
-              const Icon = stat.icon
-              return (
-                <motion.div
-                  key={index}
-                  className="text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                    <Icon className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
-                  </div>
-                  <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-900 mb-1 sm:mb-2">{stat.number}</div>
-                  <div className="text-slate-600 font-medium text-sm sm:text-base">{stat.label}</div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </motion.div>
-
-        {/* Section header */}
-        <motion.div
-          className="text-center mb-16 sm:mb-20 px-4 sm:px-0"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          <Badge className="mb-4 sm:mb-6 px-4 sm:px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs sm:text-sm">
-            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
-            Core Features
-          </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-slate-900 mb-6 sm:mb-8 leading-tight">
-            Everything you need to
-            <br className="hidden sm:block" />
-            <span className="sm:hidden"> </span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">
-              automate PDF workflows
-            </span>
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section header - Simplified */}
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-slate-100 mb-4 sm:mb-6">
+            Key Features
           </h2>
-          <p className="text-base sm:text-lg lg:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-            Built specifically for busy founders and small business owners who want to eliminate manual data entry and streamline their operations.
+          <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto">
+            AI-powered PDF processing that extracts data instantly.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Features grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-16 sm:mb-20 lg:mb-24">
-          {features.map((feature, index) => {
+        {/* Features grid - Simplified for dark mode */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12">
+          {features.slice(0, 3).map((feature, index) => {
             const Icon = feature.icon
             return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -8 }}
-                className="group"
-              >
-                <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 bg-white/80 backdrop-blur-sm h-full">
-                  {/* Gradient background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
-
-                  <CardHeader className="pb-3 sm:pb-4 relative">
-                    <div className="flex items-start justify-between mb-4 sm:mb-6">
-                      <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-gradient-to-br ${feature.gradient} shadow-lg`}>
-                        <Icon className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
-                      </div>
-                      <Badge className={`bg-gradient-to-r ${feature.gradient} text-white border-0 text-xs sm:text-sm`}>
-                        {feature.badge}
-                      </Badge>
+              <div key={index} className="group">
+                <Card className="bg-slate-800 border border-slate-700 h-full p-6">
+                  <div className="flex items-center mb-4">
+                    <div className="p-3 rounded-lg bg-blue-600 mr-4">
+                      <Icon className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="text-lg sm:text-xl font-bold text-slate-900 mb-2">
-                      {feature.title}
-                    </CardTitle>
-                    <div className="text-xs sm:text-sm text-slate-500 font-medium mb-3 sm:mb-4">
-                      {feature.benefit}
-                    </div>
-                  </CardHeader>
-                  <CardContent className="relative">
-                    <CardDescription className="text-slate-600 leading-relaxed mb-3 sm:mb-4 text-sm sm:text-base">
-                      {feature.description}
-                    </CardDescription>
-                    <div className="flex items-center text-xs sm:text-sm">
-                      <TrendingUp className="w-4 h-4 text-green-500 mr-2" />
-                      <span className="text-slate-700 font-medium">{feature.stats}</span>
-                    </div>
-                  </CardContent>
+                  </div>
+                  <CardTitle className="text-lg font-bold text-slate-100 mb-3">
+                    {feature.title}
+                  </CardTitle>
+                  <CardDescription className="text-slate-300 leading-relaxed text-sm">
+                    {feature.description}
+                  </CardDescription>
                 </Card>
-              </motion.div>
+              </div>
             )
           })}
         </div>
-
-        {/* Integrations showcase */}
-        <motion.div
-          className="relative"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 lg:p-12 border border-white/20 shadow-xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-6 px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-                <Database className="w-4 h-4 mr-2" />
-                Integrations
-              </Badge>
-              <h3 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">
-                Seamless Integrations
-              </h3>
-              <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                Connect with the tools you already use. More integrations added every month based on user requests.
-              </p>
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {integrations.map((integration, index) => (
-                <motion.div
-                  key={index}
-                  className="group relative"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="bg-white rounded-2xl p-6 text-center shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100 h-full">
-                    {/* Gradient background on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${integration.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl`} />
-
-                    <div className="relative">
-                      <div className="text-4xl mb-4">{integration.logo}</div>
-                      <h4 className="font-bold text-slate-900 mb-2 text-lg">{integration.name}</h4>
-                      <p className="text-sm text-slate-600 mb-4">{integration.description}</p>
-
-                      {integration.status === 'available' && (
-                        <Badge className="bg-gradient-to-r from-green-500 to-emerald-500 text-white border-0">
-                          <CheckCircle className="w-3 h-3 mr-1" />
-                          Available Now
-                        </Badge>
-                      )}
-                      {integration.status === 'coming-soon' && (
-                        <Badge variant="outline" className="border-slate-300 text-slate-600">
-                          <Clock className="w-3 h-3 mr-1" />
-                          Coming Soon
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Call to action */}
-            <motion.div
-              className="text-center mt-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <p className="text-slate-600 mb-4">
-                Need a specific integration?
-                <span className="font-semibold text-slate-900"> We build based on user requests.</span>
-              </p>
-              <Badge variant="outline" className="px-4 py-2 border-blue-200 text-blue-600">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Request Integration
-              </Badge>
-            </motion.div>
-          </div>
-        </motion.div>
       </div>
     </section>
   )
