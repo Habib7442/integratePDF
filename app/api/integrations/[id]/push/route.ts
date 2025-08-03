@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { createClient } from '@supabase/supabase-js'
 import { NotionIntegration } from '@/lib/integrations/notion'
+import { GoogleSheetsIntegration, GoogleSheetsConfig } from '@/lib/integrations/google-sheets'
 
 // Use service role for server-side operations to bypass RLS
 const getSupabaseServiceClient = () => {
@@ -88,13 +89,35 @@ export async function POST(
           
           externalId = result.id
           break
-          
+
+        case 'google_sheets':
+          const googleSheetsClient = new GoogleSheetsIntegration(integration.config as GoogleSheetsConfig)
+
+          // Use provided mapping or generate default mapping
+          const sheetsMapping = mapping || {}
+
+          result = await googleSheetsClient.pushExtractedData(
+            data,
+            sheetsMapping,
+            {
+              spreadsheetId: integration.config.spreadsheet_id,
+              sheetName: integration.config.sheet_name,
+              createHeaders: true,
+              documentName: document.filename
+            }
+          )
+
+          // Use the actual spreadsheet ID from the result (in case a new one was created)
+          const actualSpreadsheetId = result.spreadsheetId || integration.config.spreadsheet_id
+          externalId = `${actualSpreadsheetId}:${result.sheetName || integration.config.sheet_name}`
+          break
+
         case 'airtable':
           throw new Error('Airtable integration not yet implemented')
-          
+
         case 'quickbooks':
           throw new Error('QuickBooks integration not yet implemented')
-          
+
         default:
           throw new Error('Unknown integration type')
       }

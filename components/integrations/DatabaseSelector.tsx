@@ -45,10 +45,12 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
     }
   }, [userIntegrations.length, integrationsLoading, fetchUserIntegrations])
 
-  // Filter for active Notion integrations only - memoized to prevent recreation
+  // Filter for active integrations that support data pushing - memoized to prevent recreation
   const availableDatabases = useMemo(() =>
     userIntegrations.filter(
-      integration => integration.integration_type === 'notion' && integration.is_active
+      integration =>
+        (integration.integration_type === 'notion' || integration.integration_type === 'google_sheets') &&
+        integration.is_active
     ), [userIntegrations]
   )
 
@@ -98,12 +100,25 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
     const info = databasesInfo[integration.id]
 
     if (!info) {
-      return {
-        title: integration.integration_name,
-        subtitle: `ID: ${formatDatabaseId(integration.config.database_id)}`,
-        loading: false,
-        error: null,
-        icon: <Database className="h-4 w-4 text-gray-500" />
+      // Handle different integration types
+      if (integration.integration_type === 'google_sheets') {
+        return {
+          title: integration.integration_name,
+          subtitle: integration.config.sheet_name ?
+            `Sheet: ${integration.config.sheet_name}` :
+            `Spreadsheet: ${formatDatabaseId(integration.config.spreadsheet_id || 'Unknown')}`,
+          loading: false,
+          error: null,
+          icon: <Database className="h-4 w-4 text-green-600" />
+        }
+      } else {
+        return {
+          title: integration.integration_name,
+          subtitle: `ID: ${formatDatabaseId(integration.config.database_id)}`,
+          loading: false,
+          error: null,
+          icon: <Database className="h-4 w-4 text-gray-500" />
+        }
       }
     }
 
@@ -128,21 +143,46 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
     }
 
     if (info.database) {
-      return {
-        title: info.database.title,
-        subtitle: `Notion Database • ${Object.keys(info.database.properties).length} properties`,
-        loading: false,
-        error: null,
-        icon: <Database className="h-4 w-4 text-blue-600" />
+      if (integration.integration_type === 'google_sheets') {
+        return {
+          title: integration.integration_name,
+          subtitle: integration.config.sheet_name ?
+            `Sheet: ${integration.config.sheet_name}` :
+            `Google Sheets`,
+          loading: false,
+          error: null,
+          icon: <Database className="h-4 w-4 text-green-600" />
+        }
+      } else {
+        return {
+          title: info.database.title,
+          subtitle: `Notion Database • ${Object.keys(info.database.properties).length} properties`,
+          loading: false,
+          error: null,
+          icon: <Database className="h-4 w-4 text-blue-600" />
+        }
       }
     }
 
-    return {
-      title: integration.integration_name,
-      subtitle: `ID: ${formatDatabaseId(integration.config.database_id)}`,
-      loading: false,
-      error: null,
-      icon: <Database className="h-4 w-4 text-gray-500" />
+    // Fallback for when no database info is available
+    if (integration.integration_type === 'google_sheets') {
+      return {
+        title: integration.integration_name,
+        subtitle: integration.config.sheet_name ?
+          `Sheet: ${integration.config.sheet_name}` :
+          `Google Sheets`,
+        loading: false,
+        error: null,
+        icon: <Database className="h-4 w-4 text-green-600" />
+      }
+    } else {
+      return {
+        title: integration.integration_name,
+        subtitle: `ID: ${formatDatabaseId(integration.config.database_id)}`,
+        loading: false,
+        error: null,
+        icon: <Database className="h-4 w-4 text-gray-500" />
+      }
     }
   }, [databasesInfo])
 
@@ -155,7 +195,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
           <div>
             <p className="font-medium text-gray-900">No databases connected</p>
             <p className="text-sm text-gray-600">
-              Connect a Notion database in the integrations page to push data.
+              Connect an integration in the integrations page to push data.
             </p>
           </div>
         </div>
@@ -173,7 +213,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
           <div>
             <p className="font-medium text-gray-900">Loading databases...</p>
             <p className="text-sm text-gray-600">
-              Fetching database information from Notion
+              Fetching integration information
             </p>
           </div>
         </div>
@@ -195,7 +235,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
               isInitialLoading
                 ? "Loading databases..."
                 : availableDatabases.length > 0
-                  ? "Choose a Notion database"
+                  ? "Choose a database"
                   : "No databases available"
             }
           >
@@ -219,7 +259,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
             <div className="p-4 text-center text-gray-500">
               <Database className="h-8 w-8 mx-auto mb-2 text-gray-400" />
               <p className="text-sm font-medium">No databases connected</p>
-              <p className="text-xs">Connect a Notion database first</p>
+              <p className="text-xs">Connect an integration first</p>
             </div>
           ) : (
             availableDatabases.map((integration) => {
@@ -281,7 +321,7 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
                   <div className="text-blue-700 text-xs mb-2">
                     {displayInfo.subtitle}
                   </div>
-                  {databaseInfo?.database && (
+                  {databaseInfo?.database && selected.integration_type === 'notion' && (
                     <div className="text-xs text-blue-600">
                       <div className="mb-1">
                         <strong>Available properties:</strong> {Object.keys(databaseInfo.database.properties).join(', ')}
@@ -296,6 +336,16 @@ const DatabaseSelector: React.FC<DatabaseSelectorProps> = ({
                         >
                           Open in Notion
                         </a>
+                      </div>
+                    </div>
+                  )}
+                  {selected.integration_type === 'google_sheets' && (
+                    <div className="text-xs text-blue-600">
+                      <div className="mb-1">
+                        <strong>Spreadsheet:</strong> {selected.config.spreadsheet_id ? 'Configured' : 'Auto-create new'}
+                      </div>
+                      <div>
+                        <strong>Sheet:</strong> {selected.config.sheet_name || 'Sheet1'}
                       </div>
                     </div>
                   )}

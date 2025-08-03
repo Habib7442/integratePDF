@@ -341,14 +341,28 @@ export default function IntegrationSettingsPage() {
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
 
-                <Button
-                  variant="outline"
-                  onClick={handleTest}
-                  className="w-full"
-                >
-                  <TestTube className="h-4 w-4 mr-2" />
-                  Test Connection
-                </Button>
+                {currentIntegration.integration_type !== 'google_sheets' && (
+                  <Button
+                    variant="outline"
+                    onClick={handleTest}
+                    className="w-full"
+                  >
+                    <TestTube className="h-4 w-4 mr-2" />
+                    Test Connection
+                  </Button>
+                )}
+
+                {currentIntegration.integration_type === 'google_sheets' && (
+                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-900">OAuth Connected</span>
+                    </div>
+                    <p className="text-xs text-blue-700 mt-1">
+                      Google Sheets uses OAuth authentication. Your connection is automatically verified.
+                    </p>
+                  </div>
+                )}
 
                 <Button
                   variant="destructive"

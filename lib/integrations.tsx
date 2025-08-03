@@ -3,6 +3,7 @@ import { Integration } from '@/stores/types';
 import NotionIcon from '@/components/icons/NotionIcon';
 import AirtableIcon from '@/components/icons/AirtableIcon';
 import QuickbooksIcon from '@/components/icons/QuickbooksIcon';
+import GoogleSheetsIcon from '@/components/icons/GoogleSheetsIcon';
 
 export const INTEGRATIONS: Integration[] = [
   {
@@ -30,6 +31,34 @@ export const INTEGRATIONS: Integration[] = [
         required: true,
         placeholder: 'Enter your Notion database ID',
         description: 'The ID of the Notion database where data will be pushed'
+      }
+    ]
+  },
+  {
+    id: 'google_sheets',
+    name: 'Google Sheets',
+    type: 'google_sheets',
+    icon: () => <GoogleSheetsIcon className="w-6 h-6" />,
+    description: 'Export data to Google Sheets automatically. Connect multiple times for different spreadsheets.',
+    isAvailable: true,
+    requiresAuth: true,
+    authUrl: '/api/integrations/google-sheets/auth',
+    configFields: [
+      {
+        key: 'spreadsheet_id',
+        label: 'Spreadsheet ID',
+        type: 'text',
+        required: false,
+        placeholder: 'Leave empty to create new spreadsheet',
+        description: 'The ID of the Google Sheets spreadsheet (optional)'
+      },
+      {
+        key: 'sheet_name',
+        label: 'Sheet Name',
+        type: 'text',
+        required: false,
+        placeholder: 'Sheet1',
+        description: 'The name of the sheet within the spreadsheet'
       }
     ]
   },
@@ -91,6 +120,6 @@ export const getAvailableIntegrations = (): Integration[] => {
   return INTEGRATIONS.filter(integration => integration.isAvailable);
 };
 
-export const getIntegrationsByType = (type: 'notion' | 'airtable' | 'quickbooks'): Integration[] => {
+export const getIntegrationsByType = (type: 'notion' | 'airtable' | 'quickbooks' | 'google_sheets'): Integration[] => {
   return INTEGRATIONS.filter(integration => integration.type === type);
 };

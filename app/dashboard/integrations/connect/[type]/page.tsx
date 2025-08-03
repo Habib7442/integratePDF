@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { useIntegrations, useUIStore } from '@/stores'
 import { getIntegrationById } from '@/lib/integrations'
 import IntegrationTester from '@/components/integrations/IntegrationTester'
-import { ArrowLeft, ExternalLink, AlertCircle } from 'lucide-react'
+import { ArrowLeft, ExternalLink, AlertCircle, Loader2 } from 'lucide-react'
 
 export default function ConnectIntegrationPage() {
   const router = useRouter()
@@ -20,6 +20,7 @@ export default function ConnectIntegrationPage() {
   const [integrationName, setIntegrationName] = useState('')
   const [showTester, setShowTester] = useState(false)
   const [testPassed, setTestPassed] = useState(false)
+  const [isRedirecting, setIsRedirecting] = useState(false)
 
   const {
     isConnecting,
@@ -54,7 +55,15 @@ export default function ConnectIntegrationPage() {
     try {
       clearError()
 
-      // Validate required fields
+      // Check if this integration requires OAuth
+      if (integration.requiresAuth && integration.authUrl) {
+        // For OAuth integrations, redirect to the auth URL
+        setIsRedirecting(true)
+        window.location.href = integration.authUrl
+        return
+      }
+
+      // Validate required fields for manual configuration
       const missingFields = integration.configFields?.filter(field =>
         field.required && !config[field.key]
       ) || []
@@ -88,7 +97,20 @@ export default function ConnectIntegrationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
+      {isRedirecting && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-6 shadow-xl max-w-sm mx-4">
+            <div className="flex items-center gap-3">
+              <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
+              <div>
+                <h3 className="font-medium text-gray-900">Redirecting to {integration.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">Please wait while we redirect you to authorize access...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -124,30 +146,38 @@ export default function ConnectIntegrationPage() {
         {/* Connection Form */}
         <Card>
           <CardHeader>
-            <CardTitle>Configuration</CardTitle>
+            <CardTitle>
+              {integration.requiresAuth ? 'Connect with OAuth' : 'Configuration'}
+            </CardTitle>
             <CardDescription>
-              Enter the required information to connect your {integration.name} account
+              {integration.requiresAuth
+                ? `Connect your ${integration.name} account securely using OAuth`
+                : `Enter the required information to connect your ${integration.name} account`
+              }
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Integration Name */}
-            <div>
-              <Label htmlFor="integration-name">Integration Name</Label>
-              <Input
-                id="integration-name"
-                type="text"
-                value={integrationName}
-                onChange={(e) => setIntegrationName(e.target.value)}
-                placeholder={`My ${integration.name} Integration`}
-                className="mt-1"
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Give this integration a name to help you identify it
-              </p>
-            </div>
+            {/* Show configuration fields only for non-OAuth integrations */}
+            {!integration.requiresAuth && (
+              <>
+                {/* Integration Name */}
+                <div>
+                  <Label htmlFor="integration-name">Integration Name</Label>
+                  <Input
+                    id="integration-name"
+                    type="text"
+                    value={integrationName}
+                    onChange={(e) => setIntegrationName(e.target.value)}
+                    placeholder={`My ${integration.name} Integration`}
+                    className="mt-1"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Give this integration a name to help you identify it
+                  </p>
+                </div>
 
-            {/* Dynamic Config Fields */}
-            {integration.configFields?.map((field) => (
+                {/* Dynamic Config Fields */}
+                {integration.configFields?.map((field) => (
               <div key={field.key}>
                 <Label htmlFor={field.key}>
                   {field.label}
@@ -187,7 +217,25 @@ export default function ConnectIntegrationPage() {
                   </p>
                 )}
               </div>
-            ))}
+                ))}
+              </>
+            )}
+
+            {/* OAuth Integration Info */}
+            {integration.requiresAuth && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h4 className="font-medium text-blue-900 mb-2">OAuth Authentication</h4>
+                <p className="text-sm text-blue-800 mb-2">
+                  Click the button below to securely connect your {integration.name} account.
+                  You'll be redirected to {integration.name} to authorize access, then brought back here.
+                </p>
+                {integration.type === 'google_sheets' && (
+                  <p className="text-sm text-blue-700 font-medium">
+                    💡 Tip: You can connect multiple Google Sheets integrations to organize data into different spreadsheets.
+                  </p>
+                )}
+              </div>
+            )}
 
             {/* Integration-specific instructions */}
             {integration.type === 'notion' && (
@@ -253,15 +301,23 @@ export default function ConnectIntegrationPage() {
             <div className="flex gap-3 pt-4">
               <Button
                 onClick={handleConnect}
-                disabled={isConnecting || (showTester && !testPassed)}
+                disabled={isConnecting || isRedirecting || (showTester && !testPassed)}
                 className="flex-1"
               >
-                {isConnecting ? 'Connecting...' : `Connect ${integration.name}`}
+                {(isConnecting || isRedirecting) && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+                {isConnecting
+                  ? 'Connecting...'
+                  : isRedirecting
+                    ? 'Redirecting...'
+                    : integration.requiresAuth
+                      ? `Connect with ${integration.name}`
+                      : `Connect ${integration.name}`
+                }
               </Button>
               <Button
                 variant="outline"
                 onClick={() => router.push('/dashboard/integrations')}
-                disabled={isConnecting}
+                disabled={isConnecting || isRedirecting}
               >
                 Cancel
               </Button>

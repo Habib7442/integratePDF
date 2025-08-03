@@ -158,7 +158,7 @@ export type Database = {
         Row: {
           id: string
           user_id: string
-          integration_type: 'notion' | 'airtable' | 'quickbooks'
+          integration_type: 'notion' | 'airtable' | 'quickbooks' | 'google_sheets'
           integration_name: string
           config: Record<string, any>
           is_active: boolean
@@ -169,7 +169,7 @@ export type Database = {
         Insert: {
           id?: string
           user_id: string
-          integration_type: 'notion' | 'airtable' | 'quickbooks'
+          integration_type: 'notion' | 'airtable' | 'quickbooks' | 'google_sheets'
           integration_name: string
           config: Record<string, any>
           is_active?: boolean
@@ -180,7 +180,7 @@ export type Database = {
         Update: {
           id?: string
           user_id?: string
-          integration_type?: 'notion' | 'airtable' | 'quickbooks'
+          integration_type?: 'notion' | 'airtable' | 'quickbooks' | 'google_sheets'
           integration_name?: string
           config?: Record<string, any>
           is_active?: boolean
@@ -234,7 +234,7 @@ export type Database = {
     Enums: {
       subscription_tier: 'free' | 'pro' | 'business'
       processing_status: 'pending' | 'processing' | 'completed' | 'failed'
-      integration_type: 'notion' | 'airtable' | 'quickbooks'
+      integration_type: 'notion' | 'airtable' | 'quickbooks' | 'google_sheets'
     }
   }
 }

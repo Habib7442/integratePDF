@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 -- Create custom types
 CREATE TYPE subscription_tier AS ENUM ('free', 'pro', 'business');
 CREATE TYPE processing_status AS ENUM ('pending', 'processing', 'completed', 'failed');
-CREATE TYPE integration_type AS ENUM ('notion', 'airtable', 'quickbooks');
+CREATE TYPE integration_type AS ENUM ('notion', 'airtable', 'quickbooks', 'google_sheets');
 
 -- Create users table
 CREATE TABLE users (

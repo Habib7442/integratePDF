@@ -183,6 +183,135 @@ export class IntegrationErrorHandler {
     }
   }
 
+  static handleGoogleSheetsError(error: any): IntegrationError {
+    // Handle Google Sheets API specific errors
+    if (error.status) {
+      switch (error.status) {
+        case 400:
+          return {
+            code: 'GOOGLE_SHEETS_BAD_REQUEST',
+            message: 'Invalid request to Google Sheets API',
+            details: error.message,
+            suggestions: [
+              'Check that the spreadsheet ID is correct',
+              'Verify that sheet names exist',
+              'Ensure data format is valid'
+            ],
+            retryable: false
+          }
+
+        case 401:
+          return {
+            code: 'GOOGLE_SHEETS_UNAUTHORIZED',
+            message: 'Authentication failed with Google Sheets',
+            details: error.message,
+            suggestions: [
+              'Re-authenticate with Google',
+              'Check that your OAuth tokens are valid',
+              'Verify your Google Cloud project configuration'
+            ],
+            retryable: false
+          }
+
+        case 403:
+          return {
+            code: 'GOOGLE_SHEETS_FORBIDDEN',
+            message: 'Permission denied to access Google Sheets',
+            details: error.message,
+            suggestions: [
+              'Share the spreadsheet with your Google account',
+              'Check that you have edit permissions',
+              'Verify the spreadsheet is not restricted'
+            ],
+            retryable: false
+          }
+
+        case 404:
+          return {
+            code: 'GOOGLE_SHEETS_NOT_FOUND',
+            message: 'Google Sheets resource not found',
+            details: error.message,
+            suggestions: [
+              'Check that the spreadsheet ID is correct',
+              'Verify the spreadsheet has not been deleted',
+              'Ensure the sheet name exists'
+            ],
+            retryable: false
+          }
+
+        case 429:
+          return {
+            code: 'GOOGLE_SHEETS_RATE_LIMITED',
+            message: 'Rate limit exceeded for Google Sheets API',
+            details: error.message,
+            suggestions: [
+              'Wait before retrying the request',
+              'Reduce the frequency of API calls',
+              'Consider batching multiple operations'
+            ],
+            retryable: true
+          }
+
+        case 500:
+        case 502:
+        case 503:
+        case 504:
+          return {
+            code: 'GOOGLE_SHEETS_SERVER_ERROR',
+            message: 'Google Sheets server error',
+            details: error.message,
+            suggestions: [
+              'Try again in a few moments',
+              'Check Google Workspace status page',
+              'Contact support if the problem persists'
+            ],
+            retryable: true
+          }
+
+        default:
+          return {
+            code: 'GOOGLE_SHEETS_UNKNOWN_ERROR',
+            message: `Google Sheets API error: ${error.status}`,
+            details: error.message,
+            suggestions: [
+              'Check the Google Sheets API documentation',
+              'Verify your request format',
+              'Contact support if the issue persists'
+            ],
+            retryable: false
+          }
+      }
+    }
+
+    // Handle network and other errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      return {
+        code: 'NETWORK_ERROR',
+        message: 'Network connection failed',
+        details: error.message,
+        suggestions: [
+          'Check your internet connection',
+          'Verify that Google APIs are accessible',
+          'Try again in a few moments'
+        ],
+        retryable: true
+      }
+    }
+
+    // Generic error handling
+    return {
+      code: 'INTEGRATION_ERROR',
+      message: error.message || 'An unexpected error occurred',
+      details: error,
+      suggestions: [
+        'Try the operation again',
+        'Check your integration configuration',
+        'Contact support if the problem persists'
+      ],
+      retryable: true
+    }
+  }
+
   static getRetryDelay(attemptNumber: number): number {
     // Exponential backoff with jitter
     const baseDelay = 1000 // 1 second

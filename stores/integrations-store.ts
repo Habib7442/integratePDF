@@ -362,7 +362,7 @@ export const useIntegrationsStore = create<IntegrationsState>()(
         const { userIntegrations, setDatabaseInfo } = get()
         const integration = userIntegrations.find(i => i.id === integrationId)
 
-        if (!integration || integration.integration_type !== 'notion') {
+        if (!integration) {
           return
         }
 
@@ -375,31 +375,56 @@ export const useIntegrationsStore = create<IntegrationsState>()(
         })
 
         try {
-          const response = await fetch(
-            `/api/integrations/notion/database/${integration.config.database_id}`,
-            {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                api_key: integration.config.api_key
-              })
+          if (integration.integration_type === 'notion') {
+            const response = await fetch(
+              `/api/integrations/notion/database/${integration.config.database_id}`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  api_key: integration.config.api_key
+                })
+              }
+            )
+
+            if (!response.ok) {
+              throw new Error(`Failed to fetch database: ${response.statusText}`)
             }
-          )
 
-          if (!response.ok) {
-            throw new Error(`Failed to fetch database: ${response.statusText}`)
+            const database = await response.json()
+
+            setDatabaseInfo(integrationId, {
+              integrationId,
+              database,
+              loading: false,
+              error: null
+            })
+          } else if (integration.integration_type === 'google_sheets') {
+            // For Google Sheets, we don't need to fetch additional database info
+            // Just mark as ready with basic info
+            setDatabaseInfo(integrationId, {
+              integrationId,
+              database: {
+                title: integration.integration_name,
+                properties: {} // Google Sheets doesn't have properties like Notion
+              },
+              loading: false,
+              error: null
+            })
+          } else {
+            // For other integration types, just mark as ready
+            setDatabaseInfo(integrationId, {
+              integrationId,
+              database: {
+                title: integration.integration_name,
+                properties: {}
+              },
+              loading: false,
+              error: null
+            })
           }
-
-          const database = await response.json()
-
-          setDatabaseInfo(integrationId, {
-            integrationId,
-            database,
-            loading: false,
-            error: null
-          })
         } catch (error) {
           console.error(`Failed to fetch database info for ${integrationId}:`, error)
           setDatabaseInfo(integrationId, {

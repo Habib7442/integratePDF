@@ -40,8 +40,8 @@ const features = [
   },
   {
     icon: Zap,
-    title: "Notion Integration",
-    description: "Push extracted data directly to Notion databases with custom field mapping. CSV export also available for maximum flexibility.",
+    title: "Smart Integrations",
+    description: "Push extracted data directly to Notion databases or Google Sheets with custom field mapping. CSV export also available for maximum flexibility.",
     badge: "Available Now",
     gradient: "from-orange-500 to-red-500",
     stats: "Instant export",
@@ -61,8 +61,8 @@ const features = [
 const stats = [
   { number: "PDF", label: "Processing", icon: FileText },
   { number: "AI", label: "Extraction", icon: Brain },
-  { number: "Notion", label: "Integration", icon: Database },
-  { number: "CSV", label: "Export", icon: BarChart3 }
+  { number: "Multi", label: "Integrations", icon: Database },
+  { number: "Export", label: "Options", icon: BarChart3 }
 ]
 
 const integrations = [
@@ -74,11 +74,18 @@ const integrations = [
     gradient: "from-gray-900 to-gray-700"
   },
   {
-    name: "CSV Export",
+    name: "Google Sheets",
     logo: "📊",
-    description: "Download structured data instantly",
+    description: "Export to Google Sheets automatically",
     status: "available",
     gradient: "from-green-600 to-emerald-600"
+  },
+  {
+    name: "CSV Export",
+    logo: "📋",
+    description: "Download structured data instantly",
+    status: "available",
+    gradient: "from-blue-600 to-cyan-600"
   },
   {
     name: "Airtable",
