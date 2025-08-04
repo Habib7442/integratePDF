@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     template: '%s | IntegratePDF'
   },
   description: 'Transform any PDF into structured data with 95% accuracy using AI. Seamlessly integrate with Notion databases, export to CSV, and automate your document workflow. Try free - no signup required.',
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
   keywords: [
     'PDF data extraction',
     'AI PDF processing',
